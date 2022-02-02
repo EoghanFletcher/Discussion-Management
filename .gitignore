@@ -21,3 +21,73 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+
+# Ionic
+node_modules
+.tmp
+.sass-cache
+**/bower_components or sometimes it is lib/**
+platforms
+plugins
+*.swp
+*.swo
+*.log
+*.DS_Store
+
+# intellij
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+.idea/**/aws.xml
+.idea/**/contentModel.xml
+
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+
+.idea/**/gradle.xml
+.idea/**/libraries
+
+.idea/artifacts
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/modules.xml
+.idea/*.iml
+.idea/modules
+*.iml
+*.ipr
+
+out/
+
+.idea_modules/
+
+.idea/replstate.xml
+
+.idea/sonarlint/
+
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+.idea/httpRequests
+
+.idea/caches/build_file_checksums.ser
+
+# NetBeans
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/

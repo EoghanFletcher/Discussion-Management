@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EmailPasswordProvider } from '../interface/email-password-provider';
 import { AuthenticationService } from '../service/authentication.service';
 import { DataService } from '../service/data.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  selector: 'app-register',
+  templateUrl: './register.page.html',
+  styleUrls: ['./register.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class RegisterPage implements OnInit {
 
   private postData: FormGroup;
   private email: FormControl;
@@ -20,8 +20,7 @@ export class LoginPage implements OnInit {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private dataService: DataService,
-    private authenticate: AuthenticationService
-    ) { }
+    private authenticate: AuthenticationService) { }
 
   ngOnInit() {
     this.postData = new FormGroup({
@@ -34,8 +33,8 @@ export class LoginPage implements OnInit {
     }
   }
 
-  async login() {
-    console.log("login");
+  async register() {
+    console.log("register");
     this.email = this.postData.get("email").value;
     this.password = this.postData.get("password").value;
 
@@ -52,19 +51,18 @@ export class LoginPage implements OnInit {
       password: passwordString
     }
 
-    await this.authenticate.login(auth);
+    await this.authenticate.signUp(auth);
 
     alert(JSON.stringify(this.dataService.getData("signedIn")));
 
     if (typeof this.dataService.getData("signedIn") !== 'undefined') {
-      alert("Login successful")
+      alert("signUp successful")
       this.router.navigateByUrl("profile");  
     }
     else {
-      alert("Login failed, Username or password is incorrect");
+      alert("SignUp failed, Username or password is incorrect");
       this.router.navigateByUrl("login"); 
     }
-
   }
 
 }

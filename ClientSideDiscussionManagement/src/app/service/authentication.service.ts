@@ -1,8 +1,9 @@
 
 import { Injectable } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { EmailPasswordProvider } from '../interface/email-password-provider';
+import { ForgotPassword } from '../interface/forgot-password';
 import { DataService } from './data.service';
 
 @Injectable({
@@ -42,11 +43,19 @@ export class AuthenticationService {
     console.log("Email: " + credentials.emailAddress);
     console.log("Password: " + credentials.password);
 
-    createUserWithEmailAndPassword(this.auth, credentials.emailAddress, credentials.password)
+    await createUserWithEmailAndPassword(this.auth, credentials.emailAddress, credentials.password)
     .then(res => {console.log("res: " + res),
       this.dataService.setData("signedIn", res),
     console.log("data: " + JSON.stringify(this.dataService.getData("signedIn")));
     this.dataService.setData("isLoggedIn", true) });
+  }
+
+  async resetPassword(credentials: ForgotPassword) {
+    console.log("reset password");
+    console.log("Email: " + credentials.emailAddress);
+
+    await sendPasswordResetEmail(this.auth, credentials.emailAddress)
+    .then(res => {console.log("res: " + res)});
   }
 
 }

@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { EmailPasswordProvider } from '../interface/email-password-provider';
+import { ForgotPassword } from '../interface/forgot-password';
 import { AuthenticationService } from '../service/authentication.service';
 import { DataService } from '../service/data.service';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.page.html',
-  styleUrls: ['./register.page.scss'],
+  selector: 'app-forgot-password',
+  templateUrl: './forgot-password.page.html',
+  styleUrls: ['./forgot-password.page.scss'],
 })
-export class RegisterPage implements OnInit {
+export class ForgotPasswordPage implements OnInit {
 
   private postData: FormGroup;
   private email: FormControl;
-  private password: FormControl;
   data: any;
+
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -33,36 +33,21 @@ export class RegisterPage implements OnInit {
     }
   }
 
-  async register() {
-    console.log("register");
+  async resetPassword() {
+    console.log("resetPassword");
     this.email = this.postData.get("email").value;
-    this.password = this.postData.get("password").value;
 
     console.log("emailAddressInput: " + this.email);
-    console.log("passwordInput: " + this.password);
 
     // String
     let emailAddressString: string = this.postData.get("email").value;
-    let passwordString: string = this.password = this.postData.get("password").value;
 
-    let auth:
-    EmailPasswordProvider = {
-      emailAddress: emailAddressString,
-      password: passwordString
+    let forPass:
+    ForgotPassword = {
+      emailAddress: emailAddressString
     }
 
-    await this.authenticate.signUp(auth);
-
-    alert(JSON.stringify(this.dataService.getData("signedIn")));
-
-    if (typeof this.dataService.getData("signedIn") !== 'undefined') {
-      alert("signUp successful")
-      this.router.navigateByUrl("profile");  
-    }
-    else {
-      alert("SignUp failed, Username or password is incorrect");
-      this.router.navigateByUrl("login"); 
-    }
+    await this.authenticate.resetPassword(forPass);
   }
 
   navigateToPage(page) {

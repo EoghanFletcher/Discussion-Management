@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { EmailPasswordProvider } from '../interface/email-password-provider';
 import { AuthenticationService } from '../service/authentication.service';
 import { DataService } from '../service/data.service';
+import { FacadeService } from '../service/facade.service';
 
 @Component({
   selector: 'app-login',
@@ -19,8 +20,7 @@ export class LoginPage implements OnInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private dataService: DataService,
-    private authenticate: AuthenticationService
+    private facadeService: FacadeService
     ) { }
 
   ngOnInit() {
@@ -52,11 +52,11 @@ export class LoginPage implements OnInit {
       password: passwordString
     }
 
-    await this.authenticate.login(auth);
+    await this.facadeService.loginAuthenticationService(auth);
 
-    alert(JSON.stringify(this.dataService.getData("signedIn")));
+    alert(JSON.stringify(this.facadeService.getDataDataService("signedIn")));
 
-    if (typeof this.dataService.getData("signedIn") !== 'undefined') {
+    if (typeof this.facadeService.getDataDataService("signedIn") !== 'undefined') {
       alert("Login successful")
       this.router.navigateByUrl("profile");  
     }

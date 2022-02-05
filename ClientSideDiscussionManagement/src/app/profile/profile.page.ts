@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FacadeService } from '../service/facade.service';
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 
 @Component({
   selector: 'app-profile',
@@ -32,8 +32,13 @@ export class ProfilePage implements OnInit {
 
   getUserData() {
     console.log("getUserData");
-    let url: string = "http://localhost:8080/api/user/test";
-    let response = this.http.get(url).subscribe(responseLamdba => {console.log("Response: " + responseLamdba);}) ;
+    let url: string = "http://localhost:8080/api/user/authenticate?";
+    let response = this.http.post(url
+      ,
+      {
+      paramaters: new HttpParams().set("uId", this.facadeService.getDataDataService("uid"))
+    }
+    ).subscribe(responseLamdba => {console.log("Response: " + responseLamdba);}) ;
     
   }
 

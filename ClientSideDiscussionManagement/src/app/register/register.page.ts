@@ -38,36 +38,24 @@ export class RegisterPage implements OnInit {
     this.email = this.postData.get("email").value;
     this.password = this.postData.get("password").value;
 
-    console.log("emailAddressInput: " + this.email);
-    console.log("passwordInput: " + this.password);
-
-    // String
-    let emailAddressString: string = this.postData.get("email").value;
-    let passwordString: string = this.password = this.postData.get("password").value;
-
     let auth:
     EmailPasswordProvider = {
-      emailAddress: emailAddressString,
-      password: passwordString
+      emailAddress: String = this.postData.get("email").value,
+      password: String = this.password = this.postData.get("password").value
     }
 
     await this.facadeService.registerAuthenticationService(auth);
 
-    alert(JSON.stringify(this.facadeService.getDataDataService("signedIn")));
-
     if (typeof this.facadeService.getDataDataService("signedIn") !== 'undefined') {
-      alert("signUp successful")
       this.router.navigateByUrl("profile");  
     }
     else {
-      alert("SignUp failed, Username or password is incorrect");
-      this.router.navigateByUrl("login"); 
+      // Display a message // I am still on the login page
     }
   }
 
   navigateToPage(page) {
     console.log("navigateToPage");
-    console.log(page)
     this.router.navigateByUrl(page);
   }
 

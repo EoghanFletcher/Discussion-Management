@@ -37,14 +37,9 @@ export class ForgotPasswordPage implements OnInit {
     console.log("resetPassword");
     this.email = this.postData.get("email").value;
 
-    console.log("emailAddressInput: " + this.email);
-
-    // String
-    let emailAddressString: string = this.postData.get("email").value;
-
     let forPass:
     ForgotPassword = {
-      emailAddress: emailAddressString
+      emailAddress: String = this.postData.get("email").value
     }
 
     await this.facadeService.resetPasswordAuthenticationService(forPass);

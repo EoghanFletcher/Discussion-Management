@@ -32,13 +32,10 @@ export class ProfilePage implements OnInit {
 
   getUserData() {
     console.log("getUserData");
-    let url: string = "http://localhost:8080/api/user/authenticate?";
-    let response = this.http.post(url
-      ,
-      {
-      paramaters: new HttpParams().set("uId", this.facadeService.getDataDataService("uid"))
-    }
-    ).subscribe(responseLamdba => {console.log("Response: " + responseLamdba);}) ;
+    let url: string = "http://localhost:8080/api/user/authenticate";
+    let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid").toString()}
+    ).subscribe(responseLamdba => {console.log("Response: " + JSON.stringify(responseLamdba)),
+  this.data = responseLamdba}) ;
     
   }
 

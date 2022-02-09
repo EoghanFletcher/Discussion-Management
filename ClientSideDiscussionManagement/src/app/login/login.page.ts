@@ -62,5 +62,4 @@ export class LoginPage implements OnInit {
     console.log(page)
     this.router.navigateByUrl(page);
   }
-
 }

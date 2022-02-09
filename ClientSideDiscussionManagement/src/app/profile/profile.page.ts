@@ -18,13 +18,6 @@ export class ProfilePage implements OnInit {
     private http: HttpClient) { }
 
   ngOnInit() {
-    // if (this.route.snapshot.data.special) {
-    //   this.data = this.route.snapshot.data.special;
-    // }
-
-    // console.log(JSON.stringify(this.facadeService.getDataDataService("signedIn")));
-    // console.log(this.facadeService.getDataDataService("signedIn"));
-    // this.data = this.facadeService.getDataDataService("signedIn");
     console.log("here");
     this.data = this.facadeService.getDataDataService("uid");
     this.getUserData();
@@ -32,11 +25,8 @@ export class ProfilePage implements OnInit {
 
   getUserData() {
     console.log("getUserData");
-    let url: string = "http://localhost:8080/api/user/authenticate";
-    let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid").toString()}
-    ).subscribe(responseLamdba => {console.log("Response: " + JSON.stringify(responseLamdba)),
-  this.data = responseLamdba}) ;
-    
+    let url = "http://localhost:8080/api/user/authenticate";
+    let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid")}
+    ).subscribe(responseLamdba => { this.data = responseLamdba });    
   }
-
 }

@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ProfilePageRoutingModule } from './profile-routing.module';
 
 import { ProfilePage } from './profile.page';
+import { SignOutComponent } from '../sign-out/sign-out.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,8 @@ import { ProfilePage } from './profile.page';
     IonicModule,
     ProfilePageRoutingModule
   ],
-  declarations: [ProfilePage]
+  declarations: [ProfilePage, 
+    SignOutComponent
+  ]
 })
 export class ProfilePageModule {}

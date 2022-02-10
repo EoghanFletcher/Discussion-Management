@@ -1,5 +1,7 @@
 {
   "name": "ClientSideDiscussionManagement",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

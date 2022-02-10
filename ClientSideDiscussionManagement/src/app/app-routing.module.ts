@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { DataResolverService } from './service/data-resolver.service';
 
 const routes: Routes = [
   {
@@ -27,6 +28,18 @@ const routes: Routes = [
     path: 'forgot-password',
     loadChildren: () => import('./forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
   },
+  {
+    path: 'profile-crud',
+    loadChildren: () => import('./profile-crud/profile-crud.module').then( m => m.ProfileCrudPageModule)
+  },
+  {
+    path: 'profile-crud/:id',
+    resolve: {
+      special: DataResolverService,
+    },
+    loadChildren: () => import('./profile-crud/profile-crud.module').then( m => m.ProfileCrudPageModule)
+  },
+
 ];
 
 @NgModule({

@@ -6,6 +6,8 @@
 
 <ion-content>
   <app-sign-out></app-sign-out>
-<ion-item>{{ data.uId }}</ion-item>
+
+<ion-button *ngFor="let dataItem of data | keyvalue" [value]="dataItem.key" (click)="modifyCredential(dataItem.key, dataItem.value)">{{ dataItem.key }} : {{ dataItem.value }}</ion-button>
+
 
 </ion-content>

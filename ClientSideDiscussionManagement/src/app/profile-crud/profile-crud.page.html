@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>profile-crud</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+<button id="deleteCredential" name="deleteCredential" (click)="deleteCredential()" expand="block" color="danger">Delete credential</button>
+
+
+
+
+
+
+
+<form id="profileCredentialsCRUD" name="profileCredentialsCRUD" [formGroup]="postData">
+  <ion-input id="test" formControlName="email"></ion-input>
+  <ion-input id="password" formControlName="password"></ion-input>
+  <ion-button id="profileCredentialsCRUDBtn" (click)="update()">test</ion-button>
+  
+</form>
+
+
+</ion-content>

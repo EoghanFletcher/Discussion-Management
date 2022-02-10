@@ -19,44 +19,19 @@ import java.util.Map;
 public class UserController {
     UserDao userDao = new UserDao();
 
-    @GetMapping(path = "/test")
-//    @CrossOrigin(origins = "http://localhost:8081")
-    public List test() { return List.of("Test Message"); }
-
     @PostMapping(path = "/authenticate")
     public Map authenticate(@RequestBody HashMap uId) {
-//
-        System.out.println("uId: " + uId.entrySet());
-        System.out.println("uId: " + uId.get("uId"));
-        System.out.println("Middleware");
 
-//        String uId="yBbdYqYqfAXpZM5HawTfVIMFoTV2";
         DocumentSnapshot documentSnapshot = null;
         UserRecord userRecord = null;
 
         String uIdString = (String) uId.get("uId").toString();
-
-        System.out.println("uIdString: " + uIdString);
-
         FirebaseAuth firebaseAuth = userDao.getAuthenticationInstance();
-
-        System.out.println("FirebaseAuth: " + firebaseAuth);
-
         UserRecord userRecordUId = userDao.getUId(uIdString, firebaseAuth);
-        System.out.println("UserRecordUId: " + userRecordUId.getUid());
-
-//        System.out.println("uId: " + uId);
 
         if (userRecordUId != null) {
             documentSnapshot = userDao.getUserDocument(uIdString);
-
-            System.out.println("DocumentSnapshot: " + documentSnapshot.getData().entrySet());
         }
-
-        System.out.println("return");
-
-//        User user = new User((String) documentSnapshot.get("uId"));
-
 
         return  documentSnapshot.getData();
     }

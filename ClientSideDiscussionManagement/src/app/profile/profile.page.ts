@@ -20,6 +20,8 @@ export class ProfilePage implements OnInit {
   ngOnInit() {
     console.log("here");
     this.data = this.facadeService.getDataDataService("uid");
+
+    console.log("profile uId: " + this.facadeService.getDataDataService("uid"));
     this.getUserData();
   }
 

@@ -31,30 +31,31 @@ public class UserDao implements UserDaoInterface {
     public DocumentSnapshot getUserDocument(String uid) {
         System.out.println("getUserDocument");
         DocumentSnapshot documentSnapshot = null;
+        ApiFuture<QuerySnapshot> future = null;
+        List<QueryDocumentSnapshot> documents = null;
+
 
         try {
             Firestore firestore = Dao.initialiseFirestore();
-            System.out.println("firestore: " + firestore);
 
-            System.out.println("uid: " + uid);
-            ApiFuture<QuerySnapshot> future = firestore.collection("User").whereEqualTo("uId", uid).get();
-            List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+            future = firestore.collection("User").whereEqualTo("uId", uid).get();
+            documents = future.get().getDocuments();
+
+            if (documents.size() == 0) {
+                // Create document
+                HashMap documentData = new HashMap();
+                documentData.put("uId", uid);
+                ApiFuture<WriteResult> writeResultApiFuture = firestore.collection("User").document().set(documentData);
+
+                future = firestore.collection("User").whereEqualTo("uId", uid).get();
+                documents = future.get().getDocuments();
+            }
+
             for (DocumentSnapshot document : documents) {
-                System.out.println(document.getId() + " => " + document.getData());
                 if (document.get("uId").equals(uid)) {
                     documentSnapshot = document;
                 }
-                else {
-                    // Create document
-                    HashMap documentData = new HashMap();
-                    documentData.put("uId", uid);
-                    ApiFuture<WriteResult> writeResultApiFuture = firestore.collection("User").document().set(documentData);
-                }
             }
-
-            System.out.println("DocumentSnapshot: " + documentSnapshot);
-
-// Check if document is equal to null
         }
         catch (Exception ex) {
             System.out.println("An exception occurred, ex: " + ex.getMessage());
@@ -71,14 +72,10 @@ public class UserDao implements UserDaoInterface {
         UserRecord userRecord = null;
 
         try {
-            System.out.println("getByEmail: " + firebaseAuthInstance.getUser(uId));
             userRecord = firebaseAuthInstance.getUser(uId);
-            System.out.println("UserRecord: " + userRecord.getEmail());
-
         } catch (Exception ex) {
             System.out.println("An exception occurred [getUId], ex: " + ex);
         }
         return userRecord;
     }
 }
-

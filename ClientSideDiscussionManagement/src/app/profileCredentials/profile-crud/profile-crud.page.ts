@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SelectedCredential } from '../../interface/selected-credential';
 import { FacadeService } from '../../service/facade.service';
 
@@ -19,7 +19,8 @@ export class ProfileCrudPage implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private facadeService: FacadeService,
-    private http: HttpClient) { }
+    private http: HttpClient,
+    private router: Router) { }
 
   ngOnInit() {
     this.postData = new FormGroup({
@@ -27,6 +28,7 @@ export class ProfileCrudPage implements OnInit {
     });
     
     this.data = this.facadeService.getDataDataService("uid");
+    console.log("id: " + JSON.stringify(this.facadeService.getDataDataService("id")));
 
     if (this.route.snapshot.data.special) {
       this.credential = this.route.snapshot.data.special;
@@ -37,6 +39,18 @@ export class ProfileCrudPage implements OnInit {
 
   update() {
     console.log("update");
+
+    // console.log("keySeleted: " + keySeleted);
+
+    let chosenValue: string = this.postData.get("value").value;
+
+    let url = "http://localhost:8080/api/credentials/update";
+    let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
+                                        "chosenKey": this.facadeService.getDataDataService("id").key,
+                                      "chosenValue": chosenValue}
+    ).subscribe(responseLamdba => { this.data = responseLamdba });    
+
+    this.router.navigateByUrl("profile");
   }
 
   deleteCredential(keySeleted) {
@@ -48,6 +62,8 @@ export class ProfileCrudPage implements OnInit {
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
                                         "deleteKey": keySeleted}
     ).subscribe(responseLamdba => { this.data = responseLamdba });    
+
+    this.router.navigateByUrl("profile");
   }
 
 }

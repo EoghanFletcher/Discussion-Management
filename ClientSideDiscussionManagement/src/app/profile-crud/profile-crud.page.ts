@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -11,13 +12,15 @@ import { FacadeService } from '../service/facade.service';
 })
 export class ProfileCrudPage implements OnInit {
 
+  data: any;
   credential: SelectedCredential;
   private postData: FormGroup;
   private email: FormControl;
   private password: FormControl;
 
   constructor(private route: ActivatedRoute,
-    facadeService: FacadeService) { }
+    private facadeService: FacadeService,
+    private http: HttpClient) { }
 
   ngOnInit() {
     this.postData = new FormGroup({
@@ -25,6 +28,8 @@ export class ProfileCrudPage implements OnInit {
       password: new FormControl()
     });
     
+    this.data = this.facadeService.getDataDataService("uid");
+
     if (this.route.snapshot.data.special) {
       this.credential = this.route.snapshot.data.special;
     console.log("credential: " + this.credential.key);
@@ -36,12 +41,15 @@ export class ProfileCrudPage implements OnInit {
     console.log("update");
   }
 
-  deleteCredential() {
+  deleteCredential(keySeleted) {
     console.log("deleteCredential");
 
-    // let url = "http://localhost:8080/api/credentials/delete";
-    // let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid")}
-    // ).subscribe(responseLamdba => { this.data = responseLamdba });    
+    console.log("keySeleted: " + keySeleted);
+
+    let url = "http://localhost:8080/api/credentials/delete";
+    let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
+                                        "deleteKey": keySeleted}
+    ).subscribe(responseLamdba => { this.data = responseLamdba });    
   }
 
 }

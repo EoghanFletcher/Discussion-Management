@@ -39,15 +39,19 @@ export class LoginPage implements OnInit {
     this.email = this.postData.get("email").value;
     this.password = this.postData.get("password").value;
 
+    let emailString: string = this.postData.get("email").value;
+    let passwordString: string = this.postData.get("password").value;
+
     let auth:
     EmailPasswordProvider = {
-      emailAddress: String = this.postData.get("email").value,
-      password: String = this.postData.get("password").value
+      emailAddress: emailString,
+      password: passwordString
     }
 
     await this.facadeService.loginAuthenticationService(auth);
 
     if (typeof this.facadeService.getDataDataService("signedIn") !== 'undefined') {
+      console.log("signedin")
       console.log("profile");
       this.router.navigateByUrl("profile");  
     }

@@ -38,10 +38,13 @@ export class RegisterPage implements OnInit {
     this.email = this.postData.get("email").value;
     this.password = this.postData.get("password").value;
 
+    let emailString: string = this.postData.get("email").value;
+    let passwordString: string = this.password = this.postData.get("password").value
+
     let auth:
     EmailPasswordProvider = {
-      emailAddress: String = this.postData.get("email").value,
-      password: String = this.password = this.postData.get("password").value
+      emailAddress: emailString,
+      password: passwordString
     }
 
     await this.facadeService.registerAuthenticationService(auth);

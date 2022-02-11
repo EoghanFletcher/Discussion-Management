@@ -19,10 +19,8 @@ export class ProfilePage implements OnInit {
     private http: HttpClient) { }
 
   ngOnInit() {
-    console.log("here");
     this.data = this.facadeService.getDataDataService("uid");
 
-    console.log("profile uId: " + this.facadeService.getDataDataService("uid"));
     this.getUserData();
   }
 
@@ -35,13 +33,15 @@ export class ProfilePage implements OnInit {
 
   modifyCredential(keySeleted, valueSelected) {
     console.log("modifyCredential");
-    console.log("Key: " + keySeleted);
-    console.log("Value: " + valueSelected);
+    // console.log("Key: " + keySeleted);
+    // console.log("Value: " + valueSelected);
+
+
 
     let credential:
     SelectedCredential = {
-      key: String = keySeleted,
-      value: String = valueSelected
+      key: keySeleted,
+      value: valueSelected
     }
 
     this.facadeService.setDataDataService("id", credential);

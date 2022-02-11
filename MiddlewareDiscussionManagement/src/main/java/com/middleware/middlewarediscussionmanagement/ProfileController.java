@@ -25,7 +25,7 @@ public class ProfileController {
         System.out.println("chosenKey " + chosenKey);
         System.out.println("chosenValue: " + chosenValue);
 
-        userDao.createUpdateProfileField(uIdString, chosenKey, chosenValue);
+        userDao.createUpdateProfileField(uIdString, chosenKey, chosenValue, "User");
     }
 
     @PostMapping(path = "update")
@@ -40,7 +40,7 @@ public class ProfileController {
         System.out.println("chosenKey " + chosenKey);
         System.out.println("chosenValue: " + chosenValue);
 
-        userDao.createUpdateProfileField(uIdString, chosenKey, chosenValue);
+        userDao.createUpdateProfileField(uIdString, chosenKey, chosenValue, "User");
     }
 
     @PostMapping(path = "delete")

@@ -80,16 +80,18 @@ public class UserDao implements UserDaoInterface {
     }
 
     @Override
-    public boolean createUpdateProfileField(String uId, String key, String value) {
+    public boolean createUpdateProfileField(String uId, String key, String value, String databaseCollection) {
         System.out.println("createProfileField");
 
         DocumentSnapshot documentSnapshot = null;
         ApiFuture<QuerySnapshot> future = null;
         List<QueryDocumentSnapshot> documents = null;
+        ApiFuture<WriteResult> writeResultApiFuture = null;
+        boolean result = false;
 
         try {
             Firestore firestore = Dao.initialiseFirestore();
-            future = firestore.collection("User").whereEqualTo("uId", uId).get();
+            future = firestore.collection(databaseCollection).whereEqualTo("uId", uId).get();
             documents = future.get().getDocuments();
 
             for (DocumentSnapshot document : documents) {
@@ -100,22 +102,26 @@ public class UserDao implements UserDaoInterface {
 
             HashMap documentData = new HashMap();
             documentData.put(key, value);
-            ApiFuture<WriteResult> writeResultApiFuture = firestore.collection("User").document(documentSnapshot.getId()).update((documentData));
+             writeResultApiFuture = firestore.collection(databaseCollection).document(documentSnapshot.getId()).update((documentData));
         } catch(Exception ex) {
             System.out.println("An exception occurred [createProfileField], ex: " + ex);
         }
 
-        return false;
-
+        if (writeResultApiFuture != null) {
+            result = true;
+        }
+        return result;
     }
 
     @Override
-    public void removeProfileField(String uId, String key) {
+    public boolean removeProfileField(String uId, String key) {
         DocumentSnapshot documentSnapshot = null;
         ApiFuture<QuerySnapshot> future = null;
         List<QueryDocumentSnapshot> documents = null;
         ApiFuture<WriteResult> writeFuture = null;
         DocumentReference documentReference = null;
+        ApiFuture<WriteResult> writeResultApiFuture = null;
+        boolean result = false;
 
 
         try {
@@ -137,9 +143,7 @@ public class UserDao implements UserDaoInterface {
 
             documentReference = firestore.collection("User").document(documentSnapshot.getId());
 
-            ApiFuture<WriteResult> writeResultApiFuture = documentReference.update(documentData);
-
-
+            writeResultApiFuture = documentReference.update(documentData);
 
 
 
@@ -153,5 +157,9 @@ public class UserDao implements UserDaoInterface {
             System.out.println("An exception occurred [removeProfileField], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
+        if (writeResultApiFuture != null) {
+            result = true;
+        }
+        return result;
     }
 }

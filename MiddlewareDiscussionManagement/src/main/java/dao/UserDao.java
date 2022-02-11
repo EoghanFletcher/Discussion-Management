@@ -80,7 +80,7 @@ public class UserDao implements UserDaoInterface {
     }
 
     @Override
-    public boolean createProfileField(String uId, String key, String value) {
+    public boolean createUpdateProfileField(String uId, String key, String value) {
         System.out.println("createProfileField");
 
         DocumentSnapshot documentSnapshot = null;
@@ -110,50 +110,48 @@ public class UserDao implements UserDaoInterface {
     }
 
     @Override
-    public boolean removeProfileField(String uId, String key) {
+    public void removeProfileField(String uId, String key) {
         DocumentSnapshot documentSnapshot = null;
         ApiFuture<QuerySnapshot> future = null;
         List<QueryDocumentSnapshot> documents = null;
-        boolean remove = false;
         ApiFuture<WriteResult> writeFuture = null;
         DocumentReference documentReference = null;
 
 
         try {
             Firestore firestore = Dao.initialiseFirestore();
-// Get snapshot
+            // Get snapshot
             future = firestore.collection("User").whereEqualTo("uId", uId).get();
             documents = future.get().getDocuments();
             for (DocumentSnapshot document : documents) {
                 if (document.get("uId").equals(uId)) { documentSnapshot = document; }
             }
 
-            System.out.println("documentSnapshot: " + documentSnapshot.getData().entrySet());
 
-            // Create document reference
+
+
+
+            Map documentData = new HashMap();
+            documentData = documentSnapshot.getData();
+            documentData.put(key, FieldValue.delete());
+
             documentReference = firestore.collection("User").document(documentSnapshot.getId());
-            System.out.println("documentReference: " + documentReference.get());
 
-            // Update
-            HashMap documentData = new HashMap();
-            System.out.println("entryset: " + documentData.entrySet());
-
-            documentData.remove(key);
-            System.out.println("entryset: " + documentData.entrySet());
-            ApiFuture<WriteResult> writeResultApiFuture = firestore.collection("User").document(documentSnapshot.getId()).update((documentData));
-            System.out.println("updates: " + documentData.entrySet());
-            writeFuture = documentReference.update(documentData);
+            ApiFuture<WriteResult> writeResultApiFuture = documentReference.update(documentData);
 
 
-            System.out.println("documentSnapshot: " + documentSnapshot.getId());
-            writeFuture = firestore.collection("User").document(documentSnapshot.getId()).delete();
-//            return true;
-            System.out.println("writeFuture: " + writeFuture.get());
+
+
+
+
+
+
+
+
 
         } catch (Exception ex) {
             System.out.println("An exception occurred [removeProfileField], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
-        return remove;
     }
 }

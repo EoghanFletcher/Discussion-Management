@@ -14,7 +14,7 @@ public interface UserDaoInterface {
 
     public UserRecord getUId(String username, FirebaseAuth firebaseAuthInstance);
 
-    public boolean createProfileField(String uId, String key, String value);
+    public boolean createUpdateProfileField(String uId, String key, String value);
 
-    public boolean removeProfileField(String uId, String key);
+    public void removeProfileField(String uId, String key);
 }

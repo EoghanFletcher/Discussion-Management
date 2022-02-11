@@ -14,7 +14,6 @@ public class ProfileController {
     UserDao userDao = new UserDao();
 
     @PostMapping(path = "create")
-
     public void createCredential(@RequestBody HashMap data) {
         System.out.println("data: " + data);
 
@@ -26,7 +25,22 @@ public class ProfileController {
         System.out.println("chosenKey " + chosenKey);
         System.out.println("chosenValue: " + chosenValue);
 
-        userDao.createProfileField(uIdString, chosenKey, chosenValue);
+        userDao.createUpdateProfileField(uIdString, chosenKey, chosenValue);
+    }
+
+    @PostMapping(path = "update")
+    public void updateCredential(@RequestBody HashMap data) {
+        System.out.println("data: " + data);
+
+        String uIdString = (String) data.get("uId");
+        String chosenKey = (String) data.get("chosenKey");
+        String chosenValue = (String) data.get("chosenValue");
+
+        System.out.println("uIdString: " + uIdString);
+        System.out.println("chosenKey " + chosenKey);
+        System.out.println("chosenValue: " + chosenValue);
+
+        userDao.createUpdateProfileField(uIdString, chosenKey, chosenValue);
     }
 
     @PostMapping(path = "delete")

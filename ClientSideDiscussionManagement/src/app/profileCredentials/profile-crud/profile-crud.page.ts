@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { SelectedCredential } from '../interface/selected-credential';
-import { FacadeService } from '../service/facade.service';
+import { SelectedCredential } from '../../interface/selected-credential';
+import { FacadeService } from '../../service/facade.service';
 
 @Component({
   selector: 'app-profile-crud',
@@ -15,8 +15,7 @@ export class ProfileCrudPage implements OnInit {
   data: any;
   credential: SelectedCredential;
   private postData: FormGroup;
-  private email: FormControl;
-  private password: FormControl;
+  private value: FormControl;
 
   constructor(private route: ActivatedRoute,
     private facadeService: FacadeService,
@@ -24,8 +23,7 @@ export class ProfileCrudPage implements OnInit {
 
   ngOnInit() {
     this.postData = new FormGroup({
-      email: new FormControl(),
-      password: new FormControl()
+      value: new FormControl()
     });
     
     this.data = this.facadeService.getDataDataService("uid");

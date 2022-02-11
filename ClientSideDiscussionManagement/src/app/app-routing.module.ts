@@ -14,31 +14,36 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+    loadChildren: () => import('./authenticate/login/login.module').then( m => m.LoginPageModule)
   },
   {
     path: 'profile',
-    loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
+    loadChildren: () => import('./profileCredentials/profile/profile.module').then( m => m.ProfilePageModule)
   },
   {
     path: 'register',
-    loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
+    loadChildren: () => import('./authenticate/register/register.module').then( m => m.RegisterPageModule)
   },
   {
     path: 'forgot-password',
-    loadChildren: () => import('./forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
+    loadChildren: () => import('./authenticate/forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
   },
   {
     path: 'profile-crud',
-    loadChildren: () => import('./profile-crud/profile-crud.module').then( m => m.ProfileCrudPageModule)
+    loadChildren: () => import('./profileCredentials/profile-crud/profile-crud.module').then( m => m.ProfileCrudPageModule)
   },
   {
     path: 'profile-crud/:id',
     resolve: {
       special: DataResolverService,
     },
-    loadChildren: () => import('./profile-crud/profile-crud.module').then( m => m.ProfileCrudPageModule)
+    loadChildren: () => import('./profileCredentials/profile-crud/profile-crud.module').then( m => m.ProfileCrudPageModule)
   },
+  {
+    path: 'create-credential',
+    loadChildren: () => import('./profileCredentials/create-credential/create-credential.module').then( m => m.CreateCredentialPageModule)
+  },
+
 
 ];
 

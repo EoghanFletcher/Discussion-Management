@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FacadeService } from '../service/facade.service';
+import { FacadeService } from '../../service/facade.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
-import { SelectedCredential } from '../interface/selected-credential';
+import { SelectedCredential } from '../../interface/selected-credential';
 
 @Component({
   selector: 'app-profile',
@@ -29,6 +29,12 @@ export class ProfilePage implements OnInit {
     let url = "http://localhost:8080/api/user/authenticate";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid")}
     ).subscribe(responseLamdba => { this.data = responseLamdba });    
+  }
+
+
+  createCredential() {
+    console.log("createCredential");
+    this.router.navigateByUrl("create-credential");
   }
 
   modifyCredential(keySeleted, valueSelected) {

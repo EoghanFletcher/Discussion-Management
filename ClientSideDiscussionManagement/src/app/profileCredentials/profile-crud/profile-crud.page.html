@@ -18,10 +18,8 @@
 <!-- <ion-input id="email" name="email" type="email" formControlName="email" placeholder="Email Address" class="ion-text-center"></ion-input> -->
 
 <form id="profileCredentialsCRUD" name="profileCredentialsCRUD" [formGroup]="postData" (ngSubmit)="update()">
-  <ion-input id="test" formControlName="email" placeholder="Identifier" class="ion-text-center"></ion-input>
-  <ion-input id="password" formControlName="password" placeholder="Value" class="ion-text-center"></ion-input>
-  <ion-button id="profileCredentialsCRUDBtn" type="submit" expand="block" color="primary">Update credential</ion-button>
-  
+  <ion-input id="value" name="value" formControlName="value" placeholder="Value" class="ion-text-center"></ion-input>
+  <ion-button id="profileCredentialsCRUDBtn" name="profileCredentialsCRUDBtn" type="submit" expand="block" color="primary">Update credential</ion-button>
 </form>
 
 

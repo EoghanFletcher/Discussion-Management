@@ -7,6 +7,8 @@
 <ion-content>
   <app-sign-out></app-sign-out>
 
+  <ion-button id="createCredential" name="createCredential" (click)="createCredential()" expand="block" color="primary">Create credential</ion-button>
+
 <ion-item *ngFor="let dataItem of data | keyvalue" (click)="modifyCredential(dataItem.key, dataItem.value)">{{ dataItem.key }} : {{ dataItem.value }}</ion-item>
 
 

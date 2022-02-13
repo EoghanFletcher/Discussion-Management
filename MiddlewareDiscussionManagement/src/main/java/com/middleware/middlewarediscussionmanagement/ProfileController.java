@@ -15,48 +15,32 @@ public class ProfileController {
 
     @PostMapping(path = "create")
     public void createCredential(@RequestBody HashMap data) {
-        System.out.println("data: " + data);
 
         String uIdString = (String) data.get("uId");
         String chosenKey = (String) data.get("chosenKey");
         String chosenValue = (String) data.get("chosenValue");
-
-        System.out.println("uIdString: " + uIdString);
-        System.out.println("chosenKey " + chosenKey);
-        System.out.println("chosenValue: " + chosenValue);
 
         userDao.createUpdateProfileField(uIdString, chosenKey, chosenValue, "User");
     }
 
     @PostMapping(path = "update")
     public void updateCredential(@RequestBody HashMap data) {
-        System.out.println("data: " + data);
+        System.out.println("updateCredential");
 
         String uIdString = (String) data.get("uId");
         String chosenKey = (String) data.get("chosenKey");
         String chosenValue = (String) data.get("chosenValue");
-
-        System.out.println("uIdString: " + uIdString);
-        System.out.println("chosenKey " + chosenKey);
-        System.out.println("chosenValue: " + chosenValue);
 
         userDao.createUpdateProfileField(uIdString, chosenKey, chosenValue, "User");
     }
 
     @PostMapping(path = "delete")
     public void deleteCredential(@RequestBody HashMap data) {
-        System.out.println("/deleteCredential");
-
-        System.out.println("data: " + data);
+        System.out.println("deleteCredential");
 
         String uIdString = (String) data.get("uId");
         String deleteKey = (String) data.get("deleteKey");
 
-        System.out.println("uIdString: " + uIdString);
-        System.out.println("deleteKey: " + deleteKey);
-
         userDao.removeProfileField(uIdString, deleteKey);
-
-
     }
 }

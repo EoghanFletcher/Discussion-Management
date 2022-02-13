@@ -95,21 +95,17 @@ public class UserDao implements UserDaoInterface {
             documents = future.get().getDocuments();
 
             for (DocumentSnapshot document : documents) {
-                if (document.get("uId").equals(uId)) {
-                    documentSnapshot = document;
-                }
+                if (document.get("uId").equals(uId)) { documentSnapshot = document; }
             }
 
             HashMap documentData = new HashMap();
             documentData.put(key, value);
-             writeResultApiFuture = firestore.collection(databaseCollection).document(documentSnapshot.getId()).update((documentData));
+            writeResultApiFuture = firestore.collection(databaseCollection).document(documentSnapshot.getId()).update((documentData));
         } catch(Exception ex) {
             System.out.println("An exception occurred [createProfileField], ex: " + ex);
         }
 
-        if (writeResultApiFuture != null) {
-            result = true;
-        }
+        if (writeResultApiFuture != null) { result = true; }
         return result;
     }
 
@@ -123,36 +119,20 @@ public class UserDao implements UserDaoInterface {
         ApiFuture<WriteResult> writeResultApiFuture = null;
         boolean result = false;
 
-
         try {
             Firestore firestore = Dao.initialiseFirestore();
             // Get snapshot
             future = firestore.collection("User").whereEqualTo("uId", uId).get();
             documents = future.get().getDocuments();
-            for (DocumentSnapshot document : documents) {
-                if (document.get("uId").equals(uId)) { documentSnapshot = document; }
+            for (DocumentSnapshot document : documents) { if (document.get("uId").equals(uId)) { documentSnapshot = document; }
             }
-
-
-
-
 
             Map documentData = new HashMap();
             documentData = documentSnapshot.getData();
             documentData.put(key, FieldValue.delete());
 
             documentReference = firestore.collection("User").document(documentSnapshot.getId());
-
             writeResultApiFuture = documentReference.update(documentData);
-
-
-
-
-
-
-
-
-
         } catch (Exception ex) {
             System.out.println("An exception occurred [removeProfileField], ex: " + ex.getMessage());
             ex.printStackTrace();

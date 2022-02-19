@@ -33,11 +33,11 @@ export class CreateGroupPage implements OnInit {
     let groupName: string = this.formData.get("groupName").value;
     let groupDescription: string = this.formData.get("groupDescription").value;
 
-    let url = "http://localhost:8080/api/groupAndTask/create";
+    let url = "http://localhost:8080/api/groupAndTask/createGroup";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
                                         "groupName": groupName, "groupDescription": groupDescription}
     ).subscribe(responseLamdba => { this.data = responseLamdba });
-    this.router.navigateByUrl("profile"); 
+    // this.router.navigateByUrl("profile"); 
   }
 
 }

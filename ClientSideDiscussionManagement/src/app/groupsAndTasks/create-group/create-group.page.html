@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>create-group</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+<app-sign-out></app-sign-out>
+<app-create-group-btn></app-create-group-btn>
+
+<form id="createGroup" name="createGroup" [formGroup]="formData" (ngSubmit)="create()">
+  <ion-input id="groupName" name="groupName" formControlName="groupName" placeholder="Group Name"></ion-input>
+  <ion-input id="groupDescription" name="groupDescription" formControlName="groupDescription" placeholder="Group Description"></ion-input>
+  <ion-button id="submitBtn" name="submitBtn" type="Submit">Create group</ion-button>
+</form>
+
+</ion-content>

@@ -42,7 +42,15 @@ const routes: Routes = [
   {
     path: 'create-credential',
     loadChildren: () => import('./profileCredentials/create-credential/create-credential.module').then( m => m.CreateCredentialPageModule)
+  },  {
+    path: 'list-groups',
+    loadChildren: () => import('./groupsAndTasks/list-groups/list-groups.module').then( m => m.ListGroupsPageModule)
   },
+  {
+    path: 'create-group',
+    loadChildren: () => import('./groupsAndTasks/create-group/create-group.module').then( m => m.CreateGroupPageModule)
+  },
+
 
 
 ];

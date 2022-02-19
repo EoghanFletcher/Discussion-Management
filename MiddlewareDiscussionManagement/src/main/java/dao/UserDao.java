@@ -29,7 +29,7 @@ public class UserDao implements UserDaoInterface {
     }
 
     @Override
-    public DocumentSnapshot getUserDocument(String uid) {
+    public DocumentSnapshot getUserDocument(String uid, String email) {
         System.out.println("getUserDocument");
         DocumentSnapshot documentSnapshot = null;
         ApiFuture<QuerySnapshot> future = null;
@@ -46,6 +46,8 @@ public class UserDao implements UserDaoInterface {
                 // Create document
                 HashMap documentData = new HashMap();
                 documentData.put("uId", uid);
+                documentData.put("email", email);
+                documentData.put("username", "");
                 ApiFuture<WriteResult> writeResultApiFuture = firestore.collection("User").document().set(documentData);
 
                 future = firestore.collection("User").whereEqualTo("uId", uid).get();
@@ -86,6 +88,7 @@ public class UserDao implements UserDaoInterface {
         DocumentSnapshot documentSnapshot = null;
         ApiFuture<QuerySnapshot> future = null;
         List<QueryDocumentSnapshot> documents = null;
+        DocumentReference documentReference = null;
         ApiFuture<WriteResult> writeResultApiFuture = null;
         boolean result = false;
 
@@ -95,12 +98,15 @@ public class UserDao implements UserDaoInterface {
             documents = future.get().getDocuments();
 
             for (DocumentSnapshot document : documents) {
+
                 if (document.get("uId").equals(uId)) { documentSnapshot = document; }
             }
 
             HashMap documentData = new HashMap();
             documentData.put(key, value);
-            writeResultApiFuture = firestore.collection(databaseCollection).document(documentSnapshot.getId()).update((documentData));
+//            writeResultApiFuture = firestore.collection(databaseCollection).document(documentSnapshot.getId()).update((documentData));
+            documentReference = firestore.collection("User").document(documentSnapshot.getId());
+            writeResultApiFuture = documentReference.update(documentData);
         } catch(Exception ex) {
             System.out.println("An exception occurred [createProfileField], ex: " + ex);
         }

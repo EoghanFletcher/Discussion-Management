@@ -10,7 +10,7 @@ import javax.swing.text.Document;
 public interface UserDaoInterface {
     public FirebaseAuth getAuthenticationInstance();
 
-    public DocumentSnapshot getUserDocument(String uid);
+    public DocumentSnapshot getUserDocument(String uid, String email);
 
     public UserRecord getUId(String username, FirebaseAuth firebaseAuthInstance);
 

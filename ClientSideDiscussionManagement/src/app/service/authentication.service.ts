@@ -29,7 +29,9 @@ export class AuthenticationService {
     // console.log(JSON.stringify(this.dataService.getData("signedIn")));
     console.log("result: " + res);
     console.log("result uid: " + res.user.uid);
+    console.log("result email: " + res.user.email);
     this.dataService.setData("uid", res.user.uid);
+    this.dataService.setData("email", res.user.email);
     });
   }
 
@@ -50,6 +52,7 @@ export class AuthenticationService {
     .then(res => {console.log("res: " + res),
       this.dataService.setData("signedIn", res);
       this.dataService.setData("uid", res.user.uid);
+      this.dataService.setData("email", res.user.email);
     // console.log(JSON.stringify(this.dataService.getData("signedIn")));
     });
   }

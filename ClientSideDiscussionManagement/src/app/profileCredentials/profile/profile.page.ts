@@ -27,7 +27,8 @@ export class ProfilePage implements OnInit {
   getUserData() {
     console.log("getUserData");
     let url = "http://localhost:8080/api/user/authenticate";
-    let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid")}
+    let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
+                                      "email": this.facadeService.getDataDataService("email")}
     ).subscribe(responseLamdba => { this.data = responseLamdba });    
   }
 

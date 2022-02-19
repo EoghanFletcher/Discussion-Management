@@ -20,17 +20,18 @@ public class UserController {
     UserDao userDao = new UserDao();
 
     @PostMapping(path = "/authenticate")
-    public Map authenticate(@RequestBody HashMap uId) {
+    public Map authenticate(@RequestBody HashMap uId, String email) {
 
         DocumentSnapshot documentSnapshot = null;
         UserRecord userRecord = null;
 
         String uIdString = (String) uId.get("uId").toString();
+        String emailString = (String) uId.get("email").toString();
         FirebaseAuth firebaseAuth = userDao.getAuthenticationInstance();
         UserRecord userRecordUId = userDao.getUId(uIdString, firebaseAuth);
 
         if (userRecordUId != null) {
-            documentSnapshot = userDao.getUserDocument(uIdString);
+            documentSnapshot = userDao.getUserDocument(uIdString, emailString);
         }
 
         return  documentSnapshot.getData();

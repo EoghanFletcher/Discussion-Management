@@ -20,8 +20,7 @@ export class LoginPage implements OnInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private facadeService: FacadeService
-    ) { }
+    private facadeService: FacadeService) { }
 
   ngOnInit() {
     this.postData = new FormGroup({

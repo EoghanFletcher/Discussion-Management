@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SelectedGroup } from 'src/app/interface/selected-group';
 import { FacadeService } from 'src/app/service/facade.service';
 
 @Component({
@@ -30,5 +31,20 @@ export class ListGroupsPage implements OnInit {
                                       "email": this.facadeService.getDataDataService("email")}
     ).subscribe(responseLamdba => { this.data = responseLamdba,
     console.log(responseLamdba[0]); });    
+  }
+
+  viewGroup(keySeleted, valueSelected) {
+    console.log("viewGroup");
+    console.log("keySeleted: " + keySeleted);
+    console.log("valueSelected: " + valueSelected);
+
+    let group:
+    SelectedGroup = {
+      key: keySeleted,
+      value: valueSelected
+    }
+
+    this.facadeService.setDataDataService("id", group);
+    this.router.navigateByUrl("group-task-details/id");
   }
 }

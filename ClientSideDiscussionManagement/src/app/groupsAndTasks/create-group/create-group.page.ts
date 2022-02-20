@@ -38,7 +38,7 @@ export class CreateGroupPage implements OnInit {
                                         "email": this.facadeService.getDataDataService("email"),
                                         "groupName": groupName, "groupDescription": groupDescription}
     ).subscribe(responseLamdba => { this.data = responseLamdba });
-    // this.router.navigateByUrl("profile"); 
+    this.router.navigateByUrl("list-groups"); 
   }
 
 }

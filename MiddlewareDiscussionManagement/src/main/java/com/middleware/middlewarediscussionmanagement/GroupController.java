@@ -21,17 +21,10 @@ public class GroupController {
     public void createGroup(@RequestBody HashMap data) {
         System.out.println("createGroup");
 
-        System.out.println("data: " + data.entrySet());
-
         String uIdString = (String) data.get("uId");
         String emailString = (String) data.get("email");
         String groupNameString = (String) data.get("groupName");
         String groupDescriptionString = (String) data.get("groupDescription");
-
-        System.out.println("uId: " + uIdString);
-        System.out.println("email: " + emailString);
-        System.out.println("groupName: " + groupNameString);
-        System.out.println("groupDescription: " + groupDescriptionString);
 
         groupTaskDao.createUpdateGroup(uIdString, emailString, groupNameString, groupDescriptionString, "Group");
     }
@@ -41,21 +34,41 @@ public class GroupController {
         System.out.println("listGroups");
 
         List<DocumentSnapshot> listDocumentSnapshot = null;
-
-        System.out.println("data: " + data.entrySet());
+        List documentListData = null;
 
         String uIdString = (String) data.get("uId");
         String emailString = (String) data.get("email");
 
         listDocumentSnapshot = groupTaskDao.listGroups(uIdString, emailString, "Group");
 
-        List documentListData = new ArrayList();
-
-        for (DocumentSnapshot document : listDocumentSnapshot) {
-
-            documentListData.add(document.getData());
-
-        }
+        documentListData = new ArrayList();
+        for (DocumentSnapshot document : listDocumentSnapshot) { documentListData.add(document.getData()); }
         return documentListData;
+    }
+
+    @PostMapping(path = "/createTask")
+    public boolean createTask(@RequestBody HashMap data) {
+        System.out.println("createTask");
+
+        System.out.println("data: " + data.entrySet());
+
+        String uIdString = (String) data.get("uId");
+        String groupNameString = (String) data.get("groupName");
+        String taskNameString = (String) data.get("taskName");
+        String taskDescriptionString = (String) data.get("taskDescription");
+        String taskTypeString = (String) data.get("taskType");
+        String dateTimeOfEventString = (String) data.get("dateTimeOfEvent");
+
+        System.out.println("uIdString: " + uIdString);
+        System.out.println("taskNameString: " + taskNameString);
+        System.out.println("taskDescriptionString: " + taskDescriptionString);
+        System.out.println("taskTypeString: " + taskTypeString);
+        System.out.println("dateTimeOfEventString: " + dateTimeOfEventString);
+
+        boolean response = groupTaskDao.createTask(uIdString, groupNameString, taskNameString, taskDescriptionString, taskTypeString, dateTimeOfEventString, "Group");
+
+        System.out.println("response: " + response);
+
+        return false;
     }
 }

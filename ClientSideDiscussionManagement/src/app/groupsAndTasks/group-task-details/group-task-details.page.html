@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Name: {{ group.key }} Details</ion-title>
+    Description:{{ group.value }}
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+<app-sign-out></app-sign-out>
+<ion-button id="createTaskBtn" name="createTaskBtn" (click)="createTask()" color="primary" expand="block">Create Task</ion-button>
+<app-leave-group-btn></app-leave-group-btn>
+
+
+</ion-content>

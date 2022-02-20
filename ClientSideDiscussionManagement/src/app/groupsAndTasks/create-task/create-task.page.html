@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>create-task</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form id="createTaskForm" name="createTaskForm" [formGroup]="formData" (ngSubmit)="createTask()">
+    <ion-input id="taskName" name="taskName" type="text" formControlName="taskName" placeholder="Task Name" class="ion-text-center"></ion-input>
+    <ion-textarea id="taskDescription" name="taskDescription" type="text" formControlName="taskDescription" placeholder="Task Description" class="ion-text-center"></ion-textarea>
+
+    <ion-item>
+      <ion-label>Event type</ion-label>
+    <ion-select id="taskType" name="taskType" formControlName="taskType" multiple="false">
+      <ion-select-option value="meeting">Meeting</ion-select-option>
+      <ion-select-option value="task">Task</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+    <ion-datetime id="dateTimeOfEvent" name="dateTimeOfEvent" type="dateTime" formControlName="dateTimeOfEvent"></ion-datetime>
+
+      <ion-button id="createTaskBtn" name="createTaskBtn" type="submit" color="primary" expand="block">Create Task</ion-button>
+  </form>
+</ion-content>

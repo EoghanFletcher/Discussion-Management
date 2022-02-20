@@ -35,6 +35,7 @@ export class CreateGroupPage implements OnInit {
 
     let url = "http://localhost:8080/api/groupAndTask/createGroup";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
+                                        "email": this.facadeService.getDataDataService("email"),
                                         "groupName": groupName, "groupDescription": groupDescription}
     ).subscribe(responseLamdba => { this.data = responseLamdba });
     // this.router.navigateByUrl("profile"); 

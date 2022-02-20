@@ -1,20 +1,27 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
 import { ListGroupsPageRoutingModule } from './list-groups-routing.module';
 
 import { ListGroupsPage } from './list-groups.page';
+import { SignOutComponent } from 'src/app/sign-out/sign-out.component';
+import { CreateGroupBtnComponent } from '../create-group-btn/create-group-btn.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule,
     ListGroupsPageRoutingModule
   ],
-  declarations: [ListGroupsPage]
+  declarations: [
+    ListGroupsPage,
+    SignOutComponent,
+    CreateGroupBtnComponent
+  ]
 })
 export class ListGroupsPageModule {}

@@ -50,8 +50,6 @@ public class GroupController {
     public boolean createTask(@RequestBody HashMap data) {
         System.out.println("createTask");
 
-        System.out.println("data: " + data.entrySet());
-
         String uIdString = (String) data.get("uId");
         String groupNameString = (String) data.get("groupName");
         String taskNameString = (String) data.get("taskName");
@@ -59,16 +57,31 @@ public class GroupController {
         String taskTypeString = (String) data.get("taskType");
         String dateTimeOfEventString = (String) data.get("dateTimeOfEvent");
 
-        System.out.println("uIdString: " + uIdString);
-        System.out.println("taskNameString: " + taskNameString);
-        System.out.println("taskDescriptionString: " + taskDescriptionString);
-        System.out.println("taskTypeString: " + taskTypeString);
-        System.out.println("dateTimeOfEventString: " + dateTimeOfEventString);
-
         boolean response = groupTaskDao.createTask(uIdString, groupNameString, taskNameString, taskDescriptionString, taskTypeString, dateTimeOfEventString, "Group");
 
         System.out.println("response: " + response);
 
-        return false;
+        return response;
+    }
+
+    @PostMapping(path = "/listTasks")
+    public List<DocumentSnapshot> listTasks(@RequestBody HashMap data) {
+        System.out.println("listTasks");
+
+        List<DocumentSnapshot> listDocumentSnapshot = null;
+        List documentListData = null;
+
+
+        System.out.println("data: " + data.entrySet());
+
+        String groupNameString = (String) data.get("groupName");
+
+        System.out.println("Group name: " + groupNameString);
+
+        listDocumentSnapshot = groupTaskDao.listTasks(groupNameString, "Group");
+
+        documentListData = new ArrayList();
+        for (DocumentSnapshot document : listDocumentSnapshot) { documentListData.add(document.getData()); }
+        return documentListData;
     }
 }

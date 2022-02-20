@@ -29,11 +29,27 @@ export class GroupTaskDetailsPage implements OnInit {
   console.log("group: " + this.group.value);
   console.log("group: " + this.group);
   }
+
+  this.getTasks();
 }
 
 createTask() {
   console.log("createTask");
   this.router.navigateByUrl("create-task/id");
+}
+
+getTasks() {
+  console.log("getTasks");
+
+  console.log("key: " + this.group)
+
+  // let groupNameString: string = this.formData.get("dateTimeOfEvent").value;
+
+  let url = "http://localhost:8080/api/groupAndTask/listTasks";
+    let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
+                                       "groupName": this.group.key}
+    ).subscribe(responseLamdba => { this.data = responseLamdba,
+    console.log(responseLamdba); });
 }
 
 

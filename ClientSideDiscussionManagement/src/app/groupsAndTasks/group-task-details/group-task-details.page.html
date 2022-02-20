@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+    <ion-back-button></ion-back-button>
     <ion-title>Name: {{ group.key }} Details</ion-title>
     Description:{{ group.value }}
   </ion-toolbar>
@@ -11,5 +12,6 @@
 <ion-button id="createTaskBtn" name="createTaskBtn" (click)="createTask()" color="primary" expand="block">Create Task</ion-button>
 <app-leave-group-btn></app-leave-group-btn>
 
+<ion-item *ngFor="let dataItem of data | keyvalue">{{ dataItem.value.taskName }} : {{ dataItem.value.taskDescription }} : {{ dataItem.value.taskType }} : {{ dataItem.value.dateTimeOfEvent }}</ion-item>
 
 </ion-content>

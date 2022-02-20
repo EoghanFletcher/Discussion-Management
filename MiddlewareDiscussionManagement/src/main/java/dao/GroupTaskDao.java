@@ -71,6 +71,8 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
         return writeResultApiFuture;
     }
 
+
+
     @Override
     public boolean createTask(String uId, String groupName, String taskName, String taskDescription, String taskType, String dateTimeOfEvent, String databaseCollection) {
         System.out.println("createTask");
@@ -97,16 +99,14 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
 
             writeResultApiFuture = collectionReferenceTask.document().set(documentData);
 
-            System.out.println("Get: " + writeResultApiFuture.get());
-
         } catch(Exception ex) {
             System.out.println("An exception occurred [createTask], ex: " + ex);
         }
-        return false;
+        return result;
     }
 
     @Override
-    public List listGroups(String uId, String email, String databaseCollection) {
+    public List<DocumentSnapshot> listGroups(String uId, String email, String databaseCollection) {
         System.out.println("listGroups");
 
         ApiFuture<QuerySnapshot> future = null;
@@ -126,6 +126,35 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             System.out.println("An exception occurred [createProfileField], ex: " + ex);
         }
 
+        return listDocumentSnapshot;
+    }
+
+    @Override
+    public List<DocumentSnapshot> listTasks(String groupName, String databaseCollection) {
+        System.out.println("listTasks");
+
+        ApiFuture<QuerySnapshot> future = null;
+        List<QueryDocumentSnapshot> documents = null;
+        List<DocumentSnapshot> listDocumentSnapshot = null;
+        CollectionReference collectionReferenceTask = null;
+
+        try {
+            Firestore firestore = Dao.initialiseFirestore();
+            collectionReferenceTask = firestore.collection(databaseCollection).document(groupName).collection("Task");
+            future = collectionReferenceTask.get();
+            documents = future.get().getDocuments();
+
+            for (DocumentSnapshot document: documents) {
+                System.out.println("document: " + document.getData());
+            }
+
+            listDocumentSnapshot = new ArrayList<>();
+            for (DocumentSnapshot document: documents) {
+                listDocumentSnapshot.add(document);
+            }
+        } catch(Exception ex) {
+            System.out.println("An exception occurred [createProfileField], ex: " + ex);
+        }
 
         return listDocumentSnapshot;
     }

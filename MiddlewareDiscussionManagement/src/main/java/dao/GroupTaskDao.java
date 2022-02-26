@@ -71,13 +71,10 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
         return writeResultApiFuture;
     }
 
-
-
     @Override
     public boolean createTask(String uId, String groupName, String taskName, String taskDescription, String taskType, String dateTimeOfEvent, String databaseCollection) {
         System.out.println("createTask");
 
-        DocumentSnapshot documentSnapshot = null;
         ApiFuture<QuerySnapshot> future = null;
         List<QueryDocumentSnapshot> documents = null;
         DocumentReference documentReference = null;
@@ -98,7 +95,6 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             documentData.put("dateTimeOfEvent", dateTimeOfEvent);
 
             writeResultApiFuture = collectionReferenceTask.document().set(documentData);
-
         } catch(Exception ex) {
             System.out.println("An exception occurred [createTask], ex: " + ex);
         }
@@ -125,7 +121,6 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
         } catch(Exception ex) {
             System.out.println("An exception occurred [createProfileField], ex: " + ex);
         }
-
         return listDocumentSnapshot;
     }
 
@@ -153,9 +148,8 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
                 listDocumentSnapshot.add(document);
             }
         } catch(Exception ex) {
-            System.out.println("An exception occurred [createProfileField], ex: " + ex);
+            System.out.println("An exception occurred [listTasks], ex: " + ex);
         }
-
         return listDocumentSnapshot;
     }
 }

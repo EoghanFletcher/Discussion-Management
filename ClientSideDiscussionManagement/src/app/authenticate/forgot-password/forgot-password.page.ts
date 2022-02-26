@@ -33,6 +33,11 @@ export class ForgotPasswordPage implements OnInit {
     }
   }
 
+  ionViewWillEnter() {
+    this.postData.get("email").setValue("");
+    this.postData.get("password").setValue("");
+  }
+
   async resetPassword() {
     console.log("resetPassword");
     this.email = this.postData.get("email").value;

@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FacadeService } from '../../service/facade.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { SelectedCredential } from '../../interface/selected-credential';
+import { ModalController } from '@ionic/angular';
+import { ModalNavigationComponentComponent } from 'src/app/modal-navigation-component/modal-navigation-component.component';
 
 @Component({
   selector: 'app-profile',
@@ -19,11 +21,14 @@ export class ProfilePage implements OnInit {
     private http: HttpClient) { }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter() {
     this.data = this.facadeService.getDataDataService("uid");
 
     this.getUserData();
   }
-
+  
   getUserData() {
     console.log("getUserData");
     let url = "http://localhost:8080/api/user/authenticate";
@@ -54,5 +59,17 @@ export class ProfilePage implements OnInit {
     this.facadeService.setDataDataService("id", credential);
     
     this.router.navigateByUrl("profile-crud/id");
+  }
+
+  async displayMenu() {
+    console.log("displayMenu");
+
+    // const modal = await this.modalController.create({
+    //   component: ModalNavigationComponentComponent
+    // });
+    // return await modal.present();
+    
+    
+    await this.facadeService.displayModal();
   }
 }

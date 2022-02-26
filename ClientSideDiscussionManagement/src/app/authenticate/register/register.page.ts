@@ -33,6 +33,10 @@ export class RegisterPage implements OnInit {
     }
   }
 
+  ionViewWillEnter() {
+    this.postData.get("email").setValue("");
+  }
+
   async register() {
     console.log("register");
     this.email = this.postData.get("email").value;

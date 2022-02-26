@@ -33,6 +33,11 @@ export class LoginPage implements OnInit {
     }
   }
 
+  ionViewWillEnter() {
+    this.postData.get("email").setValue("");
+    this.postData.get("password").setValue("");
+  }
+
   async login() {
     console.log("login");
     this.email = this.postData.get("email").value;

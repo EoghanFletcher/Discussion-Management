@@ -21,12 +21,19 @@ public class GroupController {
     public void createGroup(@RequestBody HashMap data) {
         System.out.println("createGroup");
 
+        System.out.println("data: " + data.entrySet());
+
         String uIdString = (String) data.get("uId");
-        String emailString = (String) data.get("email");
+        String usernameString = (String) data.get("username");
         String groupNameString = (String) data.get("groupName");
         String groupDescriptionString = (String) data.get("groupDescription");
 
-        groupTaskDao.createUpdateGroup(uIdString, emailString, groupNameString, groupDescriptionString, "Group");
+        System.out.println("uId: " + uIdString);
+        System.out.println("usernameString: " + usernameString);
+        System.out.println("groupNameString: " + groupNameString);
+        System.out.println("groupDescriptionString: " + groupDescriptionString);
+
+        groupTaskDao.createUpdateGroup(uIdString, usernameString, groupNameString, groupDescriptionString, "Group");
     }
 
     @PostMapping(path = "/listGroups")
@@ -37,9 +44,9 @@ public class GroupController {
         List documentListData = null;
 
         String uIdString = (String) data.get("uId");
-        String emailString = (String) data.get("email");
+        String username = (String) data.get("username");
 
-        listDocumentSnapshot = groupTaskDao.listGroups(uIdString, emailString, "Group");
+        listDocumentSnapshot = groupTaskDao.listGroups(uIdString, username, "Group");
 
         documentListData = new ArrayList();
         for (DocumentSnapshot document : listDocumentSnapshot) { documentListData.add(document.getData()); }

@@ -47,12 +47,14 @@ export class AuthenticationService {
     console.log("login auth");
     console.log("Email: " + credentials.emailAddress);
     console.log("Password: " + credentials.password);
+    console.log("Username: " + credentials.username);
 
     await createUserWithEmailAndPassword(this.auth, credentials.emailAddress, credentials.password)
     .then(res => {console.log("res: " + res),
       this.dataService.setData("signedIn", res);
       this.dataService.setData("uid", res.user.uid);
       this.dataService.setData("email", res.user.email);
+      this.dataService.setData("username", credentials.username);
     // console.log(JSON.stringify(this.dataService.getData("signedIn")));
     });
   }

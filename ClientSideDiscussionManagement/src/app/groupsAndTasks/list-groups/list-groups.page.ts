@@ -24,11 +24,19 @@ export class ListGroupsPage implements OnInit {
     this.getGroupsInvolvingUser();
   }
 
+  ionViewWillEnter() {
+    this.getGroupsInvolvingUser();
+  }
+
+  createGroup() {
+    this.router.navigateByUrl("create-group");
+  }
+
   getGroupsInvolvingUser() {
     console.log("getUserData");
     let url = "http://localhost:8080/api/groupAndTask/listGroups";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
-                                      "email": this.facadeService.getDataDataService("email")}
+                                      "username": this.facadeService.getDataDataService("username")}
     ).subscribe(responseLamdba => { this.data = responseLamdba,
     console.log(responseLamdba[0]); });    
   }

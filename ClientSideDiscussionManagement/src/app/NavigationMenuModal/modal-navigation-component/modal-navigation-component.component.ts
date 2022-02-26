@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FacadeService } from '../service/facade.service';
+import { FacadeService } from '../../service/facade.service';
 
 @Component({
   selector: 'app-modal-navigation-component',

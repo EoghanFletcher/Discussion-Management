@@ -17,4 +17,6 @@ public interface GroupTaskDaoInterface {
     public ApiFuture<WriteResult> addGroupMember(String email, Firestore firestore, String groupName);
 
     public List<DocumentSnapshot> listTasks(String groupName, String databaseCollection);
+
+    public ApiFuture<WriteResult> assignAdminPrivileges(Firestore firestore, String groupName, String username);
 }

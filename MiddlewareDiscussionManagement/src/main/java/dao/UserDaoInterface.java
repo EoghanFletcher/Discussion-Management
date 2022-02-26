@@ -14,6 +14,8 @@ public interface UserDaoInterface {
 
     public DocumentSnapshot getUserDocument(String uid, String email);
 
+    public DocumentSnapshot register(String uid, String email, String username);
+
     public UserRecord getUId(String username, FirebaseAuth firebaseAuthInstance);
 
     public boolean createUpdateProfileField(String uId, String key, String value, String databaseCollection);

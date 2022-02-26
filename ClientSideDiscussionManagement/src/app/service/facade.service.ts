@@ -5,7 +5,7 @@ import { ForgotPassword } from '../interface/forgot-password';
 import { AuthenticationService } from './authentication.service';
 import { DataResolverService } from './data-resolver.service';
 import { DataService } from './data.service';
-import { ModalNavigationComponentComponent } from '../modal-navigation-component/modal-navigation-component.component';
+import { ModalNavigationComponentComponent } from '../NavigationMenuModal/modal-navigation-component/modal-navigation-component.component'
 
 @Injectable({
   providedIn: 'root'

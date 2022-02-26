@@ -12,6 +12,9 @@
   <ion-item>
     <ion-input id="password" name="password" type="password" formControlName="password" placeholder="Password" class="ion-text-center"></ion-input>
   </ion-item>
+  <ion-item>
+    <ion-input id="username" name="username" type="text" formControlName="username" placeholder="username" class="ion-text-center"></ion-input>
+  </ion-item>
       <ion-button id="registerBtn" name="registerBtn" type="submit" color="primary" expand="block">Sign Up</ion-button>
       <ion-router-link color="secondary" (click)="navigateToPage('login')">Login</ion-router-link>
       <ion-router-link color="danger" (click)="navigateToPage('forgot-password')">Forgot Password</ion-router-link>

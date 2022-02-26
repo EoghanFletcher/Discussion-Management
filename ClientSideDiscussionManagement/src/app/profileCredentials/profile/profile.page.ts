@@ -4,7 +4,7 @@ import { FacadeService } from '../../service/facade.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { SelectedCredential } from '../../interface/selected-credential';
 import { ModalController } from '@ionic/angular';
-import { ModalNavigationComponentComponent } from 'src/app/modal-navigation-component/modal-navigation-component.component';
+import { ModalNavigationComponentComponent } from 'src/app/NavigationMenuModal/modal-navigation-component/modal-navigation-component.component';
 
 @Component({
   selector: 'app-profile',
@@ -32,8 +32,14 @@ export class ProfilePage implements OnInit {
   getUserData() {
     console.log("getUserData");
     let url = "http://localhost:8080/api/user/authenticate";
+
+    console.log("uId: " + this.facadeService.getDataDataService("uid"));
+    console.log("email: " + this.facadeService.getDataDataService("email"));
+    console.log("username: " + this.facadeService.getDataDataService("username"));
+
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
-                                      "email": this.facadeService.getDataDataService("email")}
+                                      "email": this.facadeService.getDataDataService("email"),
+                                      "username": this.facadeService.getDataDataService("username")}
     ).subscribe(responseLamdba => { this.data = responseLamdba });    
   }
 
@@ -61,15 +67,4 @@ export class ProfilePage implements OnInit {
     this.router.navigateByUrl("profile-crud/id");
   }
 
-  async displayMenu() {
-    console.log("displayMenu");
-
-    // const modal = await this.modalController.create({
-    //   component: ModalNavigationComponentComponent
-    // });
-    // return await modal.present();
-    
-    
-    await this.facadeService.displayModal();
-  }
 }

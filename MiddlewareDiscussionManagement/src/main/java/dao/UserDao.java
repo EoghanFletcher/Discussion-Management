@@ -28,6 +28,36 @@ public class UserDao implements UserDaoInterface {
 
     }
 
+//    @Override
+//    public DocumentSnapshot getUserDocument(String uid, String email) {
+//        System.out.println("getUserDocument");
+//        DocumentSnapshot documentSnapshot = null;
+//        ApiFuture<QuerySnapshot> future = null;
+//        List<QueryDocumentSnapshot> documents = null;
+//
+//        System.out.println("uId: " + uid);
+//        System.out.println("uId: " + email);
+//
+//        try {
+//            Firestore firestore = Dao.initialiseFirestore();
+//
+//            future = firestore.collection("User").whereEqualTo("uId", uid).get();
+//            documents = future.get().getDocuments();
+//
+//
+//            for (DocumentSnapshot document : documents) {
+//                if (document.get("uId").equals(uid)) {
+//                    documentSnapshot = document;
+//                }
+//            }
+//        } catch (Exception ex) {
+//            System.out.println("An exception occurred [getUserDocument], ex: " + ex.getMessage());
+//            ex.printStackTrace();
+//        }
+//
+//        return documentSnapshot;
+//    }
+
     @Override
     public DocumentSnapshot getUserDocument(String uid, String email) {
         System.out.println("getUserDocument");
@@ -66,6 +96,48 @@ public class UserDao implements UserDaoInterface {
 
         return documentSnapshot;
     }
+
+
+
+    @Override
+    public DocumentSnapshot register(String uid, String email, String username) {
+        System.out.println("register");
+        DocumentSnapshot documentSnapshot = null;
+        ApiFuture<QuerySnapshot> future = null;
+        List<QueryDocumentSnapshot> documents = null;
+
+        System.out.println("uId: " + uid);
+        System.out.println("email: " + email);
+        System.out.println("username: " + username);
+
+
+
+        try {
+            Firestore firestore = Dao.initialiseFirestore();
+// Create document
+            HashMap documentData = new HashMap();
+            documentData.put("uId", uid);
+            documentData.put("email", email);
+            documentData.put("username", username);
+            ApiFuture<WriteResult> writeResultApiFuture = firestore.collection("User").document().set(documentData);
+
+            future = firestore.collection("User").whereEqualTo("uId", uid).get();
+            documents = future.get().getDocuments();
+
+            for (DocumentSnapshot document : documents) {
+                if (document.get("uId").equals(uid)) {
+                    documentSnapshot = document;
+                }
+            }
+
+        } catch (Exception ex) {
+            System.out.println("An exception occurred [register], ex: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+
+        return documentSnapshot;
+    }
+
 
     @Override
     public UserRecord getUId(String uId, FirebaseAuth firebaseAuthInstance) {

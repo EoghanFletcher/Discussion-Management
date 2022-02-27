@@ -23,11 +23,11 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
 
         try {
             Firestore firestore = Dao.initialiseFirestore();
-            future = firestore.collection(databaseCollection).whereEqualTo("uId", uId).get();
+            future = firestore.collection(databaseCollection).whereEqualTo("username", username).get();
             documents = future.get().getDocuments();
 
             for (DocumentSnapshot document : documents) {
-                if (document.get("uId").equals(uId)) { documentSnapshot = document; }
+                if (document.get("username").equals(username)) { documentSnapshot = document; }
             }
 
             HashMap documentData = new HashMap();
@@ -124,7 +124,7 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
                 if (((Map) document.getData().get("Membership")).containsKey(username)) { listDocumentSnapshot.add(document); }
             }
         } catch(Exception ex) {
-            System.out.println("An exception occurred [createProfileField], ex: " + ex);
+            System.out.println("An exception occurred [listGroup], ex: " + ex);
         }
         return listDocumentSnapshot;
     }

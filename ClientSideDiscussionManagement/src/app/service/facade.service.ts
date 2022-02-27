@@ -38,6 +38,7 @@ export class FacadeService {
     }
 
     setDataDataService(id: string, data: any) {
+      this.dataService.setData(id, data);
       return this.dataService.setData(id, data);
     }
 

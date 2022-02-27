@@ -9,6 +9,7 @@ import { ListGroupsPageRoutingModule } from './list-groups-routing.module';
 import { ListGroupsPage } from './list-groups.page';
 import { SignOutComponent } from 'src/app/sign-out/sign-out.component';
 import { CreateGroupBtnComponent } from '../create-group-btn/create-group-btn.component';
+import { NavigationMenuBtnComponent } from 'src/app/NavigationMenuModal/components/navigation-menu-btn/navigation-menu-btn.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { CreateGroupBtnComponent } from '../create-group-btn/create-group-btn.co
   declarations: [
     ListGroupsPage,
     SignOutComponent,
-    CreateGroupBtnComponent
+    CreateGroupBtnComponent,
+    NavigationMenuBtnComponent
   ]
 })
 export class ListGroupsPageModule {}

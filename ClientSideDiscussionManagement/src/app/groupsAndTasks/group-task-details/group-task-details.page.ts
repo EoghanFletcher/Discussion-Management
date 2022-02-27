@@ -52,6 +52,16 @@ getTasks() {
     console.log(responseLamdba); });
 }
 
+deleteDeactivateTask(taskName) {
+console.log("deleteDeactivateTask");
+console.log("task: " + taskName);
+
+  let url = "http://localhost:8080/api/groupAndTask/deactivateTask";
+    let response = this.http.post(url, {"groupName": this.group.key,
+                                      "taskName": taskName}
+    ).subscribe(responseLamdba => { this.data = responseLamdba,
+    console.log(responseLamdba); });
+}
 
 }
 

@@ -75,6 +75,19 @@ public class GroupController {
         return response;
     }
 
+    @PostMapping(path = "deactivateTask")
+    public void deactivateTask(@RequestBody HashMap data) {
+        System.out.println("deactivateTask");
+
+        boolean deleted = false;
+
+
+        String groupName = (String) data.get("groupName");
+        String taskName = (String) data.get("taskName");
+
+        groupTaskDao.deactivateTask(groupName, taskName);
+    }
+
     @PostMapping(path = "/listTasks")
     public List<DocumentSnapshot> listTasks(@RequestBody HashMap data) {
         System.out.println("listTasks");
@@ -101,9 +114,6 @@ public class GroupController {
         System.out.println("listEvents");
 
         DocumentSnapshot documentSnapshot = null;
-        List documentListData = null;
-
-
 
         documentSnapshot = groupTaskDao.listEvents("Event");
 
@@ -111,4 +121,6 @@ public class GroupController {
 
         return documentSnapshot.getData();
     }
+
+
 }

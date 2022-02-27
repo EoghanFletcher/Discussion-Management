@@ -1,8 +1,10 @@
 package dao;
 
+import com.google.api.client.util.DateTime;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.Future;
 
@@ -110,6 +112,56 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
     }
 
     @Override
+    public boolean deactivateTask(String groupName, String taskName) {
+        System.out.println("deactivateTask");
+        DocumentSnapshot documentSnapshot = null;
+//        ApiFuture<QuerySnapshot> future = null;
+        DocumentReference documentReference = null;
+        List<QueryDocumentSnapshot> documents = null;
+        Future<DocumentSnapshot> apiFutureFutre = null;
+        CollectionReference collectionReference = null;
+
+        ApiFuture<QuerySnapshot> future = null;
+        ApiFuture<WriteResult> writeResultApiFuture = null;
+
+
+        try {
+            Firestore firestore = Dao.initialiseFirestore();
+            collectionReference = firestore.collection("Group").document(groupName).collection("Task");
+            future = collectionReference.get();
+            documents = future.get().getDocuments();
+
+            for (DocumentSnapshot document : documents) {
+                System.out.println("data: " + document.getData());
+                if (document.get("taskName").equals(taskName)) { documentSnapshot = document; }
+            }
+
+            Map documentData = new HashMap();
+            documentData = documentSnapshot.getData();
+            System.out.println("documentData: " + documentData.entrySet());
+            documentData.put("status", "deactivated");
+
+
+            documentReference = collectionReference.document((documentSnapshot.getId()));
+            writeResultApiFuture = documentReference.update(documentData);
+
+            System.out.println("writeResultApiFuture: " + writeResultApiFuture.get());
+
+//            for (DocumentSnapshot document: documents) {
+//                System.out.println("document: " + document.getData());
+//            }
+
+            for (DocumentSnapshot document: documents) {
+                documentSnapshot = document;
+            }
+        } catch (Exception ex) {
+            System.out.println("An exception occurred [deactivateTask], ex: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
     public List<DocumentSnapshot> listGroups(String uId, String username, String databaseCollection) {
         System.out.println("listGroups");
 
@@ -147,15 +199,22 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             future = collectionReferenceTask.get();
             documents = future.get().getDocuments();
 
-//            for (DocumentSnapshot document: documents) {
-//                System.out.println("document: " + document.getData());
-//            }
-
             listDocumentSnapshot = new ArrayList<>();
             for (DocumentSnapshot document: documents) {
-//            if (document.get("status").equals("active") && document.get("dateTimeOfEvent") >= DateTime.) {
+
+//                SimpleDateFormat format = new SimpleDateFormat(("YYYY-MM-DDTHH:mmZ"));
+//
+//                Date currentDate = new Date();
+//                Date dateTimeOfEvent = new Date();
+
+
+//                Date simpleDateFormat = new SimpleDateFormat("YYYY-MM-DDTHH:mmZ").parse((String) document.get("dateTimeOfEvent"));
+
+//                System.out.println("simpleDateFormat: " + simpleDateFormat);
+
+            if (document.get("status").equals("active") /* && currentDate.after(dateTimeOfEvent) */) {
                 listDocumentSnapshot.add(document);
-//            }
+            }
             }
         } catch(Exception ex) {
             System.out.println("An exception occurred [listTasks], ex: " + ex);

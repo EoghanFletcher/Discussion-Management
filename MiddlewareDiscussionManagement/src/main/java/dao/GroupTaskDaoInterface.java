@@ -16,6 +16,8 @@ public interface GroupTaskDaoInterface {
 
     public boolean createTask(String username, String groupName, String taskName, String taskDescription, String taskType,  /* Date */  String dateTimeOfEvent, String databaseCollection);
 
+    public boolean deactivateTask(String groupName, String taskName);
+
     public ApiFuture<WriteResult> addGroupMember(String email, Firestore firestore, String groupName);
 
     public List<DocumentSnapshot> listTasks(String groupName, String databaseCollection);

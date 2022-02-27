@@ -4,6 +4,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 
 import java.util.*;
+import java.util.concurrent.Future;
 
 public class GroupTaskDao implements GroupTaskDaoInterface {
 
@@ -77,7 +78,7 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
     }
 
     @Override
-    public boolean createTask(String uId, String groupName, String taskName, String taskDescription, String taskType, String dateTimeOfEvent, String databaseCollection) {
+    public boolean createTask(String username, String groupName, String taskName, String taskDescription, String taskType, /* Date */ String dateTimeOfEvent, String databaseCollection) {
         System.out.println("createTask");
 
         ApiFuture<QuerySnapshot> future = null;
@@ -98,6 +99,8 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             documentData.put("taskDescription", taskDescription);
             documentData.put("taskType", taskType);
             documentData.put("dateTimeOfEvent", dateTimeOfEvent);
+            documentData.put("createdBy", username);
+            documentData.put("status", "active");
 
             writeResultApiFuture = collectionReferenceTask.document().set(documentData);
         } catch(Exception ex) {
@@ -144,13 +147,15 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             future = collectionReferenceTask.get();
             documents = future.get().getDocuments();
 
-            for (DocumentSnapshot document: documents) {
-                System.out.println("document: " + document.getData());
-            }
+//            for (DocumentSnapshot document: documents) {
+//                System.out.println("document: " + document.getData());
+//            }
 
             listDocumentSnapshot = new ArrayList<>();
             for (DocumentSnapshot document: documents) {
+//            if (document.get("status").equals("active") && document.get("dateTimeOfEvent") >= DateTime.) {
                 listDocumentSnapshot.add(document);
+//            }
             }
         } catch(Exception ex) {
             System.out.println("An exception occurred [listTasks], ex: " + ex);
@@ -173,5 +178,41 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             System.out.println("An exception occurred [assignAdminPrivileges], ex: " + ex);
         }
         return writeResultApiFuture;
+    }
+
+    @Override
+    public DocumentSnapshot listEvents(String databaseCollection) {
+        System.out.println("listEvents");
+        DocumentSnapshot documentSnapshot = null;
+//        ApiFuture<QuerySnapshot> future = null;
+        DocumentReference documentReference = null;
+        List<QueryDocumentSnapshot> documents = null;
+        Future<DocumentSnapshot> apiFutureFutre = null;
+        CollectionReference collectionReference = null;
+
+        ApiFuture<QuerySnapshot> future = null;
+
+
+        try {
+            Firestore firestore = Dao.initialiseFirestore();
+            collectionReference = firestore.collection(databaseCollection);
+            future = collectionReference.get();
+            documents = future.get().getDocuments();
+
+//            for (DocumentSnapshot document: documents) {
+//                System.out.println("document: " + document.getData());
+//            }
+
+            for (DocumentSnapshot document: documents) {
+            documentSnapshot = document;
+            }
+
+
+        } catch (Exception ex) {
+            System.out.println("An exception occurred [listEvents], ex: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+
+        return documentSnapshot;
     }
 }

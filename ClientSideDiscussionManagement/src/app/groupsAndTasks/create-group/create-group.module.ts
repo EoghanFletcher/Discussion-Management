@@ -19,8 +19,7 @@ import { CreateGroupBtnComponent } from '../create-group-btn/create-group-btn.co
     CreateGroupPageRoutingModule
   ],
   declarations: [CreateGroupPage,
-    SignOutComponent,
-    CreateGroupBtnComponent
+    SignOutComponent
   ]
 })
 export class CreateGroupPageModule {}

@@ -13,8 +13,9 @@
     <ion-item>
       <ion-label>Event type</ion-label>
     <ion-select id="taskType" name="taskType" formControlName="taskType" multiple="false">
-      <ion-select-option value="meeting">Meeting</ion-select-option>
-      <ion-select-option value="task">Task</ion-select-option>
+
+      <ion-select-option [value]="eventItem.value" *ngFor="let eventItem of events | keyvalue">{{ eventItem.value}}</ion-select-option>
+
     </ion-select>
   </ion-item>
 

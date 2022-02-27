@@ -2,15 +2,9 @@ package com.middleware.middlewarediscussionmanagement;
 
 import com.google.cloud.firestore.DocumentSnapshot;
 import dao.GroupTaskDao;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping(path = "/api/groupAndTask")
@@ -55,16 +49,26 @@ public class GroupController {
 
     @PostMapping(path = "/createTask")
     public boolean createTask(@RequestBody HashMap data) {
-        System.out.println("createTask");
+        System.out.println("createTask_Controller");
 
-        String uIdString = (String) data.get("uId");
+        System.out.println("data: " + data.entrySet());
+
+        String usernameString = (String) data.get("username");
         String groupNameString = (String) data.get("groupName");
         String taskNameString = (String) data.get("taskName");
         String taskDescriptionString = (String) data.get("taskDescription");
         String taskTypeString = (String) data.get("taskType");
-        String dateTimeOfEventString = (String) data.get("dateTimeOfEvent");
+//        Date dateTimeOfEvent = (Date) data.get("dateTimeOfEvent");
+        String dateTimeOfEvent = (String) data.get("dateTimeOfEvent");
 
-        boolean response = groupTaskDao.createTask(uIdString, groupNameString, taskNameString, taskDescriptionString, taskTypeString, dateTimeOfEventString, "Group");
+        System.out.println("usernameString: " + usernameString);
+        System.out.println("groupNameString: " + groupNameString);
+        System.out.println("taskNameString: " + taskNameString);
+        System.out.println("taskDescriptionString: " + taskDescriptionString);
+        System.out.println("taskTypeString: " + taskTypeString);
+        System.out.println("dateTimeOfEvent: " + dateTimeOfEvent);
+
+        boolean response = groupTaskDao.createTask(usernameString, groupNameString, taskNameString, taskDescriptionString, taskTypeString, dateTimeOfEvent, "Group");
 
         System.out.println("response: " + response);
 
@@ -90,5 +94,21 @@ public class GroupController {
         documentListData = new ArrayList();
         for (DocumentSnapshot document : listDocumentSnapshot) { documentListData.add(document.getData()); }
         return documentListData;
+    }
+
+    @GetMapping(path = "/listEvents")
+    public Map getEvents() {
+        System.out.println("listEvents");
+
+        DocumentSnapshot documentSnapshot = null;
+        List documentListData = null;
+
+
+
+        documentSnapshot = groupTaskDao.listEvents("Event");
+
+        System.out.println("documentSnapshot: " + documentSnapshot.getData());
+
+        return documentSnapshot.getData();
     }
 }

@@ -19,50 +19,53 @@ import java.util.Map;
 public class UserController {
     UserDao userDao = new UserDao();
 
+    @PostMapping(path = "/authenticate")
+    public Map authenticate(@RequestBody HashMap uId, String email, String username) {
+
+        DocumentSnapshot documentSnapshot = null;
+        UserRecord userRecord = null;
+
+        String uIdString = (String) uId.get("uId");
+        String emailString = (String) uId.get("email");
+        String usernameString = (String) uId.get("username");
+
+//        System.out.println("uIdString: " + uIdString);
+//        System.out.println("email: " + email);
+//        System.out.println("username: " + username);
+
+        FirebaseAuth firebaseAuth = userDao.getAuthenticationInstance();
+        UserRecord userRecordUId = userDao.getUId(uIdString, firebaseAuth);
+
+        if (userRecordUId != null) {
+            if(usernameString == null) {
+    System.out.println("login: ");
+                documentSnapshot = userDao.getUserDocument(uIdString, emailString);
+            }
+            else {
+                System.out.println("register: ");
+                documentSnapshot = userDao.register(uIdString, emailString, usernameString);
+            }
+        }
+
+        System.out.println("here");
+        return  documentSnapshot.getData();
+    }
+
 //    @PostMapping(path = "/authenticate")
-//    public Map authenticate(@RequestBody HashMap uId, String email, String username) {
+//    public Map authenticate(@RequestBody HashMap uId, String email) {
 //
 //        DocumentSnapshot documentSnapshot = null;
 //        UserRecord userRecord = null;
 //
 //        String uIdString = (String) uId.get("uId").toString();
 //        String emailString = (String) uId.get("email").toString();
-//        String usernameString = (String) uId.get("username").toString();
-//
-////        System.out.println("uIdString: " + uIdString);
-////        System.out.println("email: " + email);
-////        System.out.println("username: " + username);
-//
 //        FirebaseAuth firebaseAuth = userDao.getAuthenticationInstance();
 //        UserRecord userRecordUId = userDao.getUId(uIdString, firebaseAuth);
 //
 //        if (userRecordUId != null) {
-//            if(usernameString == null) {
-//                documentSnapshot = userDao.getUserDocument(uIdString, emailString);
-//            }
-//            else {
-//                userDao.register(uIdString, emailString, usernameString);
-//            }
+//            documentSnapshot = userDao.getUserDocument(uIdString, emailString);
 //        }
 //
 //        return  documentSnapshot.getData();
 //    }
-
-    @PostMapping(path = "/authenticate")
-    public Map authenticate(@RequestBody HashMap uId, String email) {
-
-        DocumentSnapshot documentSnapshot = null;
-        UserRecord userRecord = null;
-
-        String uIdString = (String) uId.get("uId").toString();
-        String emailString = (String) uId.get("email").toString();
-        FirebaseAuth firebaseAuth = userDao.getAuthenticationInstance();
-        UserRecord userRecordUId = userDao.getUId(uIdString, firebaseAuth);
-
-        if (userRecordUId != null) {
-            documentSnapshot = userDao.getUserDocument(uIdString, emailString);
-        }
-
-        return  documentSnapshot.getData();
-    }
 }

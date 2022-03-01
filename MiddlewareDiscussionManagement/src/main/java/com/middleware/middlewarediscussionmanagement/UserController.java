@@ -20,52 +20,31 @@ public class UserController {
     UserDao userDao = new UserDao();
 
     @PostMapping(path = "/authenticate")
-    public Map authenticate(@RequestBody HashMap uId, String email, String username) {
+    public Map authenticate(@RequestBody HashMap data) {
 
-        DocumentSnapshot documentSnapshot = null;
-        UserRecord userRecord = null;
+            DocumentSnapshot documentSnapshot = null;
+            UserRecord userRecord = null;
 
-        String uIdString = (String) uId.get("uId");
-        String emailString = (String) uId.get("email");
-        String usernameString = (String) uId.get("username");
+        try {
+            String uIdString = (String) data.get("uId");
+            String emailString = (String) data.get("email");
+            String usernameString = (String) data.get("username");
 
-//        System.out.println("uIdString: " + uIdString);
-//        System.out.println("email: " + email);
-//        System.out.println("username: " + username);
+            FirebaseAuth firebaseAuth = userDao.getAuthenticationInstance();
+            UserRecord userRecordUId = userDao.getUId(uIdString, firebaseAuth);
 
-        FirebaseAuth firebaseAuth = userDao.getAuthenticationInstance();
-        UserRecord userRecordUId = userDao.getUId(uIdString, firebaseAuth);
-
-        if (userRecordUId != null) {
-            if(usernameString == null) {
-    System.out.println("login: ");
-                documentSnapshot = userDao.getUserDocument(uIdString, emailString);
-            }
-            else {
-                System.out.println("register: ");
-                documentSnapshot = userDao.register(uIdString, emailString, usernameString);
+            if (userRecordUId != null) {
+                if (usernameString == null) {
+                    documentSnapshot = userDao.getUserDocument(uIdString, emailString); }
+                else {
+                    documentSnapshot = userDao.register(uIdString, emailString, usernameString); }
             }
         }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [authenticate], ex: " + ex);
+            ex.printStackTrace();
+        }
 
-        System.out.println("here");
         return  documentSnapshot.getData();
     }
-
-//    @PostMapping(path = "/authenticate")
-//    public Map authenticate(@RequestBody HashMap uId, String email) {
-//
-//        DocumentSnapshot documentSnapshot = null;
-//        UserRecord userRecord = null;
-//
-//        String uIdString = (String) uId.get("uId").toString();
-//        String emailString = (String) uId.get("email").toString();
-//        FirebaseAuth firebaseAuth = userDao.getAuthenticationInstance();
-//        UserRecord userRecordUId = userDao.getUId(uIdString, firebaseAuth);
-//
-//        if (userRecordUId != null) {
-//            documentSnapshot = userDao.getUserDocument(uIdString, emailString);
-//        }
-//
-//        return  documentSnapshot.getData();
-//    }
 }

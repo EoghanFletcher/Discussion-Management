@@ -27,13 +27,27 @@ export class GroupTaskDetailsPage implements OnInit {
     this.group = this.route.snapshot.data.special;
     this.facadeService.setDataDataService("groupName", this.group.key);
 
-
+    if (this.group.requestsToLeave != null) {
     this.requestToLeaveData = Object.keys(this.group.requestsToLeave);
+  }
 
-    console.log("typeof: " + typeof(this.requestToLeaveData[0]));
-    console.log("requestToLeaveData[0]: " + this.requestToLeaveData[0]);
+    // console.log("typeof: " + typeof(this.requestToLeaveData[0]));
+    // console.log("requestToLeaveData[0]: " + this.requestToLeaveData[0]);
   }
   this.getTasks();
+}
+requestsToLeaveVerdict(verdict, username) {
+  console.log("requestsToLeaveVerdict");
+  
+  console.log("username: " + username);
+  console.log("groupName: " + this.group.key);
+  console.log("verdict: " + verdict);
+
+  let url = "http://localhost:8080/api/groupAndTask/leaveGroupVerdict";
+    let response = this.http.post(url, {"username": username,
+                                       "groupName": this.group.key,
+                                        "verdict": verdict}
+    ).subscribe(responseLamdba => { this.data = responseLamdba });
 }
 
 createTask() {

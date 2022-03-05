@@ -120,5 +120,41 @@ public class GroupController {
         return result;
     }
 
+    @PostMapping(path = "leaveGroupVerdict")
+    public boolean leaveGroupVerdict(@RequestBody HashMap data) {
+        System.out.println("requestToLeaveGroup");
+
+        boolean result = false;
+
+        try {
+
+            System.out.println("data: " + data.entrySet());
+
+            String usernameString = (String) data.get("username");
+            String groupNameString = (String) data.get("groupName");
+            String verdictString = (String) data.get("verdict");
+
+            System.out.println("usernameString: " + usernameString);
+            System.out.println("groupNameString: " + groupNameString);
+            System.out.println("verdictString: " + verdictString);
+
+            if (verdictString.equals("grant")) {
+                result = groupTaskDao.grantRequestToLeave(groupNameString, usernameString, "Group");
+            }
+            else {
+                // Deny
+                System.out.println("deny");
+                result = groupTaskDao.removeRequestToLeave(groupNameString, usernameString, "Group");
+            }
+
+            result = groupTaskDao.removeRequestToLeave(groupNameString, usernameString, "Group");
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [requestToLeaveGroup], ex: " + ex);
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
 
 }

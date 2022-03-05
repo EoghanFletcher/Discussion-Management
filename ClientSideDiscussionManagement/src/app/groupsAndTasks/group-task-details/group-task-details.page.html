@@ -19,8 +19,11 @@
 </ion-item>
 
 <ion-item *ngIf="group.requestsToLeave != null">
-  <ion-item *ngFor="let groupRequests of requestToLeaveData">
-  <ion-button (click)="requestsToLeaveVerdict(groupRequests)">{{ groupRequests }}</ion-button>
+  <ion-item *ngFor="let groupRequest of requestToLeaveData">
+  <ion-text>{{ groupRequest }}
+    <ion-button (click)="requestsToLeaveVerdict('grant', groupRequest)">Grant Request</ion-button>
+    <ion-button (click)="requestsToLeaveVerdict('deny', groupRequest)">Deny Request</ion-button>
+  </ion-text>
 </ion-item>
 </ion-item>
 

@@ -229,6 +229,71 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
     }
 
     @Override
+    public boolean grantRequestToLeave(String groupName, String username, String databaseCollection) {
+        System.out.println("grantRequestToLeave");
+
+        ApiFuture<WriteResult> writeResultApiFuture = null;
+        boolean result = false;
+        boolean removeRequest = false;
+
+        try {
+            System.out.println("1");
+            removeRequest = removeRequestToLeave(groupName, username, "Group");
+            System.out.println("2");
+            System.out.println("removeRequest2: " + removeRequest);
+
+            System.out.println("removeRequest: " + removeRequest);
+
+            if (removeRequest) {
+                Firestore firestore = Dao.initialiseFirestore();
+                HashMap groupData = new HashMap();
+                // If the user is not an administrator nothing will happen
+                groupData.put("Administration." + username, FieldValue.delete());
+                groupData.put("Membership." + username, FieldValue.delete());
+                writeResultApiFuture = firestore.collection("Group").document(groupName).update(groupData);
+            }
+        } catch(Exception ex) {
+            System.out.println("An exception occurred [grantRequestToLeave], ex: " + ex);
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean removeRequestToLeave(String groupName, String username, String databaseCollection) {
+        System.out.println("removeRequestToLeave");
+
+        ApiFuture<WriteResult> writeResultApiFuture = null;
+        boolean result = false;
+
+        try {
+            Firestore firestore = Dao.initialiseFirestore();
+
+            HashMap groupData = new HashMap();
+            groupData.put("RequestToLeave." + username, FieldValue.delete());
+
+            writeResultApiFuture = firestore.collection("Group").document(groupName).update(groupData);
+
+//            while (writeResultApiFuture.isDone() == false) {
+//                System.out.println("not complete");
+//            }
+//
+//            // This probably returns true if the operation is finished and not if the operation completed successfully
+//            System.out.println("is Done: " + writeResultApiFuture.isDone());
+//            if (writeResultApiFuture.isDone()) {
+//                result = true;
+//                System.out.println("true");
+//            }
+            result = true;
+
+        } catch(Exception ex) {
+            System.out.println("An exception occurred [removeRequestToLeave], ex: " + ex);
+        }
+        System.out.println("return");
+        return result;
+    }
+
+    @Override
     public ApiFuture<WriteResult> assignAdminPrivileges(Firestore firestore, String groupName, String username) {
         System.out.println("assignAdminPrivileges");
 

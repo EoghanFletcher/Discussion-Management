@@ -53,7 +53,8 @@ export class ListGroupsPage implements OnInit {
     SelectedGroup = {
       key: keySeleted,
       value: valueSelected,
-      administration: null
+      administration: null,
+      requestsToLeave: null
     }
 
     let username = this.facadeService.getDataDataService("username");
@@ -74,10 +75,9 @@ export class ListGroupsPage implements OnInit {
         // console.log("administration: " + element.Administration);
         // console.log("username: " + element.Administration.username);
         // group.administration = element.Administration.get .{username};
+        group.requestsToLeave = element.RequestToLeave
       }
-      else {
-        console.log("no");
-      }
+      
 
     this.facadeService.setDataDataService("id", group);
     this.router.navigateByUrl("group-task-details/id");

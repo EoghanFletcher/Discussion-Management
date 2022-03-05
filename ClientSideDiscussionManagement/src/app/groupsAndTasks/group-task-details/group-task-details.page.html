@@ -18,4 +18,10 @@
 </ion-item>
 </ion-item>
 
+<ion-item *ngIf="group.requestsToLeave != null">
+  <ion-item *ngFor="let groupRequests of requestToLeaveData">
+  <ion-button (click)="requestsToLeaveVerdict(groupRequests)">{{ groupRequests }}</ion-button>
+</ion-item>
+</ion-item>
+
 </ion-content>

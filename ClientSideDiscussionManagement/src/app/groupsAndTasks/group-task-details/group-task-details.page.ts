@@ -13,6 +13,7 @@ export class GroupTaskDetailsPage implements OnInit {
 
   data: any;
   group: SelectedGroup;
+  requestToLeaveData: any;
 
   constructor(private route: ActivatedRoute,
     private facadeService: FacadeService,
@@ -24,10 +25,13 @@ export class GroupTaskDetailsPage implements OnInit {
 
   if (this.route.snapshot.data.special) {
     this.group = this.route.snapshot.data.special;
-    // console.log("group: " + JSON.stringify(this.group));
     this.facadeService.setDataDataService("groupName", this.group.key);
 
-    console.log("group: " + this.group.administration);
+
+    this.requestToLeaveData = Object.keys(this.group.requestsToLeave);
+
+    console.log("typeof: " + typeof(this.requestToLeaveData[0]));
+    console.log("requestToLeaveData[0]: " + this.requestToLeaveData[0]);
   }
   this.getTasks();
 }

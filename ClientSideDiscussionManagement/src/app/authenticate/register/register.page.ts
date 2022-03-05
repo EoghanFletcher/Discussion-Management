@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { EmailPasswordProvider } from '../interface/email-password-provider';
-import { AuthenticationService } from '../service/authentication.service';
-import { DataService } from '../service/data.service';
-import { FacadeService } from '../service/facade.service';
+import { EmailPasswordProvider } from '../../interface/email-password-provider';
+import { AuthenticationService } from '../../service/authentication.service';
+import { DataService } from '../../service/data.service';
+import { FacadeService } from '../../service/facade.service';
 
 @Component({
   selector: 'app-register',
@@ -38,10 +38,13 @@ export class RegisterPage implements OnInit {
     this.email = this.postData.get("email").value;
     this.password = this.postData.get("password").value;
 
+    let emailString: string = this.postData.get("email").value;
+    let passwordString: string = this.password = this.postData.get("password").value
+
     let auth:
     EmailPasswordProvider = {
-      emailAddress: String = this.postData.get("email").value,
-      password: String = this.password = this.postData.get("password").value
+      emailAddress: emailString,
+      password: passwordString
     }
 
     await this.facadeService.registerAuthenticationService(auth);

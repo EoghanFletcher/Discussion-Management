@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FacadeService } from '../service/facade.service';
+import { FacadeService } from '../../service/facade.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
+import { SelectedCredential } from '../../interface/selected-credential';
 
 @Component({
   selector: 'app-profile',
@@ -18,10 +19,8 @@ export class ProfilePage implements OnInit {
     private http: HttpClient) { }
 
   ngOnInit() {
-    console.log("here");
     this.data = this.facadeService.getDataDataService("uid");
 
-    console.log("profile uId: " + this.facadeService.getDataDataService("uid"));
     this.getUserData();
   }
 
@@ -30,5 +29,29 @@ export class ProfilePage implements OnInit {
     let url = "http://localhost:8080/api/user/authenticate";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid")}
     ).subscribe(responseLamdba => { this.data = responseLamdba });    
+  }
+
+
+  createCredential() {
+    console.log("createCredential");
+    this.router.navigateByUrl("create-credential");
+  }
+
+  modifyCredential(keySeleted, valueSelected) {
+    console.log("modifyCredential");
+    // console.log("Key: " + keySeleted);
+    // console.log("Value: " + valueSelected);
+
+
+
+    let credential:
+    SelectedCredential = {
+      key: keySeleted,
+      value: valueSelected
+    }
+
+    this.facadeService.setDataDataService("id", credential);
+    
+    this.router.navigateByUrl("profile-crud/id");
   }
 }

@@ -100,5 +100,25 @@ public class GroupController {
         return documentSnapshot.getData();
     }
 
+    @PostMapping(path = "requestToLeaveGroup")
+    public boolean requestToLeaveGroup(@RequestBody HashMap data) {
+        System.out.println("requestToLeaveGroup");
+
+        boolean result = false;
+
+        String groupNameString = (String) data.get("groupName");
+        String usernameString = (String) data.get("username");
+
+        try {
+
+            result = groupTaskDao.requestToLeaveGroup(groupNameString, usernameString, "Group");
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [requestToLeaveGroup], ex: " + ex);
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
 
 }

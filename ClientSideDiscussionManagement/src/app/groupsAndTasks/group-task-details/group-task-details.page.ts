@@ -24,6 +24,8 @@ export class GroupTaskDetailsPage implements OnInit {
 
   if (this.route.snapshot.data.special) {
     this.group = this.route.snapshot.data.special;
+    // console.log("group: " + JSON.stringify(this.group));
+    this.facadeService.setDataDataService("groupName", this.group.key);
 
     console.log("group: " + this.group.administration);
   }

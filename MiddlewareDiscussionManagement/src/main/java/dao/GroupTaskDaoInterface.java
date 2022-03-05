@@ -20,6 +20,8 @@ public interface GroupTaskDaoInterface {
 
     public List<DocumentSnapshot> listTasks(String groupName, String databaseCollection);
 
+    public boolean requestToLeaveGroup(String groupName, String username, String databaseCollection);
+
     public ApiFuture<WriteResult> assignAdminPrivileges(Firestore firestore, String groupName, String username);
 
     public DocumentSnapshot listEvents(String databaseCollection);

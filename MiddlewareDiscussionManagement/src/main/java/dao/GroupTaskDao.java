@@ -211,6 +211,24 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
     }
 
     @Override
+    public boolean requestToLeaveGroup(String groupName, String username, String databaseCollection) {
+        System.out.println("requestToLeaveGroup");
+
+        ApiFuture<WriteResult> writeResultApiFuture = null;
+        boolean result = false;
+
+        try {
+            Firestore firestore = Dao.initialiseFirestore();
+            HashMap groupData = new HashMap();
+            groupData.put("RequestToLeave", Map.of(username, username));
+            writeResultApiFuture = firestore.collection("Group").document(groupName).update(groupData);
+        } catch(Exception ex) {
+            System.out.println("An exception occurred [requestToLeaveGroup], ex: " + ex);
+        }
+        return result;
+    }
+
+    @Override
     public ApiFuture<WriteResult> assignAdminPrivileges(Firestore firestore, String groupName, String username) {
         System.out.println("assignAdminPrivileges");
 

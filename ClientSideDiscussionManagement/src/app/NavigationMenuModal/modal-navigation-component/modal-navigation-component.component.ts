@@ -16,21 +16,18 @@ export class ModalNavigationComponentComponent implements OnInit {
     
   }
 
-  async closeMenu() {
-    console.log("displayMenu");
-
-    // const modal = await this.modalController.create({
-    //   component: ModalNavigationComponentComponent
-    // });
-    // return await modal.present();
-    
-    
-    await this.facadeService.closeModal();
-  }
-
   navigateToPage(location) {
     console.log("navigateToPage");
     this.router.navigateByUrl(location);
+    this.closeMenu();
   }
+  
+  async closeMenu() {
+    console.log("displayMenu");
+
+    await this.facadeService.closeModal();
+  }
+
+  
 
 }

@@ -21,15 +21,12 @@ export class GroupTaskDetailsPage implements OnInit {
 
   ngOnInit() {
   this.data = this.facadeService.getDataDataService("uid");
-  console.log("id: " + JSON.stringify(this.facadeService.getDataDataService("id")));
 
   if (this.route.snapshot.data.special) {
     this.group = this.route.snapshot.data.special;
-  console.log("group: " + this.group.key);
-  console.log("group: " + this.group.value);
-  console.log("group: " + this.group);
-  }
 
+    console.log("group: " + this.group.administration);
+  }
   this.getTasks();
 }
 
@@ -41,26 +38,19 @@ createTask() {
 getTasks() {
   console.log("getTasks");
 
-  console.log("key: " + this.group)
-
-  // let groupNameString: string = this.formData.get("dateTimeOfEvent").value;
-
   let url = "http://localhost:8080/api/groupAndTask/listTasks";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
                                        "groupName": this.group.key}
-    ).subscribe(responseLamdba => { this.data = responseLamdba,
-    console.log(responseLamdba); });
+    ).subscribe(responseLamdba => { this.data = responseLamdba });
 }
 
 deleteDeactivateTask(taskName) {
 console.log("deleteDeactivateTask");
-console.log("task: " + taskName);
 
   let url = "http://localhost:8080/api/groupAndTask/deactivateTask";
     let response = this.http.post(url, {"groupName": this.group.key,
                                       "taskName": taskName}
-    ).subscribe(responseLamdba => { this.data = responseLamdba,
-    console.log(responseLamdba); });
+    ).subscribe(responseLamdba => { this.data = responseLamdba });
 }
 
 }

@@ -32,15 +32,11 @@ export class ProfileCrudPage implements OnInit {
 
     if (this.route.snapshot.data.special) {
       this.credential = this.route.snapshot.data.special;
-    console.log("credential: " + this.credential.key);
-    console.log("credential: " + this.credential.value);
     }
   }
 
   update() {
     console.log("update");
-
-    // console.log("keySeleted: " + keySeleted);
 
     let chosenValue: string = this.postData.get("value").value;
 

@@ -12,11 +12,12 @@ export class LeaveGroupBtnComponent implements OnInit {
   constructor(public facadeService: FacadeService,
     public router: Router) { }
 
+    message: string = "requestToLeaveGroup";
+
   ngOnInit() {}
 
   leaveGroup() {
     console.log("leaveGroup");
-    // this.router.navigateByUrl("login");
   }
 
 }

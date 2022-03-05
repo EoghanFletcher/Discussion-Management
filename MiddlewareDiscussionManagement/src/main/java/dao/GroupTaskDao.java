@@ -14,8 +14,6 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
     public boolean createUpdateGroup(String uId, String username, String groupName, String groupDescription, String databaseCollection) {
         System.out.println("createUpdateGroup");
 
-        System.out.println("username: " + username);
-
         DocumentSnapshot documentSnapshot = null;
         ApiFuture<QuerySnapshot> future = null;
         List<QueryDocumentSnapshot> documents = null;
@@ -42,8 +40,6 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
 
                 // Create Membership
                 groupTaskDao = new GroupTaskDao();
-
-                System.out.println("username: " + username);
 
                 writeResultApiFuture = groupTaskDao.addGroupMember(username,firestore, groupName);
                 writeResultApiFuture = groupTaskDao.assignAdminPrivileges(firestore, groupName, username);
@@ -132,24 +128,16 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             documents = future.get().getDocuments();
 
             for (DocumentSnapshot document : documents) {
-                System.out.println("data: " + document.getData());
                 if (document.get("taskName").equals(taskName)) { documentSnapshot = document; }
             }
 
             Map documentData = new HashMap();
             documentData = documentSnapshot.getData();
-            System.out.println("documentData: " + documentData.entrySet());
             documentData.put("status", "deactivated");
 
 
             documentReference = collectionReference.document((documentSnapshot.getId()));
             writeResultApiFuture = documentReference.update(documentData);
-
-            System.out.println("writeResultApiFuture: " + writeResultApiFuture.get());
-
-//            for (DocumentSnapshot document: documents) {
-//                System.out.println("document: " + document.getData());
-//            }
 
             for (DocumentSnapshot document: documents) {
                 documentSnapshot = document;
@@ -243,7 +231,6 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
     public DocumentSnapshot listEvents(String databaseCollection) {
         System.out.println("listEvents");
         DocumentSnapshot documentSnapshot = null;
-//        ApiFuture<QuerySnapshot> future = null;
         DocumentReference documentReference = null;
         List<QueryDocumentSnapshot> documents = null;
         Future<DocumentSnapshot> apiFutureFutre = null;
@@ -258,15 +245,9 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             future = collectionReference.get();
             documents = future.get().getDocuments();
 
-//            for (DocumentSnapshot document: documents) {
-//                System.out.println("document: " + document.getData());
-//            }
-
             for (DocumentSnapshot document: documents) {
             documentSnapshot = document;
             }
-
-
         } catch (Exception ex) {
             System.out.println("An exception occurred [listEvents], ex: " + ex.getMessage());
             ex.printStackTrace();

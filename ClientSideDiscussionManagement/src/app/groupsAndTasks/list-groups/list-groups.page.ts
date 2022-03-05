@@ -38,21 +38,49 @@ export class ListGroupsPage implements OnInit {
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
                                       "username": this.facadeService.getDataDataService("username")}
     ).subscribe(responseLamdba => { this.data = responseLamdba,
-    console.log(responseLamdba[0]); });    
+      console.log("responseLamdba: " + JSON.stringify(responseLamdba)),
+    // console.log("data: " + JSON.stringify(this.data[0]))
+    console.log("data: " + JSON.stringify(this.data[0].Administration))
+    });    
   }
 
   viewGroup(keySeleted, valueSelected) {
     console.log("viewGroup");
-    console.log("keySeleted: " + keySeleted);
+    console.log("keySelected: " + keySeleted);
     console.log("valueSelected: " + valueSelected);
 
     let group:
     SelectedGroup = {
       key: keySeleted,
-      value: valueSelected
+      value: valueSelected,
+      administration: null
     }
+
+    let username = this.facadeService.getDataDataService("username");
+
+    this.data.forEach(element => {
+      console.log("element: " + JSON.stringify(element));
+      // console.log("element group name: " + element.groupName)
+      if (element.groupName === keySeleted) {
+        console.log("here");
+        console.log("administration: " + JSON.stringify(element.Administration));
+
+        let administration = element.Administration;
+        console.log(administration.hasOwnProperty(username));
+        if(administration.hasOwnProperty(username)) {
+        group.administration = username;
+        console.log("group admin: " + group.administration);
+        }
+        // console.log("administration: " + element.Administration);
+        // console.log("username: " + element.Administration.username);
+        // group.administration = element.Administration.get .{username};
+      }
+      else {
+        console.log("no");
+      }
 
     this.facadeService.setDataDataService("id", group);
     this.router.navigateByUrl("group-task-details/id");
+  });
   }
 }

@@ -37,7 +37,6 @@ export class CreateTaskPage implements OnInit {
   createTask() {
     console.log("createTask");
 
-    console.log("Group Name: " + this.facadeService.getDataDataService("id"));
     let url = "http://localhost:8080/api/groupAndTask/createTask";
 
     let taskNameString: string = this.formData.get("taskName").value;
@@ -45,11 +44,6 @@ export class CreateTaskPage implements OnInit {
     let taskTypeString: string = this.formData.get("taskType").value;
     let dateTimeOfEventString: Date = this.formData.get("dateTimeOfEvent").value;
 
-    console.log("date: " + this.formData.get("dateTimeOfEvent").value);
-
-      // console.log("date: " + dateTimeOfEventString.getDate());
-      // console.log("time: " + dateTimeOfEventString.getTime());
-      // console.log("toLocaleDateString: " + dateTimeOfEventString.toLocaleDateString());
     let response = this.http.post(url, {"username": this.facadeService.getDataDataService("username"),
       	                                "groupName": this.facadeService.getDataDataService("id").key,
                                         "taskName": taskNameString,
@@ -64,11 +58,9 @@ export class CreateTaskPage implements OnInit {
   getEvents() {
     console.log("listEvents");
 
-    console.log("Group Name: " + this.facadeService.getDataDataService("id"));
     let url = "http://localhost:8080/api/groupAndTask/listEvents";
 
-    let response = this.http.get(url).subscribe(responseLamdba => { this.events = responseLamdba,
-    console.log(JSON.stringify(responseLamdba)); });    
+    let response = this.http.get(url).subscribe(responseLamdba => { this.events = responseLamdba });    
   }
 
 }

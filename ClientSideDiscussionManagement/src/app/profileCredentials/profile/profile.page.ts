@@ -31,27 +31,17 @@ export class ProfilePage implements OnInit {
     this.data = this.facadeService.getDataDataService("uid");
 
     this.getUserData();
-    console.log("count: " + this.count);
   }
   
   getUserData() {
     console.log("getUserData");
     let url = "http://localhost:8080/api/user/authenticate";
 
-    console.log("uId: " + this.facadeService.getDataDataService("uid"));
-    console.log("email: " + this.facadeService.getDataDataService("email"));
-    console.log("username: " + this.facadeService.getDataDataService("username"));
-
     let response = this.http.post<EmailPasswordProvider>(url, {"uId": this.facadeService.getDataDataService("uid"),
                                       "email": this.facadeService.getDataDataService("email"),
                                       "username": this.facadeService.getDataDataService("username")}
     ).subscribe(responseLamdba => { this.data = responseLamdba,
-      
-
-      console.log("username: " + responseLamdba.username);
-      
       this.dataService.setData("username", responseLamdba.username);
-      console.log("get: username: " + this.dataService.getData("username"));
     });
   }
 
@@ -63,10 +53,6 @@ export class ProfilePage implements OnInit {
 
   modifyCredential(keySeleted, valueSelected) {
     console.log("modifyCredential");
-    // console.log("Key: " + keySeleted);
-    // console.log("Value: " + valueSelected);
-
-
 
     let credential:
     SelectedCredential = {
@@ -75,7 +61,6 @@ export class ProfilePage implements OnInit {
     }
 
     this.facadeService.setDataDataService("id", credential);
-    
     this.router.navigateByUrl("profile-crud/id");
   }
 

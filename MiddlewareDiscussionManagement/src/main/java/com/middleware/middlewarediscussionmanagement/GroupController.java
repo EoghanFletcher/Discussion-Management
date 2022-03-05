@@ -22,11 +22,6 @@ public class GroupController {
         String groupNameString = (String) data.get("groupName");
         String groupDescriptionString = (String) data.get("groupDescription");
 
-        System.out.println("uId: " + uIdString);
-        System.out.println("usernameString: " + usernameString);
-        System.out.println("groupNameString: " + groupNameString);
-        System.out.println("groupDescriptionString: " + groupDescriptionString);
-
         groupTaskDao.createUpdateGroup(uIdString, usernameString, groupNameString, groupDescriptionString, "Group");
     }
 
@@ -51,8 +46,6 @@ public class GroupController {
     public boolean createTask(@RequestBody HashMap data) {
         System.out.println("createTask_Controller");
 
-        System.out.println("data: " + data.entrySet());
-
         String usernameString = (String) data.get("username");
         String groupNameString = (String) data.get("groupName");
         String taskNameString = (String) data.get("taskName");
@@ -60,13 +53,6 @@ public class GroupController {
         String taskTypeString = (String) data.get("taskType");
 //        Date dateTimeOfEvent = (Date) data.get("dateTimeOfEvent");
         String dateTimeOfEvent = (String) data.get("dateTimeOfEvent");
-
-        System.out.println("usernameString: " + usernameString);
-        System.out.println("groupNameString: " + groupNameString);
-        System.out.println("taskNameString: " + taskNameString);
-        System.out.println("taskDescriptionString: " + taskDescriptionString);
-        System.out.println("taskTypeString: " + taskTypeString);
-        System.out.println("dateTimeOfEvent: " + dateTimeOfEvent);
 
         boolean response = groupTaskDao.createTask(usernameString, groupNameString, taskNameString, taskDescriptionString, taskTypeString, dateTimeOfEvent, "Group");
 
@@ -81,7 +67,6 @@ public class GroupController {
 
         boolean deleted = false;
 
-
         String groupName = (String) data.get("groupName");
         String taskName = (String) data.get("taskName");
 
@@ -95,12 +80,7 @@ public class GroupController {
         List<DocumentSnapshot> listDocumentSnapshot = null;
         List documentListData = null;
 
-
-        System.out.println("data: " + data.entrySet());
-
         String groupNameString = (String) data.get("groupName");
-
-        System.out.println("Group name: " + groupNameString);
 
         listDocumentSnapshot = groupTaskDao.listTasks(groupNameString, "Group");
 
@@ -116,8 +96,6 @@ public class GroupController {
         DocumentSnapshot documentSnapshot = null;
 
         documentSnapshot = groupTaskDao.listEvents("Event");
-
-        System.out.println("documentSnapshot: " + documentSnapshot.getData());
 
         return documentSnapshot.getData();
     }

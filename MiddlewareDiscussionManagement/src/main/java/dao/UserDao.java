@@ -43,11 +43,9 @@ public class UserDao implements UserDaoInterface {
             // There should only be one value returned
             System.out.println("documents size(): " + documents.size());
             if (documents.size() == 1) {
-                System.out.println("single");
                 documentSnapshot = documents.get(0);
             }
             else {
-                System.out.println("many");
                 for (DocumentSnapshot document : documents) {
                     if (document.get("uId").equals(uid)) {
                         documentSnapshot = document;
@@ -69,10 +67,6 @@ public class UserDao implements UserDaoInterface {
         ApiFuture<QuerySnapshot> future = null;
         List<QueryDocumentSnapshot> documents = null;
 
-        System.out.println("uId: " + uid);
-        System.out.println("email: " + email);
-        System.out.println("username: " + username);
-
         try {
             Firestore firestore = Dao.initialiseFirestore();
             // Create document
@@ -86,34 +80,18 @@ public class UserDao implements UserDaoInterface {
             future = firestore.collection(databaseCollection).whereEqualTo("username", username).get();
             documents = future.get().getDocuments();
 
-            System.out.println("documents size: " + documents.size());
-
             if (documents.size() == 0) {
                 ApiFuture<WriteResult> writeResultApiFuture = firestore.collection(databaseCollection).document().set(documentData);
-
-                System.out.println("writeResultApiFuture: " + writeResultApiFuture.get());
             }
 
             future = firestore.collection("User").whereEqualTo("username", username).get();
-            System.out.println("future: " + future);
             documents = future.get().getDocuments();
 
             for (DocumentSnapshot document : documents) {
-                System.out.println("data: " + document.getData().entrySet());
-                System.out.println("username: " + document.getData().get("username"));
-                System.out.println("username: " + document.get("username"));
                 if (document.getData().get("username").equals(username)) {
-                    System.out.println("if");
-                    System.out.println("document: " + document);
-
                     documentSnapshot = document;
-                    System.out.println("still here");
-                }
-                else {
-                    System.out.println("else");
                 }
             }
-
         } catch (Exception ex) {
             System.out.println("An exception occurred [register], ex: " + ex.getMessage());
             ex.printStackTrace();
@@ -153,28 +131,16 @@ public class UserDao implements UserDaoInterface {
             future = firestore.collection(databaseCollection).whereEqualTo("username", username).get();
             documents = future.get().getDocuments();
 
-            System.out.println("documents size: " + documents.size());
-
             for (DocumentSnapshot document : documents) {
 
                 if (document.get("username").equals(username)) {
-                    System.out.println("true: , document username: " + document.getData().get("username"));
-                    System.out.println(" and id : " + document.getId());
                     documentSnapshot = document;
-                    System.out.println("document snapshot id " + documentSnapshot.getId());
-                    System.out.println("document snapshot data " + documentSnapshot.getData());
                 }
-                else {
-                    System.out.println("no equal"); };
             }
 
             HashMap documentData = new HashMap();
             documentData.put(key, value);
-//            writeResultApiFuture = firestore.collection(databaseCollection).document(documentSnapshot.getId()).update((documentData));
-            System.out.println("| getId |: " + documentSnapshot.getId());
             documentReference = firestore.collection(databaseCollection).document(documentSnapshot.getId());
-
-            System.out.println("id: " + documentSnapshot.getId());
 
             writeResultApiFuture = documentReference.update(documentData);
         } catch(Exception ex) {
@@ -203,7 +169,7 @@ public class UserDao implements UserDaoInterface {
             for (DocumentSnapshot document : documents) { if (document.get("uId").equals(uId)) { documentSnapshot = document; }
             }
 
-            Map documentData = new HashMap();
+            Map documentData = null;
             documentData = documentSnapshot.getData();
             documentData.put(key, FieldValue.delete());
 

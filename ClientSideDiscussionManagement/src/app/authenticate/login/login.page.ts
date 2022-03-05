@@ -56,7 +56,6 @@ export class LoginPage implements OnInit {
 
     if (typeof this.facadeService.getDataDataService("signedIn") !== 'undefined') {
       console.log("signedin")
-      console.log("profile");
       this.router.navigateByUrl("profile");  
     }
     else {
@@ -67,7 +66,6 @@ export class LoginPage implements OnInit {
 
   navigateToPage(page) {
     console.log("navigateToPage");
-    console.log(page)
     this.router.navigateByUrl(page);
   }
 }

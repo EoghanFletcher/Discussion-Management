@@ -20,16 +20,9 @@ export class AuthenticationService {
   // Login
   async login(credentials: EmailPasswordProvider) {
     console.log("login auth");
-    console.log("Email: " + credentials.emailAddress);
-    console.log("Password: " + credentials.password);
-
 
     await signInWithEmailAndPassword(this.auth, credentials.emailAddress, credentials.password)
     .then(res => {this.dataService.setData("signedIn", res);
-    // console.log(JSON.stringify(this.dataService.getData("signedIn")));
-    console.log("result: " + res);
-    console.log("result uid: " + res.user.uid);
-    console.log("result email: " + res.user.email);
     this.dataService.setData("uid", res.user.uid);
     this.dataService.setData("email", res.user.email);
     });
@@ -45,26 +38,20 @@ export class AuthenticationService {
   // Sign up
   async signUp(credentials: EmailPasswordProvider) {
     console.log("login auth");
-    console.log("Email: " + credentials.emailAddress);
-    console.log("Password: " + credentials.password);
-    console.log("Username: " + credentials.username);
 
     await createUserWithEmailAndPassword(this.auth, credentials.emailAddress, credentials.password)
-    .then(res => {console.log("res: " + res),
-      this.dataService.setData("signedIn", res);
+    .then(res => { this.dataService.setData("signedIn", res);
       this.dataService.setData("uid", res.user.uid);
       this.dataService.setData("email", res.user.email);
       this.dataService.setData("username", credentials.username);
-    // console.log(JSON.stringify(this.dataService.getData("signedIn")));
     });
   }
 
   async resetPassword(credentials: ForgotPassword) {
     console.log("reset password");
-    // console.log("Email: " + credentials.emailAddress);
 
     await sendPasswordResetEmail(this.auth, credentials.emailAddress)
-    .then(res => {console.log("res: " + res)});
+    .then(res => {  });
   }
 
 }

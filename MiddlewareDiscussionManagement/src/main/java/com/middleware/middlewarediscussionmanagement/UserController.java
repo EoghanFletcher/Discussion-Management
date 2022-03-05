@@ -24,6 +24,7 @@ public class UserController {
 
             DocumentSnapshot documentSnapshot = null;
             UserRecord userRecord = null;
+            String databaseCollection = "User";
 
         try {
             String uIdString = (String) data.get("uId");
@@ -35,9 +36,9 @@ public class UserController {
 
             if (userRecordUId != null) {
                 if (usernameString == null) {
-                    documentSnapshot = userDao.getUserDocument(uIdString, emailString); }
+                    documentSnapshot = userDao.getUserDocument(uIdString, emailString, databaseCollection); }
                 else {
-                    documentSnapshot = userDao.register(uIdString, emailString, usernameString); }
+                    documentSnapshot = userDao.register(uIdString, emailString, usernameString, databaseCollection); }
             }
         }
         catch (Exception ex) {

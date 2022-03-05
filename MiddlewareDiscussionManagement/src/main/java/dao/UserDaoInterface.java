@@ -12,13 +12,13 @@ import javax.swing.text.Document;
 public interface UserDaoInterface {
     public FirebaseAuth getAuthenticationInstance();
 
-    public DocumentSnapshot getUserDocument(String uid, String email);
+    public DocumentSnapshot getUserDocument(String uid, String email, String databaseCollection);
 
-    public DocumentSnapshot register(String uid, String email, String username);
+    public DocumentSnapshot register(String uid, String email, String username, String databaseCollection);
 
     public UserRecord getUId(String username, FirebaseAuth firebaseAuthInstance);
 
-    public boolean createUpdateProfileField(String uId, String key, String value, String databaseCollection);
+    public boolean createUpdateProfileField(String uId, String username, String key, String value, String databaseCollection);
 
-    public boolean removeProfileField(String uId, String key);
+    public boolean removeProfileField(String uId, String username, String key, String databaseCollection);
 }

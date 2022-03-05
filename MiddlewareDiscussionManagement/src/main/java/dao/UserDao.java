@@ -28,7 +28,7 @@ public class UserDao implements UserDaoInterface {
     }
 
     @Override
-    public DocumentSnapshot getUserDocument(String uid, String email) {
+    public DocumentSnapshot getUserDocument(String uid, String email, String databaseCollection) {
         System.out.println("getUserDocument");
         DocumentSnapshot documentSnapshot = null;
         ApiFuture<QuerySnapshot> future = null;
@@ -37,7 +37,7 @@ public class UserDao implements UserDaoInterface {
         try {
             Firestore firestore = Dao.initialiseFirestore();
 
-            future = firestore.collection("User").whereEqualTo("uId", uid).get();
+            future = firestore.collection(databaseCollection).whereEqualTo("uId", uid).get();
             documents = future.get().getDocuments();
 
             // There should only be one value returned
@@ -63,7 +63,7 @@ public class UserDao implements UserDaoInterface {
     }
 
     @Override
-    public DocumentSnapshot register(String uid, String email, String username) {
+    public DocumentSnapshot register(String uid, String email, String username, String databaseCollection) {
         System.out.println("register");
         DocumentSnapshot documentSnapshot = null;
         ApiFuture<QuerySnapshot> future = null;
@@ -73,18 +73,26 @@ public class UserDao implements UserDaoInterface {
         System.out.println("email: " + email);
         System.out.println("username: " + username);
 
-
-
         try {
             Firestore firestore = Dao.initialiseFirestore();
-// Create document
+            // Create document
             HashMap documentData = new HashMap();
             documentData.put("uId", uid);
             documentData.put("email", email);
             documentData.put("username", username);
-            ApiFuture<WriteResult> writeResultApiFuture = firestore.collection("User").document().set(documentData);
 
-            System.out.println("writeResultApiFuture: " + writeResultApiFuture.get());
+
+            // Check if document exists
+            future = firestore.collection(databaseCollection).whereEqualTo("username", username).get();
+            documents = future.get().getDocuments();
+
+            System.out.println("documents size: " + documents.size());
+
+            if (documents.size() == 0) {
+                ApiFuture<WriteResult> writeResultApiFuture = firestore.collection(databaseCollection).document().set(documentData);
+
+                System.out.println("writeResultApiFuture: " + writeResultApiFuture.get());
+            }
 
             future = firestore.collection("User").whereEqualTo("username", username).get();
             System.out.println("future: " + future);
@@ -130,7 +138,7 @@ public class UserDao implements UserDaoInterface {
     }
 
     @Override
-    public boolean createUpdateProfileField(String uId, String key, String value, String databaseCollection) {
+    public boolean createUpdateProfileField(String uId, String username, String key, String value, String databaseCollection) {
         System.out.println("createProfileField");
 
         DocumentSnapshot documentSnapshot = null;
@@ -142,18 +150,32 @@ public class UserDao implements UserDaoInterface {
 
         try {
             Firestore firestore = Dao.initialiseFirestore();
-            future = firestore.collection(databaseCollection).whereEqualTo("uId", uId).get();
+            future = firestore.collection(databaseCollection).whereEqualTo("username", username).get();
             documents = future.get().getDocuments();
+
+            System.out.println("documents size: " + documents.size());
 
             for (DocumentSnapshot document : documents) {
 
-                if (document.get("uId").equals(uId)) { documentSnapshot = document; }
+                if (document.get("username").equals(username)) {
+                    System.out.println("true: , document username: " + document.getData().get("username"));
+                    System.out.println(" and id : " + document.getId());
+                    documentSnapshot = document;
+                    System.out.println("document snapshot id " + documentSnapshot.getId());
+                    System.out.println("document snapshot data " + documentSnapshot.getData());
+                }
+                else {
+                    System.out.println("no equal"); };
             }
 
             HashMap documentData = new HashMap();
             documentData.put(key, value);
 //            writeResultApiFuture = firestore.collection(databaseCollection).document(documentSnapshot.getId()).update((documentData));
-            documentReference = firestore.collection("User").document(documentSnapshot.getId());
+            System.out.println("| getId |: " + documentSnapshot.getId());
+            documentReference = firestore.collection(databaseCollection).document(documentSnapshot.getId());
+
+            System.out.println("id: " + documentSnapshot.getId());
+
             writeResultApiFuture = documentReference.update(documentData);
         } catch(Exception ex) {
             System.out.println("An exception occurred [createProfileField], ex: " + ex);
@@ -164,7 +186,7 @@ public class UserDao implements UserDaoInterface {
     }
 
     @Override
-    public boolean removeProfileField(String uId, String key) {
+    public boolean removeProfileField(String uId, String username, String key, String databaseCollection) {
         DocumentSnapshot documentSnapshot = null;
         ApiFuture<QuerySnapshot> future = null;
         List<QueryDocumentSnapshot> documents = null;
@@ -176,7 +198,7 @@ public class UserDao implements UserDaoInterface {
         try {
             Firestore firestore = Dao.initialiseFirestore();
             // Get snapshot
-            future = firestore.collection("User").whereEqualTo("uId", uId).get();
+            future = firestore.collection(databaseCollection).whereEqualTo("uId", uId).get();
             documents = future.get().getDocuments();
             for (DocumentSnapshot document : documents) { if (document.get("uId").equals(uId)) { documentSnapshot = document; }
             }

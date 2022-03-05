@@ -28,6 +28,7 @@ public class UserDaoTest {
     public static ApiFuture<QuerySnapshot> future = null;
     public static List<QueryDocumentSnapshot> documents = null;
     public static CollectionReference collectionReference = null;
+    String collection = "UserTest";
 
     @BeforeClass
     public static void setupData() {
@@ -63,7 +64,7 @@ public class UserDaoTest {
 
         try {
         System.out.println("Create field");
-        result = userDao.createUpdateProfileField(userRecord.getUid(), "JUnit", "JUnit", "UserTest");
+        result = userDao.createUpdateProfileField(userRecord.getUid(), "JUnit", "JUnit", "UserTest", collection);
 
         if (result) {
             System.out.println("Field created proceeding to the next section");

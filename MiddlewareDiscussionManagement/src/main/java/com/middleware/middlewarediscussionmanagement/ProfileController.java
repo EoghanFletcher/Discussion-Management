@@ -12,15 +12,17 @@ import java.util.HashMap;
 @RequestMapping(path = "/api/credentials")
 public class ProfileController {
     UserDao userDao = new UserDao();
+    String databaseCollection = "User";
 
     @PostMapping(path = "create")
     public void createCredential(@RequestBody HashMap data) {
 
         String uIdString = (String) data.get("uId");
+        String usernameString = (String) data.get("username");
         String chosenKey = (String) data.get("chosenKey");
         String chosenValue = (String) data.get("chosenValue");
 
-        userDao.createUpdateProfileField(uIdString, chosenKey, chosenValue, "User");
+        userDao.createUpdateProfileField(uIdString, usernameString, chosenKey, chosenValue, databaseCollection);
     }
 
     @PostMapping(path = "update")
@@ -28,10 +30,11 @@ public class ProfileController {
         System.out.println("updateCredential");
 
         String uIdString = (String) data.get("uId");
+        String usernameString = (String) data.get("username");
         String chosenKey = (String) data.get("chosenKey");
         String chosenValue = (String) data.get("chosenValue");
 
-        userDao.createUpdateProfileField(uIdString, chosenKey, chosenValue, "User");
+        userDao.createUpdateProfileField(uIdString, usernameString, chosenKey, chosenValue, databaseCollection);
     }
 
     @PostMapping(path = "delete")
@@ -39,8 +42,9 @@ public class ProfileController {
         System.out.println("deleteCredential");
 
         String uIdString = (String) data.get("uId");
+        String usernameString = (String) data.get("username");
         String deleteKey = (String) data.get("deleteKey");
 
-        userDao.removeProfileField(uIdString, deleteKey);
+        userDao.removeProfileField(uIdString, usernameString, deleteKey, databaseCollection);
     }
 }

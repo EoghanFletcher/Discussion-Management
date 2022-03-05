@@ -46,6 +46,7 @@ export class ProfileCrudPage implements OnInit {
 
     let url = "http://localhost:8080/api/credentials/update";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
+                                        "username": this.facadeService.getDataDataService("username"),
                                         "chosenKey": this.facadeService.getDataDataService("id").key,
                                       "chosenValue": chosenValue}
     ).subscribe(responseLamdba => { this.data = responseLamdba });    
@@ -53,15 +54,26 @@ export class ProfileCrudPage implements OnInit {
     this.router.navigateByUrl("profile");
   }
 
-  deleteCredential(keySeleted) {
+  deleteCredential(keySelected) {
     console.log("deleteCredential");
 
-    console.log("keySeleted: " + keySeleted);
+    console.log("keySeleted: " + keySelected);
 
+    console.log("key selected: " + keySelected)
+
+    if (keySelected !== "email" ||
+        keySelected !== "uId" || 
+        keySelected !== "username") {
+          console.log("not equal");
     let url = "http://localhost:8080/api/credentials/delete";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
-                                        "deleteKey": keySeleted}
-    ).subscribe(responseLamdba => { this.data = responseLamdba });    
+                                        "username": this.facadeService.getDataDataService("username"),
+                                        "deleteKey": keySelected}
+    ).subscribe(responseLamdba => { this.data = responseLamdba });
+  }    
+  else {
+    console.log("equal");
+  }
 
     this.router.navigateByUrl("profile");
   }

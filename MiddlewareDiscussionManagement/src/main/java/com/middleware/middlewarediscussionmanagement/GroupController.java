@@ -1,6 +1,8 @@
 package com.middleware.middlewarediscussionmanagement;
 
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import dao.Dao;
 import dao.GroupTaskDao;
 import org.springframework.web.bind.annotation.*;
 
@@ -151,6 +153,34 @@ public class GroupController {
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [requestToLeaveGroup], ex: " + ex);
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    @PostMapping(path = "groupAddMember")
+    public boolean groupAddMember(@RequestBody HashMap data) {
+        System.out.println("requestToLeaveGroup");
+
+        boolean result = false;
+
+        try {
+
+            Firestore firestore = Dao.initialiseFirestore();
+
+            System.out.println("data: " + data.entrySet());
+
+            String usernameString = (String) data.get("username");
+            String groupNameString = (String) data.get("groupName");
+
+            System.out.println("usernameString: " + usernameString);
+            System.out.println("groupNameString: " + groupNameString);
+
+                /* result = */ groupTaskDao.addGroupMember(usernameString, firestore, groupNameString, "Group");
+
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [groupAddMember], ex: " + ex);
             ex.printStackTrace();
         }
         return result;

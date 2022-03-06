@@ -5,6 +5,7 @@ import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -183,5 +184,35 @@ public class UserDao implements UserDaoInterface {
             result = true;
         }
         return result;
+    }
+
+    public List<DocumentSnapshot> listUsers(String databaseCollection) {
+        System.out.println("listUsers");
+
+        List<DocumentSnapshot> listDocumentSnapshot = null;
+        DocumentSnapshot documentSnapshot = null;
+        ApiFuture<QuerySnapshot> future = null;
+        List<QueryDocumentSnapshot> documents = null;
+
+        try {
+            Firestore firestore = Dao.initialiseFirestore();
+
+            future = firestore.collection(databaseCollection).get();
+            documents = future.get().getDocuments();
+
+            System.out.println("documents size(): " + documents.size());
+
+            listDocumentSnapshot = new ArrayList<>();
+            for (DocumentSnapshot document: documents) {
+                System.out.println("document: " + document.getData());
+                    listDocumentSnapshot.add(document);
+            }
+
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [listUsers], ex: " + ex);
+            ex.printStackTrace();
+        }
+        return listDocumentSnapshot;
     }
 }

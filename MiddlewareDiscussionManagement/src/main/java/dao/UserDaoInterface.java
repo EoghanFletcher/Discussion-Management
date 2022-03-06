@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 
 import javax.swing.text.Document;
+import java.util.List;
 
 public interface UserDaoInterface {
     public FirebaseAuth getAuthenticationInstance();
@@ -21,4 +22,6 @@ public interface UserDaoInterface {
     public boolean createUpdateProfileField(String uId, String username, String key, String value, String databaseCollection);
 
     public boolean removeProfileField(String uId, String username, String key, String databaseCollection);
+
+    public List<DocumentSnapshot> listUsers(String databaseCollection);
 }

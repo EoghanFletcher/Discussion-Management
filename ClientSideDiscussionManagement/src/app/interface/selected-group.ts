@@ -3,4 +3,5 @@ export interface SelectedGroup {
     value: string
     administration: string
     requestsToLeave: string[]
+    members: string[]
 }

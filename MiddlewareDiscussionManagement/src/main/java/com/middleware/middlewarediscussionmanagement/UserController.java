@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.CoderResult;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,13 +19,13 @@ import java.util.Map;
 //@CrossOrigin
 public class UserController {
     UserDao userDao = new UserDao();
+    String databaseCollection = "User";
 
     @PostMapping(path = "/authenticate")
     public Map authenticate(@RequestBody HashMap data) {
 
             DocumentSnapshot documentSnapshot = null;
             UserRecord userRecord = null;
-            String databaseCollection = "User";
 
         try {
             String uIdString = (String) data.get("uId");
@@ -48,4 +49,27 @@ public class UserController {
 
         return  documentSnapshot.getData();
     }
-}
+
+    @PostMapping(path = "getAllUsers")
+    public List<DocumentSnapshot> getAllUsers (@RequestBody HashMap data) {
+        System.out.println("getAllUsers");
+
+        List documentListData = null;
+        List<DocumentSnapshot> listDocumentSnapshot = null;
+
+        try {
+            FirebaseAuth firebaseAuth = userDao.getAuthenticationInstance();
+
+            listDocumentSnapshot = userDao.listUsers(databaseCollection);
+
+            documentListData = new ArrayList();
+            for (DocumentSnapshot document : listDocumentSnapshot) { documentListData.add(document.getData()); }
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [getAllUsers], ex: " + ex);
+            ex.printStackTrace();
+        }
+        System.out.println("return");
+        return documentListData;
+        }
+    }

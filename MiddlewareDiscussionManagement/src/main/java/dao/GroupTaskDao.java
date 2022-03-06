@@ -41,7 +41,7 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
                 // Create Membership
                 groupTaskDao = new GroupTaskDao();
 
-                writeResultApiFuture = groupTaskDao.addGroupMember(username,firestore, groupName);
+                writeResultApiFuture = groupTaskDao.addGroupMember(username,firestore, groupName, "Group");
                 writeResultApiFuture = groupTaskDao.assignAdminPrivileges(firestore, groupName, username);
             }
             else {
@@ -60,15 +60,21 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
         return result;
     }
 
-    public ApiFuture<WriteResult> addGroupMember(String username, Firestore firestore, String groupName) {
+    public ApiFuture<WriteResult> addGroupMember(String username, Firestore firestore, String groupName, String databaseCollection) {
         System.out.println("addGroupMember");
 
         ApiFuture<WriteResult> writeResultApiFuture = null;
 
         try {
+//            groupData.put("RequestToLeave", Map.of(username, username));
+//            writeResultApiFuture = firestore.collection("Group").document(groupName).update(groupData);
+
+
+
             HashMap membershipData = new HashMap();
-            membershipData.put("Membership", Map.of(username, username));
-            writeResultApiFuture = firestore.collection("Group").document(groupName).update(membershipData);
+            membershipData.put("Membership." + username, Map.of(username, username));
+//            membershipData.put("Membership." + username, username);
+            writeResultApiFuture = firestore.collection(databaseCollection).document(groupName).update(membershipData);
         } catch(Exception ex) {
             System.out.println("An exception occurred [addGroupMember], ex: " + ex);
         }

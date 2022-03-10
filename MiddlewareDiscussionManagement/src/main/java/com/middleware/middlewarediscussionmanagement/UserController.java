@@ -1,14 +1,11 @@
 package com.middleware.middlewarediscussionmanagement;
 
-import business.User;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import dao.UserDao;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.CoderResult;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

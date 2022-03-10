@@ -280,16 +280,6 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
 
             writeResultApiFuture = firestore.collection("Group").document(groupName).update(groupData);
 
-//            while (writeResultApiFuture.isDone() == false) {
-//                System.out.println("not complete");
-//            }
-//
-//            // This probably returns true if the operation is finished and not if the operation completed successfully
-//            System.out.println("is Done: " + writeResultApiFuture.isDone());
-//            if (writeResultApiFuture.isDone()) {
-//                result = true;
-//                System.out.println("true");
-//            }
             result = true;
 
         } catch(Exception ex) {

@@ -136,10 +136,6 @@ public class GroupController {
             String groupNameString = (String) data.get("groupName");
             String verdictString = (String) data.get("verdict");
 
-            System.out.println("usernameString: " + usernameString);
-            System.out.println("groupNameString: " + groupNameString);
-            System.out.println("verdictString: " + verdictString);
-
             if (verdictString.equals("grant")) {
                 result = groupTaskDao.grantRequestToLeave(groupNameString, usernameString, "Group");
             }
@@ -173,9 +169,6 @@ public class GroupController {
             String usernameString = (String) data.get("username");
             String groupNameString = (String) data.get("groupName");
 
-            System.out.println("usernameString: " + usernameString);
-            System.out.println("groupNameString: " + groupNameString);
-
                 /* result = */ groupTaskDao.addGroupMember(usernameString, firestore, groupNameString, "Group");
 
         }
@@ -185,6 +178,4 @@ public class GroupController {
         }
         return result;
     }
-
-
 }

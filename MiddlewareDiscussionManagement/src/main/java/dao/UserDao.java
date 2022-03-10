@@ -41,7 +41,7 @@ public class UserDao implements UserDaoInterface {
             future = firestore.collection(databaseCollection).whereEqualTo("uId", uid).get();
             documents = future.get().getDocuments();
 
-            // There should only be one value returned
+            // Only one value should  be returned
             System.out.println("documents size(): " + documents.size());
             if (documents.size() == 1) {
                 documentSnapshot = documents.get(0);
@@ -85,7 +85,7 @@ public class UserDao implements UserDaoInterface {
                 ApiFuture<WriteResult> writeResultApiFuture = firestore.collection(databaseCollection).document().set(documentData);
             }
 
-            future = firestore.collection("User").whereEqualTo("username", username).get();
+            future = firestore.collection(databaseCollection).whereEqualTo("username", username).get();
             documents = future.get().getDocuments();
 
             for (DocumentSnapshot document : documents) {

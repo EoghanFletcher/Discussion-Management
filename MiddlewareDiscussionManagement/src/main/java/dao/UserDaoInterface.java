@@ -13,7 +13,9 @@ import java.util.List;
 public interface UserDaoInterface {
     public FirebaseAuth getAuthenticationInstance();
 
-    public DocumentSnapshot getUserDocument(String uid, String email, String databaseCollection);
+    public DocumentSnapshot getUserDocumentByUId(String uid, String email, String databaseCollection);
+
+    public DocumentSnapshot getUserDocumentByEmail(String email, String databaseCollection);
 
     public DocumentSnapshot register(String uid, String email, String username, String databaseCollection);
 

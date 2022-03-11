@@ -7,6 +7,7 @@ import { ModalController } from '@ionic/angular';
 import { ModalNavigationComponentComponent } from 'src/app/NavigationMenuModal/modal-navigation-component/modal-navigation-component.component';
 import { EmailPasswordProvider } from 'src/app/interface/email-password-provider';
 import { DataService } from 'src/app/service/data.service';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 @Component({
   selector: 'app-profile',
@@ -35,7 +36,7 @@ export class ProfilePage implements OnInit {
   
   getUserData() {
     console.log("getUserData");
-    let url = "http://localhost:8080/api/user/authenticate";
+    let url = "http://localhost:8080/api/user/authenticateEmailPassword";
 
     let response = this.http.post<EmailPasswordProvider>(url, {"uId": this.facadeService.getDataDataService("uid"),
                                       "email": this.facadeService.getDataDataService("email"),
@@ -44,6 +45,8 @@ export class ProfilePage implements OnInit {
       this.dataService.setData("username", responseLamdba.username);
     });
   }
+
+  
 
 
   createCredential() {

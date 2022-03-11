@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { EmailPasswordProvider } from '../../interface/email-password-provider';
-import { AuthenticationService } from '../../service/authentication.service';
-import { DataService } from '../../service/data.service';
 import { FacadeService } from '../../service/facade.service';
 
 @Component({
@@ -38,8 +37,8 @@ export class LoginPage implements OnInit {
     this.postData.get("password").setValue("");
   }
 
-  async login() {
-    console.log("login");
+  async loginEmailAndPassword() {
+    console.log("loginEmailAndPassword");
     this.email = this.postData.get("email").value;
     this.password = this.postData.get("password").value;
 
@@ -62,6 +61,17 @@ export class LoginPage implements OnInit {
       // Display a message // I am still on the login page
     }
 
+  }
+
+  loginGoogle() { // Needed to getEmail address
+    let result;
+    result = this.facadeService.authenticationService.googleSignin();
+    // const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        console.log("user: " + JSON.stringify(user));
+
+        
   }
 
   navigateToPage(page) {

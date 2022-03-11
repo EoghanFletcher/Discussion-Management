@@ -29,8 +29,8 @@ public class UserDao implements UserDaoInterface {
     }
 
     @Override
-    public DocumentSnapshot getUserDocument(String uid, String email, String databaseCollection) {
-        System.out.println("getUserDocument");
+    public DocumentSnapshot getUserDocumentByUId(String uid, String email, String databaseCollection) {
+        System.out.println("getUserDocumentByUId");
         DocumentSnapshot documentSnapshot = null;
         ApiFuture<QuerySnapshot> future = null;
         List<QueryDocumentSnapshot> documents = null;
@@ -38,7 +38,7 @@ public class UserDao implements UserDaoInterface {
         try {
             Firestore firestore = Dao.initialiseFirestore();
 
-            future = firestore.collection(databaseCollection).whereEqualTo("uId", uid).get();
+            future = firestore.collection(databaseCollection).whereEqualTo("uid", uid).get();
             documents = future.get().getDocuments();
 
             // Only one value should  be returned
@@ -48,10 +48,36 @@ public class UserDao implements UserDaoInterface {
             }
             else {
                 for (DocumentSnapshot document : documents) {
-                    if (document.get("uId").equals(uid)) {
+                    if (document.get("uid").equals(uid)) {
                         documentSnapshot = document;
                     }
                 }
+            }
+        } catch (Exception ex) {
+            System.out.println("An exception occurred [getUserDocument], ex: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+
+        return documentSnapshot;
+    }
+
+    @Override
+    public DocumentSnapshot getUserDocumentByEmail(String email, String databaseCollection) {
+        System.out.println("getUserDocumentByEmail");
+        DocumentSnapshot documentSnapshot = null;
+        ApiFuture<QuerySnapshot> future = null;
+        List<QueryDocumentSnapshot> documents = null;
+
+        try {
+            Firestore firestore = Dao.initialiseFirestore();
+
+            future = firestore.collection(databaseCollection).whereEqualTo("email", email).get();
+            documents = future.get().getDocuments();
+
+            // Only one value should  be returned
+            System.out.println("documents size(): " + documents.size());
+            if (documents.size() == 1) {
+                documentSnapshot = documents.get(0);
             }
         } catch (Exception ex) {
             System.out.println("An exception occurred [getUserDocument], ex: " + ex.getMessage());

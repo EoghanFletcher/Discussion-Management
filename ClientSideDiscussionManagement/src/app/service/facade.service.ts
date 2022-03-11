@@ -73,7 +73,13 @@ export class FacadeService {
     }
 
     async closeModal() {
+      console.log("closeModal");
       return await this.modalController.dismiss();
+    }
+
+    async getGoogleSignCrednetials() {
+      console.log("getGoogleSignCrednetials");
+      return await this.authenticationService.googleSignin();
     }
 
 

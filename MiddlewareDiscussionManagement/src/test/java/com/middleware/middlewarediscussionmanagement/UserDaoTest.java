@@ -85,12 +85,12 @@ public class UserDaoTest {
 //        System.out.println("uId: " + userDao.getUserDocument(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData().entrySet());
 
         Assert.assertEquals("Documents should be equal", userRecord.getUid(),
-                userDao.getUserDocument(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData().get("uId"));
+                userDao.getUserDocumentByUId(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData().get("uId"));
 
         System.out.println("getUserDocument_Invalid");
 
         Assert.assertNull("Documents should not be equal",
-                userDao.getUserDocument("fakeUid", "fakeEmail", databaseCollection));
+                userDao.getUserDocumentByUId("fakeUid", "fakeEmail", databaseCollection));
     }
 
     @Test
@@ -132,7 +132,7 @@ public class UserDaoTest {
             Assert.assertEquals("failed to create field", true,
                     userDao.createUpdateProfileField(userRecord.getUid(), username, key, value, databaseCollection));
             // Get Data
-            documentData = (HashMap) userDao.getUserDocument(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData();
+            documentData = (HashMap) userDao.getUserDocumentByUId(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData();
 //          future = firestore.collection("UserTest").whereEqualTo("uId", userRecord.getUid()).get();
 //          documentData = (HashMap) future.get().getDocuments().get(0).getData();
             Assert.assertEquals("failed to retrieve data after create", userRecord.getUid().toString(),
@@ -157,7 +157,7 @@ public class UserDaoTest {
                     userDao.createUpdateProfileField(userRecord.getUid(), username, key, updatedValue, databaseCollection));
 
 
-            documentData = (HashMap) userDao.getUserDocument(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData();
+            documentData = (HashMap) userDao.getUserDocumentByUId(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData();
 
             System.out.println("document data: " + key + ": " + documentData.get(key));
             System.out.println("updatedValue: " + updatedValue);

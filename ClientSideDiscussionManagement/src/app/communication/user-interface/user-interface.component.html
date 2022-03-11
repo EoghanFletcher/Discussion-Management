@@ -1,0 +1,1 @@
+<ion-item *ngFor="let dataItem of data | keyvalue" (click)="viewGroup(dataItem.value.groupName, dataItem.value.groupDescription)">{{ dataItem.value.groupName }} : {{ dataItem.value.groupDescription }}</ion-item>

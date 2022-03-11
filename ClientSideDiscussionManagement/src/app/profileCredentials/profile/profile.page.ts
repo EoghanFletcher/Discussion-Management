@@ -46,7 +46,33 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  
+  async loginGoogleExistingAccount() { // Needed to getEmail address // https://firebase.google.com/docs/auth/web/account-linking#:~:text=You%20can%20allow%20users%20to,they%20used%20to%20sign%20in.
+    console.log("loginGoogleExistingAccount");
+    let result;
+    result = await this.facadeService.authenticationService.googleSigninExistingAccount().then((details: any) => {
+    // const token = credential.accessToken;
+        // The signed-in user info.
+        // const user = result.user;
+        
+        console.log("details: " + details),
+        console.log(JSON.stringify(details));
+
+    //     console.log("result: " + JSON.stringify(details));
+    //     const credential = GoogleAuthProvider.credentialFromResult(details);
+
+    //     console.log("\n\n\n\n")
+    // const token = credential.accessToken;
+
+    // console.log("access token: " + token);
+        // console.log("user: " + JSON.stringify(user));
+
+
+
+        
+  });
+
+        
+  }
 
 
   createCredential() {

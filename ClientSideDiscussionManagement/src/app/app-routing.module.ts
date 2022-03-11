@@ -73,6 +73,12 @@ const routes: Routes = [
     },
     loadChildren: () => import('./groupsAndTasks/create-task/create-task.module').then( m => m.CreateTaskPageModule)
   },
+  {
+    path: 'tabs',
+    loadChildren: () => import('./communication/tabs/tabs.module').then( m => m.TabsPageModule)
+  },
+  
+
 
 
 

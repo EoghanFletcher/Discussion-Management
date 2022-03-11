@@ -77,9 +77,15 @@ export class FacadeService {
       return await this.modalController.dismiss();
     }
 
-    async getGoogleSignCrednetials() {
-      console.log("getGoogleSignCrednetials");
-      return await this.authenticationService.googleSignin();
+
+    async getExistingGoogleCredentials() {
+      console.log("getExistingGoogleCredentials");
+      return await this.authenticationService.googleSigninExistingAccount();
+    }
+
+    async createAccountWithGoogleSignin() {
+      console.log("createAccountWithGoogleSignin");
+      return await this.authenticationService.googleSigninNewAccount();
     }
 
 

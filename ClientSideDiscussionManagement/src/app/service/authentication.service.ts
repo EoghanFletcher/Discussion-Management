@@ -1,7 +1,7 @@
 
 import { Injectable } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
-import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, linkWithPopup, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import { EmailPasswordProvider } from '../interface/email-password-provider';
 import { ForgotPassword } from '../interface/forgot-password';
 import { DataService } from './data.service';
@@ -22,10 +22,63 @@ export class AuthenticationService {
     console.log("login auth");
 
     await signInWithEmailAndPassword(this.auth, credentials.emailAddress, credentials.password)
-    .then(res => {this.dataService.setData("signedIn", res);
+    .then((res) => {this.dataService.setData("signedIn", res);
     this.dataService.setData("uid", res.user.uid);
     this.dataService.setData("email", res.user.email);
+    // console.log("result: " + res);
+    // console.log("result: " + JSON.stringify(res));
+
+console.log("object:" + typeof(res));
+
+    console.log("result: " + JSON.stringify(res));
+
+    console.log("\n\n\n\n\n");
+
+        let credential = GoogleAuthProvider.credentialFromResult(res);
+
+        console.log("credential: " + credential);
     });
+
+
+    
+// // Sign in using a popup.
+// const provider = new GoogleAuthProvider();
+// // provider.addScope('profile');
+// // provider.addScope('email');
+// const result = await signInWithPopup(this.auth, provider);
+
+// console.log("==============================================")
+// console.log("\n")
+// console.log("result: " + JSON.stringify(result));
+// console.log("\n")
+
+// console.log("==============================================")
+// console.log("\n")
+// // The signed-in user info.
+// const user = result.user;
+// console.log("result.user: " + JSON.stringify(user));
+
+// console.log("\n")
+// console.log("==============================================")
+// console.log("\n")
+
+// // This gives you a Google Access Token.
+// const credential = GoogleAuthProvider.credentialFromResult(result);
+
+// console.log("\n")
+// console.log("==============================================")
+// console.log("\n")
+
+// console.log("credential: " + credential);
+// console.log("\n")
+// console.log("==============================================")
+// console.log("\n")
+// const token = credential.accessToken;
+
+// console.log("token: " + token)
+
+
+
   }
 
   async logout() {
@@ -37,7 +90,7 @@ export class AuthenticationService {
 
   // Sign up
   async signUp(credentials: EmailPasswordProvider) {
-    console.log("login auth");
+    console.log("signUp");
 
     await createUserWithEmailAndPassword(this.auth, credentials.emailAddress, credentials.password)
     .then(res => { this.dataService.setData("signedIn", res);
@@ -54,8 +107,10 @@ export class AuthenticationService {
     .then(res => {  });
   }
   
-  async googleSignin() {
-    console.log("loginGoogle");
+
+  
+  async googleSigninNewAccount() {
+    console.log("googleSigninNewAccount");
 
     // https://firebase.google.com/docs/auth/web/google-signin
 
@@ -65,14 +120,15 @@ export class AuthenticationService {
 
     // Diffent interfaces can be usd for desktop and mobile devices. I should check for this
 
-console.log("id: " + googleSignInProvider.providerId);
-
     const auth = getAuth();
     await signInWithPopup(auth, googleSignInProvider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
-        console.log("result: " + JSON.stringify(result));
+        // console.log("result: " + JSON.stringify(result));
         const credential = GoogleAuthProvider.credentialFromResult(result);
+
+        
+        alert(JSON.stringify(credential));
         return credential;
         
         // ...
@@ -86,6 +142,66 @@ console.log("id: " + googleSignInProvider.providerId);
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
       });
+  }
+
+  async googleSigninExistingAccount() {
+    console.log("googleSigninExistingAccount");
+
+    // https://firebase.google.com/docs/auth/web/google-signin
+
+    const googleSignInProvider = new GoogleAuthProvider();
+
+    
+    // Diffent interfaces can be usd for desktop and mobile devices. I should check for this
+    const auth = getAuth();
+    //  Link accounts
+    await linkWithPopup(auth.currentUser, googleSignInProvider).then((result) => {
+      console.log("-linkWithPopup")
+      // Accounts successfully linked.
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const user = result.user;
+      // console.log("result: " + result);
+      // return result;
+      // ...
+      console.log("here")
+      }).catch((error) => {
+        console.log("error");
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.email;
+        // The AuthCredential type that was used.
+        console.log("error message, code: " + errorCode);
+
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+
+      console.log("here2")
+
+    // Get oAuth credentials
+    await signInWithPopup(auth, googleSignInProvider).then((result) => {
+    console.log("-signInWithPopup");
+    console.log("here3")
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    // The signed-in user info.
+    const user = result.user;
+    console.log("token: " + token)
+    return result;
+    // ...
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
+  });
   }
 
 }

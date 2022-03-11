@@ -15,5 +15,6 @@ export class DataService {
 
   getData(id) {
     return this.data[id];
+    
   }
 }

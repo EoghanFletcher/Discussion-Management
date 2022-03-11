@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { EmailPasswordProvider } from '../../interface/email-password-provider';
-import { AuthenticationService } from '../../service/authentication.service';
-import { DataService } from '../../service/data.service';
 import { FacadeService } from '../../service/facade.service';
 
 @Component({
@@ -20,8 +19,7 @@ export class LoginPage implements OnInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private facadeService: FacadeService
-    ) { }
+    private facadeService: FacadeService) { }
 
   ngOnInit() {
     this.postData = new FormGroup({
@@ -34,8 +32,13 @@ export class LoginPage implements OnInit {
     }
   }
 
-  async login() {
-    console.log("login");
+  ionViewWillEnter() {
+    this.postData.get("email").setValue("");
+    this.postData.get("password").setValue("");
+  }
+
+  async loginEmailAndPassword() {
+    console.log("loginEmailAndPassword");
     this.email = this.postData.get("email").value;
     this.password = this.postData.get("password").value;
 
@@ -52,7 +55,6 @@ export class LoginPage implements OnInit {
 
     if (typeof this.facadeService.getDataDataService("signedIn") !== 'undefined') {
       console.log("signedin")
-      console.log("profile");
       this.router.navigateByUrl("profile");  
     }
     else {
@@ -61,9 +63,19 @@ export class LoginPage implements OnInit {
 
   }
 
+  loginGoogle() { // Needed to getEmail address
+    let result;
+    result = this.facadeService.authenticationService.googleSignin();
+    // const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        console.log("user: " + JSON.stringify(user));
+
+        
+  }
+
   navigateToPage(page) {
     console.log("navigateToPage");
-    console.log(page)
     this.router.navigateByUrl(page);
   }
 }

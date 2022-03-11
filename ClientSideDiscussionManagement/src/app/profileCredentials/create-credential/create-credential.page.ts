@@ -40,7 +40,9 @@ export class CreateCredentialPage implements OnInit {
 
     let url = "http://localhost:8080/api/credentials/create";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
-                                        "chosenKey": chosenKey, "chosenValue": chosenValue}
+                                        "username": this.facadeService.getDataDataService("username"),
+                                        "chosenKey": chosenKey,
+                                        "chosenValue": chosenValue}
     ).subscribe(responseLamdba => { this.data = responseLamdba });
     this.router.navigateByUrl("profile");  
   }

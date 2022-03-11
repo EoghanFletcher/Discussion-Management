@@ -43,6 +43,39 @@ const routes: Routes = [
     path: 'create-credential',
     loadChildren: () => import('./profileCredentials/create-credential/create-credential.module').then( m => m.CreateCredentialPageModule)
   },
+  {
+    path: 'list-groups',
+    loadChildren: () => import('./groupsAndTasks/list-groups/list-groups.module').then( m => m.ListGroupsPageModule)
+  },
+  {
+    path: 'create-group',
+    loadChildren: () => import('./groupsAndTasks/create-group/create-group.module').then( m => m.CreateGroupPageModule)
+  },
+  {
+    path: 'group-task-details',
+    loadChildren: () => import('./groupsAndTasks/group-task-details/group-task-details.module').then( m => m.GroupTaskDetailsPageModule)
+  },
+  {
+    path: 'group-task-details/:id',
+    resolve: {
+      special: DataResolverService,
+    },
+    loadChildren: () => import('./groupsAndTasks/group-task-details/group-task-details.module').then( m => m.GroupTaskDetailsPageModule)
+  },
+  {
+    path: 'create-task',
+    loadChildren: () => import('./groupsAndTasks/create-task/create-task.module').then( m => m.CreateTaskPageModule)
+  },
+  {
+    path: 'create-task/:id',
+    resolve: {
+      special: DataResolverService,
+    },
+    loadChildren: () => import('./groupsAndTasks/create-task/create-task.module').then( m => m.CreateTaskPageModule)
+  },
+
+
+
 
 
 ];

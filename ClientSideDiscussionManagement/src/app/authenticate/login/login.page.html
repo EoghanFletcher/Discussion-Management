@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content >
-  <form id="loginForm" name="loginForm" [formGroup]="postData" (ngSubmit)="login()">
+  <form id="loginForm" name="loginForm" [formGroup]="postData" (ngSubmit)="loginEmailAndPassword()">
     <ion-item>
     <ion-input id="email" name="email" type="email" formControlName="email" placeholder="Email Address" class="ion-text-center"></ion-input>
   </ion-item>
@@ -16,4 +16,7 @@
       <ion-router-link color="secondary" (click)="navigateToPage('register')">Register</ion-router-link>
       <ion-router-link color="danger" (click)="navigateToPage('forgot-password')">Forgot Password</ion-router-link>
   </form>
+
+  <ion-button id="googleSignin" name="googleSignin" (click)="loginGoogle()">Sign into Google account</ion-button>
+
 </ion-content>

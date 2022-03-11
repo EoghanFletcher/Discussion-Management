@@ -1,9 +1,11 @@
 import { Injectable, Injector } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { EmailPasswordProvider } from '../interface/email-password-provider';
 import { ForgotPassword } from '../interface/forgot-password';
 import { AuthenticationService } from './authentication.service';
 import { DataResolverService } from './data-resolver.service';
 import { DataService } from './data.service';
+import { ModalNavigationComponentComponent } from '../NavigationMenuModal/modal-navigation-component/modal-navigation-component.component'
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +29,8 @@ export class FacadeService {
     if (!this._authenticationService) {this._authenticationService = this.injector.get(AuthenticationService);}return this._authenticationService
   }
 
-  constructor(private injector: Injector) {
+  constructor(private injector: Injector,
+              private modalController: ModalController) {
 
   }
     getDataDataService(id: any) {
@@ -35,6 +38,7 @@ export class FacadeService {
     }
 
     setDataDataService(id: string, data: any) {
+      this.dataService.setData(id, data);
       return this.dataService.setData(id, data);
     }
 
@@ -58,6 +62,24 @@ export class FacadeService {
     async resetPasswordAuthenticationService(forPass: ForgotPassword) {
       console.log("authenticationServiceResetPassword");
       return await this.authenticationService.resetPassword(forPass);
+    }
+
+    async displayModal() {
+      console.log("Facade service: displayModal")
+      const modal = await this.modalController.create({
+        component: ModalNavigationComponentComponent
+      });
+      return await modal.present();
+    }
+
+    async closeModal() {
+      console.log("closeModal");
+      return await this.modalController.dismiss();
+    }
+
+    async getGoogleSignCrednetials() {
+      console.log("getGoogleSignCrednetials");
+      return await this.authenticationService.googleSignin();
     }
 
 

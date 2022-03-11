@@ -16,6 +16,7 @@ export class RegisterPage implements OnInit {
   private postData: FormGroup;
   private email: FormControl;
   private password: FormControl;
+  private username: FormControl;
   data: any;
 
   constructor(private router: Router,
@@ -25,7 +26,8 @@ export class RegisterPage implements OnInit {
   ngOnInit() {
     this.postData = new FormGroup({
       email: new FormControl(),
-      password: new FormControl()
+      password: new FormControl(),
+      username: new FormControl()
     });
 
     if (this.route.snapshot.data.special) {
@@ -33,18 +35,27 @@ export class RegisterPage implements OnInit {
     }
   }
 
+  ionViewWillEnter() {
+    this.postData.get("email").setValue("");
+    this.postData.get("password").setValue("");
+    this.postData.get("username").setValue("");
+  }
+
   async register() {
     console.log("register");
     this.email = this.postData.get("email").value;
     this.password = this.postData.get("password").value;
+    this.password = this.postData.get("username").value;
 
     let emailString: string = this.postData.get("email").value;
-    let passwordString: string = this.password = this.postData.get("password").value
+    let passwordString: string = this.password = this.postData.get("password").value;
+    let usernameString: string = this.username = this.postData.get("username").value
 
     let auth:
     EmailPasswordProvider = {
       emailAddress: emailString,
-      password: passwordString
+      password: passwordString,
+      username: usernameString
     }
 
     await this.facadeService.registerAuthenticationService(auth);

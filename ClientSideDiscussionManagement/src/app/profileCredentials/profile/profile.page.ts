@@ -3,6 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FacadeService } from '../../service/facade.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { SelectedCredential } from '../../interface/selected-credential';
+import { ModalController } from '@ionic/angular';
+import { ModalNavigationComponentComponent } from 'src/app/NavigationMenuModal/modal-navigation-component/modal-navigation-component.component';
+import { EmailPasswordProvider } from 'src/app/interface/email-password-provider';
+import { DataService } from 'src/app/service/data.service';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 @Component({
   selector: 'app-profile',
@@ -12,24 +17,36 @@ import { SelectedCredential } from '../../interface/selected-credential';
 export class ProfilePage implements OnInit {
 
   data: any;
+  count: any = 0;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private facadeService: FacadeService,
-    private http: HttpClient) { }
+    private http: HttpClient,
+    private dataService: DataService) { }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter() {
     this.data = this.facadeService.getDataDataService("uid");
 
     this.getUserData();
   }
-
+  
   getUserData() {
     console.log("getUserData");
-    let url = "http://localhost:8080/api/user/authenticate";
-    let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid")}
-    ).subscribe(responseLamdba => { this.data = responseLamdba });    
+    let url = "http://localhost:8080/api/user/authenticateEmailPassword";
+
+    let response = this.http.post<EmailPasswordProvider>(url, {"uId": this.facadeService.getDataDataService("uid"),
+                                      "email": this.facadeService.getDataDataService("email"),
+                                      "username": this.facadeService.getDataDataService("username")}
+    ).subscribe(responseLamdba => { this.data = responseLamdba,
+      this.dataService.setData("username", responseLamdba.username);
+    });
   }
+
+  
 
 
   createCredential() {
@@ -39,10 +56,6 @@ export class ProfilePage implements OnInit {
 
   modifyCredential(keySeleted, valueSelected) {
     console.log("modifyCredential");
-    // console.log("Key: " + keySeleted);
-    // console.log("Value: " + valueSelected);
-
-
 
     let credential:
     SelectedCredential = {
@@ -51,7 +64,7 @@ export class ProfilePage implements OnInit {
     }
 
     this.facadeService.setDataDataService("id", credential);
-    
     this.router.navigateByUrl("profile-crud/id");
   }
+
 }

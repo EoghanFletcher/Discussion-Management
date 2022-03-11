@@ -11,9 +11,6 @@ export class DataResolverService {
 
   resolve(route : ActivatedRouteSnapshot) {
     const id = route.paramMap.get("id");
-    console.log("id: " + id);
-    console.log(route);
-    console.log("facade: " + JSON.stringify(this.facadeService.getDataDataService(id)));
     return this.facadeService.getDataDataService(id);
   }
 }

@@ -1,7 +1,7 @@
 
 import { Injectable } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
-import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import { EmailPasswordProvider } from '../interface/email-password-provider';
 import { ForgotPassword } from '../interface/forgot-password';
 import { DataService } from './data.service';
@@ -20,16 +20,11 @@ export class AuthenticationService {
   // Login
   async login(credentials: EmailPasswordProvider) {
     console.log("login auth");
-    console.log("Email: " + credentials.emailAddress);
-    console.log("Password: " + credentials.password);
-
 
     await signInWithEmailAndPassword(this.auth, credentials.emailAddress, credentials.password)
     .then(res => {this.dataService.setData("signedIn", res);
-    // console.log(JSON.stringify(this.dataService.getData("signedIn")));
-    console.log("result: " + res);
-    console.log("result uid: " + res.user.uid);
     this.dataService.setData("uid", res.user.uid);
+    this.dataService.setData("email", res.user.email);
     });
   }
 
@@ -43,23 +38,54 @@ export class AuthenticationService {
   // Sign up
   async signUp(credentials: EmailPasswordProvider) {
     console.log("login auth");
-    console.log("Email: " + credentials.emailAddress);
-    console.log("Password: " + credentials.password);
 
     await createUserWithEmailAndPassword(this.auth, credentials.emailAddress, credentials.password)
-    .then(res => {console.log("res: " + res),
-      this.dataService.setData("signedIn", res);
+    .then(res => { this.dataService.setData("signedIn", res);
       this.dataService.setData("uid", res.user.uid);
-    // console.log(JSON.stringify(this.dataService.getData("signedIn")));
+      this.dataService.setData("email", res.user.email);
+      this.dataService.setData("username", credentials.username);
     });
   }
 
   async resetPassword(credentials: ForgotPassword) {
     console.log("reset password");
-    // console.log("Email: " + credentials.emailAddress);
 
     await sendPasswordResetEmail(this.auth, credentials.emailAddress)
-    .then(res => {console.log("res: " + res)});
+    .then(res => {  });
+  }
+  
+  async googleSignin() {
+    console.log("loginGoogle");
+
+    // https://firebase.google.com/docs/auth/web/google-signin
+
+    const googleSignInProvider = new GoogleAuthProvider();
+
+    // googleSignInProvider.addScope("")
+
+    // Diffent interfaces can be usd for desktop and mobile devices. I should check for this
+
+console.log("id: " + googleSignInProvider.providerId);
+
+    const auth = getAuth();
+    await signInWithPopup(auth, googleSignInProvider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        console.log("result: " + JSON.stringify(result));
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        return credential;
+        
+        // ...
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
   }
 
 }

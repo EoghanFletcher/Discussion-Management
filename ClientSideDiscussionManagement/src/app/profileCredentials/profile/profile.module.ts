@@ -8,6 +8,7 @@ import { ProfilePageRoutingModule } from './profile-routing.module';
 
 import { ProfilePage } from './profile.page';
 import { SignOutComponent } from '../../sign-out/sign-out.component';
+import { NavigationMenuBtnComponent } from 'src/app/NavigationMenuModal/components/navigation-menu-btn/navigation-menu-btn.component';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { SignOutComponent } from '../../sign-out/sign-out.component';
     ProfilePageRoutingModule
   ],
   declarations: [ProfilePage, 
-    SignOutComponent
+    SignOutComponent,
+    NavigationMenuBtnComponent
   ]
 })
 export class ProfilePageModule {}

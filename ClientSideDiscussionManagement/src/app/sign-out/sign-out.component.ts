@@ -19,6 +19,13 @@ export class SignOutComponent implements OnInit {
   signOut() {
     console.log("signOut");
     this.facadeService.setDataDataService("signedIn", null)
+
+
+    this.facadeService.setDataDataService("uid", null);
+    this.facadeService.setDataDataService("email", null);
+    this.facadeService.setDataDataService("username", null);
+
+
     this.router.navigateByUrl("login");
   }
 

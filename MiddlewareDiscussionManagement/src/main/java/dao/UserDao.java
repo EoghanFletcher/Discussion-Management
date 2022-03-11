@@ -174,7 +174,7 @@ public class UserDao implements UserDaoInterface {
             documentData = documentSnapshot.getData();
             documentData.put(key, FieldValue.delete());
 
-            documentReference = firestore.collection("User").document(documentSnapshot.getId());
+            documentReference = firestore.collection(databaseCollection).document(documentSnapshot.getId());
             writeResultApiFuture = documentReference.update(documentData);
         } catch (Exception ex) {
             System.out.println("An exception occurred [removeProfileField], ex: " + ex.getMessage());

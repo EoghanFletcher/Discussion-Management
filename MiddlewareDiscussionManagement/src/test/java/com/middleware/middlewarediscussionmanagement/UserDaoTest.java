@@ -33,6 +33,7 @@ public class UserDaoTest {
     private static DocumentSnapshot documentSnapshot = null;
     private static ApiFuture<QuerySnapshot> future = null;
     private static List<QueryDocumentSnapshot> documents = null;
+    private static List<DocumentSnapshot> listDocumentSnapshot = null;
     private static CollectionReference collectionReference = null;
     private static String databaseCollection = "UserTest";
     private static String username = "JUnit";
@@ -49,7 +50,8 @@ public class UserDaoTest {
             documentData = new HashMap();
             firebaseAuthInstance = FirebaseAuth.getInstance();
 
-//            firebaseAuthInstance.createUser(new CreateRequest().setEmail("JUnit@gmail.com").setPassword("JUnit@gmail.com"));
+            firebaseAuthInstance.createUser(new CreateRequest().setEmail("JUnit@gmail.com").setPassword("JUnit@gmail.com"));
+            Thread.sleep(2000);
             userRecord = firebaseAuthInstance.getUserByEmail("JUnit@gmail.com");
 
             firestore = Dao.initialiseFirestore();
@@ -60,7 +62,7 @@ public class UserDaoTest {
             documentData.put("username", username);
 
             collectionReference = firestore.collection(databaseCollection);
-//            collectionReference.document().set(documentData);
+            collectionReference.document().set(documentData);
         }
         catch(Exception ex) {
             System.out.println("An error occurred [setupData], ex: " + ex);
@@ -80,15 +82,15 @@ public class UserDaoTest {
     public void getUserDocument() {
         System.out.println("getUserDocument_Valid");
 
-        System.out.println("uId: " + userDao.getUserDocument(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData().entrySet());
+//        System.out.println("uId: " + userDao.getUserDocument(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData().entrySet());
 
-        assertEquals("Documents should be equal", userRecord.getUid(),
+        Assert.assertEquals("Documents should be equal", userRecord.getUid(),
                 userDao.getUserDocument(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData().get("uId"));
 
         System.out.println("getUserDocument_Invalid");
 
-        assertEquals("Documents should not be equal", userRecord.getUid(),
-                userDao.getUserDocument("fakeUid", "fakeEmail", databaseCollection).getData().get("uId"));
+        Assert.assertNull("Documents should not be equal",
+                userDao.getUserDocument("fakeUid", "fakeEmail", databaseCollection));
     }
 
     @Test
@@ -115,7 +117,7 @@ public class UserDaoTest {
 
         System.out.println("getUid_Invalid");
 
-        Assert.assertNull("The value returned is null", userDao.getUId("test", firebaseAuthInstance).getUid());
+        Assert.assertNull("The value returned is null", userDao.getUId("test", firebaseAuthInstance));
     }
 
     @Test
@@ -139,24 +141,49 @@ public class UserDaoTest {
             Assert.assertEquals("failed to retrieve data after create (check value)", value,
                     documentData.get(key).toString());
 
+
+
+
+
+
+
+
             System.out.println("\n UPDATE_ProfileField_Valid \n");
             // Update
 
+            String updatedValue = "newValue";
+
             Assert.assertEquals("failed to update field", true,
-                    userDao.createUpdateProfileField(userRecord.getUid(), username, key, "newValue", databaseCollection));
-            Assert.assertEquals("failed to retrieve data after update", userRecord.getUid().toString(),
-                    documentData.get("uId").toString());
+                    userDao.createUpdateProfileField(userRecord.getUid(), username, key, updatedValue, databaseCollection));
+
+
+            documentData = (HashMap) userDao.getUserDocument(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData();
+
+            System.out.println("document data: " + key + ": " + documentData.get(key));
+            System.out.println("updatedValue: " + updatedValue);
+            Assert.assertEquals("failed to retrieve data after update", updatedValue,
+                    documentData.get(key).toString());
+
+
+
+
+
+
+
 
             System.out.println("\n REMOVE_ProfileField_Valid \n");
             // Remove
 
             System.out.println("username: " + username);
             System.out.println("key: " + key);
+
+            System.out.println("database collection: " + databaseCollection);
 //            Function is slightly broken
             Assert.assertTrue("failed to remove field",
                     userDao.removeProfileField(userRecord.getUid(), username, key, databaseCollection));
 
-
+            // When not using multithreading the program runs on a single thread
+            Thread.sleep(2000);
 
             future = firestore.collection(databaseCollection).whereEqualTo("uId", userRecord.getUid()).get();
           Map returnedValue = (HashMap) future.get().getDocuments().get(0).getData();
@@ -178,11 +205,28 @@ public class UserDaoTest {
         }
     }
 
+    @Test
+    public void listUsers() {
+        System.out.println("listUsers");
+
+        System.out.println("\n listUsers_Valid \n");
+
+        listDocumentSnapshot = userDao.listUsers(databaseCollection);
+
+        Assert.assertEquals("Position 0 returned by listUsers() was not equal to the expected value",
+                "JUnit",
+                listDocumentSnapshot.get(0).getData().get("username"));
+
+        System.out.println("\n listUsers_Invalid \n");
+
+        Assert.assertNotEquals("Position 0 returned by listUsers() was not equal to the expected value",
+                "usernameFalse",
+                listDocumentSnapshot.get(0).getData().get("username"));
+    }
 
 
 
-
-//    @AfterClass
+    @AfterClass
     public static void removeTestData() {
         System.out.println("removeTestData");
         try {

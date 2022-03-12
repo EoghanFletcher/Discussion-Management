@@ -46,7 +46,7 @@ export class FacadeService {
 
     async loginAuthenticationService(credentials: EmailPasswordProvider) {
       console.log("authenticationServiceLogin");
-      return await this.authenticationService.login(credentials);
+      let test = await this.authenticationService.login(credentials);
     }
     
     async logoutAuthenticationService() {

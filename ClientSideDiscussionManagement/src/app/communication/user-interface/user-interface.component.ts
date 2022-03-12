@@ -32,7 +32,8 @@ export class UserInterfaceComponent implements OnInit {
 
     let url = "http://localhost:8080/api/communication/emails";
     let response = this.http.post(url, {"email": this.facadeService.getDataDataService("email"),
-                                      "username": this.facadeService.getDataDataService("username")}
+                                      "username": this.facadeService.getDataDataService("username"),
+                                      "accessToken": this.facadeService.getDataDataService("accessToken")}
     ).subscribe(responseLamdba => { this.data = responseLamdba });    
   }
 

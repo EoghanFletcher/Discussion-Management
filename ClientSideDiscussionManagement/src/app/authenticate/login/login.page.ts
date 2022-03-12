@@ -51,6 +51,7 @@ export class LoginPage implements OnInit {
       password: passwordString
     }
 
+    
     await this.facadeService.loginAuthenticationService(auth);
 
     if (typeof this.facadeService.getDataDataService("signedIn") !== 'undefined') {

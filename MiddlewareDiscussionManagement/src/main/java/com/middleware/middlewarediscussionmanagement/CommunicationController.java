@@ -21,9 +21,11 @@ public class CommunicationController {
 
         System.out.println("data: " + data.entrySet());
 
-        String groupNameString = (String) data.get("email");
+        String emailString = (String) data.get("email");
         String usernameString = (String) data.get("username");
+        String accessTokenString = (String) data.get("accessToken");
 
+        userDao.getEmails(emailString, accessTokenString);
     }
 
 }

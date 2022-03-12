@@ -50,28 +50,9 @@ export class ProfilePage implements OnInit {
     console.log("loginGoogleExistingAccount");
     let result;
     result = await this.facadeService.authenticationService.googleSigninExistingAccount().then((details: any) => {
-    // const token = credential.accessToken;
-        // The signed-in user info.
-        // const user = result.user;
-        
         console.log("details: " + details),
         console.log(JSON.stringify(details));
-
-    //     console.log("result: " + JSON.stringify(details));
-    //     const credential = GoogleAuthProvider.credentialFromResult(details);
-
-    //     console.log("\n\n\n\n")
-    // const token = credential.accessToken;
-
-    // console.log("access token: " + token);
-        // console.log("user: " + JSON.stringify(user));
-
-
-
-        
-  });
-
-        
+    });
   }
 
 

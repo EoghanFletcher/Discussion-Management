@@ -25,18 +25,26 @@ export class AuthenticationService {
     .then((res) => {this.dataService.setData("signedIn", res);
     this.dataService.setData("uid", res.user.uid);
     this.dataService.setData("email", res.user.email);
-    // console.log("result: " + res);
-    // console.log("result: " + JSON.stringify(res));
 
-console.log("object:" + typeof(res));
-
-    console.log("result: " + JSON.stringify(res));
+    console.log("result: " + JSON.stringify(res.user));
 
     console.log("\n\n\n\n\n");
 
-        let credential = GoogleAuthProvider.credentialFromResult(res);
+    let token =  JSON.stringify(res.user.getIdTokenResult().then(
+      (x) => {
+      console.log("token: " + x.token),
+      this.dataService.setData("accessToken", x.token);
+      }
+    ));
 
-        console.log("credential: " + credential);
+
+    // console.log("providerId: " + JSON.stringify(res.providerId))
+
+    console.log("\n\n\n\n\n");
+
+        // let credential = GoogleAuthProvider.credentialFromResult(res);
+
+        // console.log("credential: " + credential);
     });
 
 
@@ -128,7 +136,7 @@ console.log("object:" + typeof(res));
         const credential = GoogleAuthProvider.credentialFromResult(result);
 
         
-        alert(JSON.stringify(credential));
+        console.log(JSON.stringify(result));
         return credential;
         
         // ...

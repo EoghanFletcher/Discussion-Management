@@ -27,5 +27,5 @@ public interface UserDaoInterface {
 
     public List<DocumentSnapshot> listUsers(String databaseCollection);
 
-    public void getEmails(String email, String accessToken);
+
 }

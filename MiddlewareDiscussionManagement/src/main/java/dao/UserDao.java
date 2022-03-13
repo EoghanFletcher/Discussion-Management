@@ -244,43 +244,4 @@ public class UserDao implements UserDaoInterface {
         }
         return listDocumentSnapshot;
     }
-
-    public void getEmails(String email, String accessToken) {
-        System.out.println("getEmails");
-
-//        AccessToken access = new AccessToken(accessToken, new Date());
-////        GoogleCredential credential = new GoogleCredential().setAccessToken(accessToken);
-////        Plus plus = new Plus.builder(new NetHttpTransport(),
-////                GsonFactory.getDefaultInstance(),
-////                credential)
-////                .setApplicationName("Google-PlusSample/1.0")
-////                .build();
-//        GoogleCredentials googleCredentials = new GoogleCredentials(access);
-//
-//
-//
-//        // https://developers.google.com/api-client-library/java/google-api-java-client/oauth2
-//        // https://developers.google.com/gmail/api/downloads#java
-//        // https://stackoverflow.com/questions/44484440/get-google-access-token
-
-//        final String uri = "https://gmail.googleapis.com/gmail/v1/users/" + email + "/drafts";
-        String uri = "https://accounts.google.com/o/oauth2/v2/auth?" +
-                " scope=https://mail.google.com&" +
-                " access_type=offline&" +
-                " include_granted_scopes=true&" +
-                " response_type=code&" +
-                " state=state_parameter_passthrough_value&" +
-                " redirect_uri=https://discussionmanagement-a9065.firebaseapp.com/__/auth/handler&" +
-                " client_id=691585599545-g0hg3r59jemdgse06f7q8p9skdnlt4uj.apps.googleusercontent.com";
-
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            String result = restTemplate.getForObject(uri, String.class);
-            System.out.println("result: " + result);
-        }
-        catch (Exception ex) {
-            System.out.println("An exception occurred [getEmails], ex: " + ex);
-            ex.printStackTrace();
-        }
-    }
 }

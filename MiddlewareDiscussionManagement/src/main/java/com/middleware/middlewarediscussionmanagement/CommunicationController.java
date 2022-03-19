@@ -15,10 +15,11 @@ import java.util.HashMap;
 public class CommunicationController {
 
     CommunicationDao communicationDao = new CommunicationDao();
+//    final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 //    String databaseCollection = "User";
 
-    @PostMapping(path = "/emails")
-    public void getEmails(@RequestBody HashMap data) {
+    @PostMapping(path = "/getDrafts")
+    public void getDrafts(@RequestBody HashMap data) {
         System.out.println("getEmails");
 
         System.out.println("data: " + data.entrySet());
@@ -28,9 +29,10 @@ public class CommunicationController {
             String usernameString = (String) data.get("username");
             String accessTokenString = (String) data.get("accessToken");
 
-            communicationDao.getEmails(emailString, accessTokenString);
+            final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+            communicationDao.getDrafts(HTTP_TRANSPORT);
 
-//            final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+
 //            System.out.println(communicationDao.getCredentials(HTTP_TRANSPORT));
 
         }

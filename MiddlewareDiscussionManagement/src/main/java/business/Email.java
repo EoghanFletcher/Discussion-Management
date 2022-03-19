@@ -7,6 +7,7 @@ import com.google.api.services.gmail.GmailScopes;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class Email {
     /** Application name. */
@@ -21,6 +22,7 @@ public class Email {
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
     // Add more scopes
-    public static final List<String> SCOPES_LABELS = Collections.singletonList(GmailScopes.GMAIL_LABELS);
+//    public static final List<String> SCOPES_LABELS = Collections.singletonList(GmailScopes.GMAIL_LABELS);
+      public static final Set<String> SCOPES_LABELS = GmailScopes.all();
     public static final String CREDENTIALS_FILE_PATH = "./keys/client_secret_691585599545-g0hg3r59jemdgse06f7q8p9skdnlt4uj.apps.googleusercontent.com.json";
 }

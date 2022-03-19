@@ -168,25 +168,17 @@ export class AuthenticationService {
       // Accounts successfully linked.
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const user = result.user;
-      // console.log("result: " + result);
-      // return result;
-      // ...
-      console.log("here")
       }).catch((error) => {
         console.log("error");
-        // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        // The email of the user's account used.
         const email = error.email;
-        // The AuthCredential type that was used.
         console.log("error message, code: " + errorCode);
 
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
       });
 
-      console.log("here2")
 
     // Get oAuth credentials
     await signInWithPopup(auth, googleSignInProvider).then((result) => {

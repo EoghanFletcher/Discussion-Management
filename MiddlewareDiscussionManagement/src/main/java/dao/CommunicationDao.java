@@ -6,36 +6,70 @@ import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInsta
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.util.store.FileDataStoreFactory;
+import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.model.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static business.Email.*;
 
 public class CommunicationDao implements CommunicationDaoInterface {
 
     Email email = new Email();
+    String user = "me";
+    NetHttpTransport HTTP_TRANSPORT = null;
 
-    public void getEmails(String email, String accessToken) {
-        System.out.println("getEmails");
+    { try { HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport(); } catch (GeneralSecurityException e) { e.printStackTrace(); } catch (IOException e) {  e.printStackTrace(); } }
+    Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+            .setApplicationName(APPLICATION_NAME)
+            .build();
 
-        final String uri = "https://gmail.googleapis.com/gmail/v1/users/" + email + "/drafts";
+    public List<Message> getDrafts(NetHttpTransport HTTP_TRANSPORT) {
+        System.out.println("getDrafts");
+
+//        final String uri = "https://gmail.googleapis.com/gmail/v1/users/" + email + "/drafts";
+
+        List<Draft> draftList = null;
+        List<Message> returnList = null;
+        Draft draftsResponse = null;
 
         try {
-            RestTemplate restTemplate = new RestTemplate();
-            String result = restTemplate.getForObject(uri, String.class);
-            System.out.println("result: " + result);
+            ListDraftsResponse listDraftsResponse = service.users().drafts().list(user).execute();
+            draftList = listDraftsResponse.getDrafts();
+
+            if (draftList.isEmpty()) {
+                System.out.println("No drafts found.");
+            } else {
+                System.out.println("Drafts:");
+                returnList = new ArrayList<>();
+                for (Draft draft : draftList) {
+                    draftsResponse = service.users().drafts().get("me", draft.getId()).execute();
+                    System.out.println("draftsResponse 0: " + draftsResponse.getMessage().toPrettyString());
+//                    System.out.println("draftsResponse 0: " + draftsResponse.getMessage().getSnippet());
+//                    System.out.println("draftsResponse 0: " + draftsResponse.getMessage().values());
+                    returnList.add(draftsResponse.getMessage());
+                    System.out.println("\n");
+                }
+            }
+
         }
         catch (Exception ex) {
-            System.out.println("An exception occurred [getEmails], ex: " + ex);
+            System.out.println("An exception occurred [getDrafts], ex: " + ex);
             ex.printStackTrace();
         }
+        return returnList;
     }
 
-    public Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) {
+    public Credential getCredentials(NetHttpTransport HTTP_TRANSPORT) {
         System.out.println("getCredentials");
 //        https://developers.google.com/gmail/api/quickstart/java
 
@@ -44,7 +78,9 @@ public class CommunicationDao implements CommunicationDaoInterface {
         GoogleAuthorizationCodeFlow flow = null;
         LocalServerReceiver receiver = null;
         Credential credential = null;
-        List<String> SCOPES = SCOPES_LABELS;
+//        List<String> SCOPES = SCOPES_LABELS;
+        Set<String> SCOPES = SCOPES_LABELS;
+
 
         try {
             // Load client secrets.
@@ -62,7 +98,7 @@ public class CommunicationDao implements CommunicationDaoInterface {
                     .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                     .setAccessType("offline")
                     .build();
-            receiver = new LocalServerReceiver.Builder().setPort(8888).build();
+            receiver = new LocalServerReceiver.Builder().setPort(8899).build();
             credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
             //returns an authorized Credential object.
         }

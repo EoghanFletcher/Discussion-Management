@@ -64,33 +64,10 @@ export class LoginPage implements OnInit {
 
   }
 
-  loginGoogleNewAccount() { // Needed to getEmail address
-    console.log("loginGoogleNewAccount");
+  loginwithGoogle() { // Needed to getEmail address
+    console.log("loginwithGoogle");
     let result;
-    result = this.facadeService.authenticationService.googleSigninNewAccount().then((details: any) => {
-    // const token = credential.accessToken;
-        // The signed-in user info.
-        // const user = result.user;
-        
-    //     console.log("details: " + details),
-    //     console.log(JSON.stringify(details));
-
-    //     console.log("result: " + JSON.stringify(details));
-    //     const credential = details.user.providerId;
-    //     console.log("credential: " + credential);
-    //     // const credential = GoogleAuthProvider.credentialFromResult(details);
-
-    //     console.log("\n\n\n\n")
-    // const token = credential.accessToken;
-
-    // console.log("access token: " + token);
-        // console.log("user: " + JSON.stringify(user));
-
-  
-
-    // alert("access token: " + token);
-
-    });
+    result = this.facadeService.authenticationService.googleSigninNewAccount().then((details: any) => {  });
 
     console.log("result: " + result);
   }

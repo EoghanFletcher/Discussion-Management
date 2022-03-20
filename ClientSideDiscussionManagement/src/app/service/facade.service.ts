@@ -6,6 +6,7 @@ import { AuthenticationService } from './authentication.service';
 import { DataResolverService } from './data-resolver.service';
 import { DataService } from './data.service';
 import { ModalNavigationComponentComponent } from '../NavigationMenuModal/modal-navigation-component/modal-navigation-component.component'
+import { ProfileService } from './profile.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class FacadeService {
 
   private _dataService: DataService;
   private _authenticationService: AuthenticationService;
-  private _resolverService: DataResolverService
+  private _resolverService: DataResolverService;
+  private _profileService: ProfileService;
 
   
   public get dataService(): DataService {
@@ -27,6 +29,10 @@ export class FacadeService {
 
   public get authenticationService(): AuthenticationService {
     if (!this._authenticationService) {this._authenticationService = this.injector.get(AuthenticationService);}return this._authenticationService
+  }
+
+  public get profileService(): ProfileService {
+    if (!this._profileService) {this._profileService = this.injector.get(ProfileService);}return this._profileService
   }
 
   constructor(private injector: Injector,
@@ -86,6 +92,13 @@ export class FacadeService {
     async createAccountWithGoogleSignin() {
       console.log("createAccountWithGoogleSignin");
       return await this.authenticationService.googleSigninNewAccount();
+    }
+
+    async getUseInformation() {
+      console.log("getUseInformation");
+
+      return console.log("here2: " + await JSON.stringify(this.profileService.getUserData()));
+      // return await this.profileService.getUserData();
     }
 
 

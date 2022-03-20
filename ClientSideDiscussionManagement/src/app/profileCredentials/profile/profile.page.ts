@@ -34,8 +34,11 @@ export class ProfilePage implements OnInit {
     this.getUserData();
   }
   
-  getUserData() {
+  async getUserData() {
     console.log("getUserData");
+    // this.data = await this.facadeService.getUseInformation();
+    // console.log("here3: " + JSON.stringify(this.data))
+
     let url = "http://localhost:8080/api/user/authenticateEmailPassword";
 
     let response = this.http.post<EmailPasswordProvider>(url, {"uId": this.facadeService.getDataDataService("uid"),
@@ -46,8 +49,8 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  async loginGoogleExistingAccount() { // Needed to getEmail address // https://firebase.google.com/docs/auth/web/account-linking#:~:text=You%20can%20allow%20users%20to,they%20used%20to%20sign%20in.
-    console.log("loginGoogleExistingAccount");
+  async linkGoogleAccount() { // Needed to getEmail address // https://firebase.google.com/docs/auth/web/account-linking#:~:text=You%20can%20allow%20users%20to,they%20used%20to%20sign%20in.
+    console.log("linkGoogleAccount");
     let result;
     result = await this.facadeService.authenticationService.googleSigninExistingAccount().then((details: any) => {
         console.log("details: " + details),

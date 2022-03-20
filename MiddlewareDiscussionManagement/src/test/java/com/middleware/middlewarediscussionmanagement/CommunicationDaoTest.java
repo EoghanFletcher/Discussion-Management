@@ -83,7 +83,7 @@ public class CommunicationDaoTest {
 
                 mimeMessage = communicationDao.createMineMessage(draftData, HTTP_TRANSPORT);
                 message = communicationDao.createMessage(mimeMessage);
-                message = communicationDao.createDraft(service, "me", mimeMessage);
+                draft = communicationDao.createDraft(service, "me", mimeMessage);
 
                 System.out.println("==========");
                 System.out.println("getDrafts");
@@ -155,11 +155,12 @@ public class CommunicationDaoTest {
                 System.out.println("createDraft");
                 System.out.println("==========");
 
-                message = communicationDao.createDraft(service, "me", mimeMessage);
+                draft = communicationDao.createDraft(service, "me", mimeMessage);
 
                 System.out.println("message: " + message);
                 System.out.println("message Id: " + message.getId());
                 Assert.assertNotNull(message);
+                System.out.println("create draft raw: " + message.getRaw());
                 Assert.assertTrue(message.getRaw() instanceof String);
 
                 System.out.println("==========");

@@ -74,11 +74,12 @@ public class CommunicationDao implements CommunicationDaoInterface {
 
             for (Message message : messageList) {
                 if (message.getId().equals(draftId)) {
-                    System.out.println("Yes, current draft id : " + message.getId() + ", draftId: " + draftId);
+//                    System.out.println("raw: " + message.getRaw());
+//                    System.out.println("Yes, current draft id : " + message.getId() + ", draftId: " + draftId);
                     retrievedDraft = message;
                 }
                 else {
-                    System.out.println("no, current draft id : " + message.getId() + ", draftId: " + draftId);
+//                    System.out.println("no, current draft id : " + message.getId() + ", draftId: " + draftId);
                 }
             }
         }
@@ -136,23 +137,22 @@ public class CommunicationDao implements CommunicationDaoInterface {
         Draft draft = new Draft();
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
-        MimeMessage email = new MimeMessage(session);
+        MimeMessage mineMessage = new MimeMessage(session);
 
         try {
-            email.setFrom(new InternetAddress(draftData.get("from").toString()));
-            email.addRecipient(javax.mail.Message.RecipientType.TO,
+            mineMessage.setFrom(new InternetAddress(draftData.get("from").toString()));
+            mineMessage.addRecipient(javax.mail.Message.RecipientType.TO,
                     new InternetAddress(draftData.get("to").toString()));
-            email.setSubject(draftData.get("subject").toString());
-            email.setText(draftData.get("body").toString());
+            mineMessage.setSubject(draftData.get("subject").toString());
+            mineMessage.setText(draftData.get("body").toString());
 
 
-//            ListDraftsResponse listDraftsResponse = service.users().drafts().create();
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [createMineMessage], ex: " + ex);
             ex.printStackTrace();
         }
-        return email;
+        return mineMessage;
     }
 
     public Message createMessage(MimeMessage mimeMessage) {
@@ -175,7 +175,7 @@ public class CommunicationDao implements CommunicationDaoInterface {
         return message;
     }
 
-    public Message createDraft(Gmail service, String userId, MimeMessage mimeMessage) {
+    public Draft createDraft(Gmail service, String userId, MimeMessage mimeMessage) {
         System.out.println("sendMessage");
 
         Message message = null;
@@ -186,20 +186,12 @@ public class CommunicationDao implements CommunicationDaoInterface {
             draft = new Draft();
             draft.setMessage(message);
             draft = service.users().drafts().create(userId, draft).execute();
-
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            mimeMessage.writeTo(buffer);
-            byte[] bytes = buffer.toByteArray();
-            String encodedEmail =  Base64.encodeBase64URLSafeString(bytes);
-
-            message.setRaw(encodedEmail);
-
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [sendMessage], ex: " + ex);
             ex.printStackTrace();
         }
-        return message;
+        return draft;
     }
 
     @Override
@@ -210,24 +202,63 @@ public class CommunicationDao implements CommunicationDaoInterface {
     @Override
     public Message sendDraft(Gmail service, String userId, String draftId) {
         System.out.println("sendDraft");
+        System.out.println("||||");
 
         Message message = null;
         Draft draft = null;
+        MimeMessage mimeMessage = null;
+
+
+        Properties props = new Properties();
+        Session session = Session.getDefaultInstance(props, null);
+        Map<String, String> draftData = null;
 
         try {
             message = this.getDraft(this.getDrafts(HTTP_TRANSPORT), draftId);
 
-//            System.out.println("message entrySet: " + message.entrySet());
-//            System.out.println("message getSnippet: " + message.getSnippet());
-            System.out.println("message: " + message);
+            System.out.println("MESSAGE: " + message.toPrettyString());
 
-            draft = new Draft();
-            draft.setId(message.getId());
-            draft.setMessage(message);
-            System.out.println("draft id: " + draft.getId());
-            System.out.println("draft message: " + draft.getMessage());
-            message = service.users().drafts().send(userId, draft).execute();
+            System.out.println("MESSAGE RAW: " + message.getRaw());
 
+            Object test = message.getPayload().get("headers");
+
+            System.out.println("test: " + test);
+
+            System.out.println("Header parts: " + message.getPayload().getHeaders());
+
+            System.out.println("Header parts: " + message.getPayload().getHeaders());
+            List<MessagePartHeader> messagePartHeaderList = message.getPayload().getHeaders();
+            System.out.println("messagePartHeaderList.get(0): " + messagePartHeaderList.get(0));
+            System.out.println("messagePartHeaderList.get(0).name: " + messagePartHeaderList.get(0).getName());
+            System.out.println("messagePartHeaderList.get(0).value: " + messagePartHeaderList.get(0).getValue());
+            System.out.println("messagePartHeaderList.get(1): " + messagePartHeaderList.get(1));
+            System.out.println("messagePartHeaderList.get(1).name: " + messagePartHeaderList.get(1).getName());
+            System.out.println("messagePartHeaderList.get(1).value: " + messagePartHeaderList.get(1).getValue());
+            System.out.println("messagePartHeaderList.get(2): " + messagePartHeaderList.get(2));
+            System.out.println("messagePartHeaderList.get(2).name: " + messagePartHeaderList.get(2).getName());
+            System.out.println("messagePartHeaderList.get(2).value: " + messagePartHeaderList.get(2).getValue());
+            System.out.println("messagePartHeaderList.get(3): " + messagePartHeaderList.get(3));
+            System.out.println("messagePartHeaderList.get(3).name: " + messagePartHeaderList.get(3).getName());
+            System.out.println("messagePartHeaderList.get(3).value: " + messagePartHeaderList.get(3).getValue());
+            System.out.println("messagePartHeaderList.get(4): " + messagePartHeaderList.get(4));
+            System.out.println("messagePartHeaderList.get(5): " + messagePartHeaderList.get(5));
+            System.out.println("messagePartHeaderList.get(5).name: " + messagePartHeaderList.get(5).getName());
+            System.out.println("messagePartHeaderList.get(5).value: " + messagePartHeaderList.get(5).getValue());
+            System.out.println("messagePartHeaderList.get(6): " + messagePartHeaderList.get(6));
+            System.out.println("messagePartHeaderList.get(7): " + messagePartHeaderList.get(7));
+
+            draftData = new HashMap<>();
+            draftData.put("to", messagePartHeaderList.get(3).getValue());
+            draftData.put("from", messagePartHeaderList.get(2).getValue());
+            draftData.put("subject", messagePartHeaderList.get(5).getValue());
+            draftData.put("body", message.getSnippet());
+
+            mimeMessage = this.createMineMessage(draftData, HTTP_TRANSPORT);
+            message = this.createMessage(mimeMessage);
+            message.setId(draftId);
+
+
+            message = service.users().messages().send(userId, message).execute();
 
         }
         catch (Exception ex) {

@@ -21,7 +21,7 @@ public interface CommunicationDaoInterface {
 
     public Message createMessage(MimeMessage mimeMessage);
 
-    public Message createDraft(Gmail service, String userId, MimeMessage mimeMessage);
+    public Draft createDraft(Gmail service, String userId, MimeMessage mimeMessage);
 
     public Message updateDraft(Gmail service, String userId, MimeMessage mimeMessage, String draftId);
 

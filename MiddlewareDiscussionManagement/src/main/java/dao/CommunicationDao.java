@@ -11,14 +11,15 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.*;
-import org.springframework.web.client.RestTemplate;
+import com.google.cloud.firestore.DocumentSnapshot;
+import org.apache.commons.codec.binary.Base64;
 
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static business.Email.*;
 
@@ -36,8 +37,6 @@ public class CommunicationDao implements CommunicationDaoInterface {
     public List<Message> getDrafts(NetHttpTransport HTTP_TRANSPORT) {
         System.out.println("getDrafts");
 
-//        final String uri = "https://gmail.googleapis.com/gmail/v1/users/" + email + "/drafts";
-
         List<Draft> draftList = null;
         List<Message> returnList = null;
         Draft draftsResponse = null;
@@ -45,7 +44,6 @@ public class CommunicationDao implements CommunicationDaoInterface {
         try {
             ListDraftsResponse listDraftsResponse = service.users().drafts().list(user).execute();
             draftList = listDraftsResponse.getDrafts();
-
             if (draftList.isEmpty()) {
                 System.out.println("No drafts found.");
             } else {
@@ -53,20 +51,42 @@ public class CommunicationDao implements CommunicationDaoInterface {
                 returnList = new ArrayList<>();
                 for (Draft draft : draftList) {
                     draftsResponse = service.users().drafts().get("me", draft.getId()).execute();
-                    System.out.println("draftsResponse 0: " + draftsResponse.getMessage().toPrettyString());
-//                    System.out.println("draftsResponse 0: " + draftsResponse.getMessage().getSnippet());
-//                    System.out.println("draftsResponse 0: " + draftsResponse.getMessage().values());
+//                    System.out.println("draftsResponse 0: " + draftsResponse.getMessage().toPrettyString());
                     returnList.add(draftsResponse.getMessage());
-                    System.out.println("\n");
                 }
             }
-
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [getDrafts], ex: " + ex);
             ex.printStackTrace();
         }
         return returnList;
+    }
+
+    @Override
+    public Message getDraft(List<Message> messageList, String draftId) {
+        System.out.println("getDraft");
+
+        Message retrievedDraft = null;
+        Draft draftsResponse = null;
+
+        try {
+
+            for (Message message : messageList) {
+                if (message.getId().equals(draftId)) {
+                    System.out.println("Yes, current draft id : " + message.getId() + ", draftId: " + draftId);
+                    retrievedDraft = message;
+                }
+                else {
+                    System.out.println("no, current draft id : " + message.getId() + ", draftId: " + draftId);
+                }
+            }
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [getDrafts], ex: " + ex);
+            ex.printStackTrace();
+        }
+        return retrievedDraft;
     }
 
     public Credential getCredentials(NetHttpTransport HTTP_TRANSPORT) {
@@ -80,7 +100,6 @@ public class CommunicationDao implements CommunicationDaoInterface {
         Credential credential = null;
 //        List<String> SCOPES = SCOPES_LABELS;
         Set<String> SCOPES = SCOPES_LABELS;
-
 
         try {
             // Load client secrets.
@@ -107,6 +126,115 @@ public class CommunicationDao implements CommunicationDaoInterface {
             ex.printStackTrace();
         }
         return credential;
+    }
+
+    @Override
+    public MimeMessage createMineMessage(Map draftData, NetHttpTransport HTTP_TRANSPORT) {
+        System.out.println("createMineMessage");
+
+        List<Draft> draftList = null;
+        Draft draft = new Draft();
+        Properties props = new Properties();
+        Session session = Session.getDefaultInstance(props, null);
+        MimeMessage email = new MimeMessage(session);
+
+        try {
+            email.setFrom(new InternetAddress(draftData.get("from").toString()));
+            email.addRecipient(javax.mail.Message.RecipientType.TO,
+                    new InternetAddress(draftData.get("to").toString()));
+            email.setSubject(draftData.get("subject").toString());
+            email.setText(draftData.get("body").toString());
+
+
+//            ListDraftsResponse listDraftsResponse = service.users().drafts().create();
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [createMineMessage], ex: " + ex);
+            ex.printStackTrace();
+        }
+        return email;
+    }
+
+    public Message createMessage(MimeMessage mimeMessage) {
+        System.out.println("createMessage");
+
+        Message message = new Message();
+        try {
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            mimeMessage.writeTo(buffer);
+            byte[] bytes = buffer.toByteArray();
+            String encodedEmail =  Base64.encodeBase64URLSafeString(bytes);
+
+            message.setRaw(encodedEmail);
+
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [createMessage], ex: " + ex);
+            ex.printStackTrace();
+        }
+        return message;
+    }
+
+    public Message createDraft(Gmail service, String userId, MimeMessage mimeMessage) {
+        System.out.println("sendMessage");
+
+        Message message = null;
+        Draft draft = null;
+
+        try {
+            message = this.createMessage(mimeMessage);
+            draft = new Draft();
+            draft.setMessage(message);
+            draft = service.users().drafts().create(userId, draft).execute();
+
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            mimeMessage.writeTo(buffer);
+            byte[] bytes = buffer.toByteArray();
+            String encodedEmail =  Base64.encodeBase64URLSafeString(bytes);
+
+            message.setRaw(encodedEmail);
+
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [sendMessage], ex: " + ex);
+            ex.printStackTrace();
+        }
+        return message;
+    }
+
+    @Override
+    public Message updateDraft(Gmail service, String userId, MimeMessage mimeMessage, String draftId) {
+        return null;
+    }
+
+    @Override
+    public Message sendDraft(Gmail service, String userId, String draftId) {
+        System.out.println("sendDraft");
+
+        Message message = null;
+        Draft draft = null;
+
+        try {
+            message = this.getDraft(this.getDrafts(HTTP_TRANSPORT), draftId);
+
+//            System.out.println("message entrySet: " + message.entrySet());
+//            System.out.println("message getSnippet: " + message.getSnippet());
+            System.out.println("message: " + message);
+
+            draft = new Draft();
+            draft.setId(message.getId());
+            draft.setMessage(message);
+            System.out.println("draft id: " + draft.getId());
+            System.out.println("draft message: " + draft.getMessage());
+            message = service.users().drafts().send(userId, draft).execute();
+
+
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [sendDraft], ex: " + ex);
+            ex.printStackTrace();
+        }
+        return message;
     }
 
 }

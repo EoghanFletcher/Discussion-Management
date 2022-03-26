@@ -65,7 +65,7 @@ export class ComposeMessagePage implements OnInit {
                                         "from": this.facadeService.getDataDataService("email"),
                                         "subject": this.email.subject,
                                         "body": this.email.body}
-    ).subscribe(responseLamdba => { console.log("here"), "" });
+    ).subscribe(responseLamdba => { "" });
     this.router.navigateByUrl("communication/inbox");  
   }
 

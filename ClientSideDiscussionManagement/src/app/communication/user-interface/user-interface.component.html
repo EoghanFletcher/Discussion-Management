@@ -1,3 +1,8 @@
 <app-compose-btn></app-compose-btn>
 
-<ion-item *ngFor="let dataItem of data | keyvalue" (click)="viewGroup(dataItem.value.groupName, dataItem.value.groupDescription)">{{ dataItem.value.groupName }} : {{ dataItem.value.groupDescription }}</ion-item>
+<ion-list *ngFor="let dataItem of data | keyvalue" (click)="viewMessage()">
+    <!-- <ion-item-divider>{{ dataItem.value.payload.headers[24].name }} : {{ dataItem.value.payload.headers[24].value }}</ion-item-divider> -->
+                                                                            <!-- <ion-item-divider>{{ dataItem.value.payload.headers[23].name }} : {{ dataItem.value.payload.headers[23].value }}</ion-item-divider> -->
+                                                                            <!-- <ion-item-divider>{{ dataItem.value.payload.headers[22].name }} : {{ dataItem.value.payload.headers[22].value }}</ion-item-divider> -->
+                                                                            <ion-item>Snippet : {{ dataItem.value.snippet }}</ion-item>
+                                                                        </ion-list>

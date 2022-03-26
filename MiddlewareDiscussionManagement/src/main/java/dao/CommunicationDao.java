@@ -10,6 +10,7 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.*;
 import org.apache.commons.codec.binary.Base64;
 
@@ -29,7 +30,7 @@ public class CommunicationDao implements CommunicationDaoInterface {
     NetHttpTransport HTTP_TRANSPORT = null;
 
     { try { HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport(); } catch (GeneralSecurityException e) { e.printStackTrace(); } catch (IOException e) {  e.printStackTrace(); } }
-    Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+    Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT, SCOPES_LABELS))
             .setApplicationName(APPLICATION_NAME)
             .build();
 
@@ -62,6 +63,65 @@ public class CommunicationDao implements CommunicationDaoInterface {
     }
 
     @Override
+    public List<Message> inboxMessages(NetHttpTransport HTTP_TRANSPORT) {
+        System.out.println("inboxMessages");
+
+
+        List<Message> messagesList = null;
+        Message messagesResponse = null;
+        List<Message> returnList = null;
+        Set<String> scopeSet = SCOPES_LABELS;
+
+//        scopeSet.add(GmailScopes)
+
+        try {
+
+            { try { HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport(); } catch (GeneralSecurityException e) { e.printStackTrace(); } catch (IOException e) {  e.printStackTrace(); } }
+            Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT, scopeSet))
+                    .setApplicationName(APPLICATION_NAME)
+                    .build();
+
+            ListMessagesResponse listMessagesResponse = service.users().messages().list(user).execute();
+            messagesList = listMessagesResponse.getMessages();
+
+            System.out.println("size: " + messagesList.size());
+
+            if (!messagesList.isEmpty()) {
+                returnList = new ArrayList<>();
+            for (Message msg : messagesList) {
+                    messagesResponse = service.users().messages().get("me", msg.getId()).execute();
+//                System.out.println("\n");
+//                    System.out.println("message: " + messagesResponse);
+//                System.out.println("\n");
+
+                    returnList.add(messagesResponse);
+                }
+
+                System.out.println("\n\n\n\n\n");
+                System.out.println(returnList.get(0));
+                System.out.println("\n\n\n\n\n");
+//                System.out.println("\n\n0: " + returnList.get(0).getPayload().getHeaders().get(0));
+//                System.out.println("\n\n1: " + returnList.get(0).getPayload().getHeaders().get(1));
+//                System.out.println("\n\n2: " + returnList.get(0).getPayload().getHeaders().get(2));
+//                System.out.println("\n\n3: " + returnList.get(0).getPayload().getHeaders().get(3));
+//                System.out.println("\n\n4: " + returnList.get(0).getPayload().getHeaders().get(4));
+//                System.out.println("\n\n5: " + returnList.get(0).getPayload().getHeaders().get(5));
+//                System.out.println("\n\n6: " + returnList.get(0).getPayload().getHeaders().get(6));
+//                System.out.println("\n\n7: " + returnList.get(0).getPayload().getHeaders().get(7));
+//                System.out.println("\n\n8: " + returnList.get(0).getPayload().getHeaders().get(8));
+//                System.out.println("\n\n9: " + returnList.get(0).getPayload().getHeaders().get(9));
+//                System.out.println("\n\n10: " + returnList.get(0).getPayload().getHeaders().get(10));
+            }
+            System.out.println("returnList size: " + returnList.size());
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [inboxMessages], ex: " + ex);
+            ex.printStackTrace();
+        }
+        return returnList;
+    }
+
+    @Override
     public Message getDraft(List<Message> messageList, String draftId) {
         System.out.println("getDraft");
 
@@ -79,7 +139,7 @@ public class CommunicationDao implements CommunicationDaoInterface {
         return retrievedDraft;
     }
 
-    public Credential getCredentials(NetHttpTransport HTTP_TRANSPORT) {
+    public Credential getCredentials(NetHttpTransport HTTP_TRANSPORT, Set<String> scopes) {
         System.out.println("getCredentials");
 //        https://developers.google.com/gmail/api/quickstart/java
 
@@ -88,8 +148,10 @@ public class CommunicationDao implements CommunicationDaoInterface {
         GoogleAuthorizationCodeFlow flow = null;
         LocalServerReceiver receiver = null;
         Credential credential = null;
-        Set<String> SCOPES = SCOPES_LABELS;
+        Set<String> SCOPES = scopes;
+//        scopes.remove(GmailScopes.GMAIL_METADATA);
 
+        System.out.println("scopes: " + scopes);
         try {
             // Load client secrets.
             System.out.println();

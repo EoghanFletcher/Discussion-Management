@@ -1,17 +1,16 @@
 package com.middleware.middlewarediscussionmanagement;
 
+import business.Email;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Draft;
 import com.google.api.services.gmail.model.Message;
 import dao.CommunicationDao;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 import static business.Email.APPLICATION_NAME;
 import static business.Email.JSON_FACTORY;
@@ -27,28 +26,23 @@ public class CommunicationController {
 
 
 
-    @PostMapping(path = "/getDrafts")
-    public void getDrafts(@RequestBody HashMap data) {
-        System.out.println("getEmails");
+    @GetMapping(path = "/getDrafts")
+    public List<Message> getDrafts() {
+        System.out.println("getDrafts");
 
-        System.out.println("data: " + data.entrySet());
+        List<Message> messageList = null;
 
         try {
-            String emailString = (String) data.get("email");
-            String usernameString = (String) data.get("username");
-            String accessTokenString = (String) data.get("accessToken");
 
             final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-            communicationDao.getDrafts(HTTP_TRANSPORT);
-
-
-//            System.out.println(communicationDao.getCredentials(HTTP_TRANSPORT));
-
+            messageList = communicationDao.getDrafts(HTTP_TRANSPORT);
+            System.out.println("here: " + messageList.size());
         }
         catch (Exception ex) {
-                System.out.println("An exception occurred [getEmails], ex: " + ex);
+                System.out.println("An exception occurred [getDrafts], ex: " + ex);
                 ex.printStackTrace();
             }
+        return messageList;
     }
 
     @PostMapping(path = "/credentials")
@@ -59,7 +53,7 @@ public class CommunicationController {
 
         try {
             final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-            System.out.println(communicationDao.getCredentials(HTTP_TRANSPORT));
+            System.out.println(communicationDao.getCredentials(HTTP_TRANSPORT, Email.SCOPES_LABELS));
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [getCredentials], ex: " + ex);
@@ -73,7 +67,7 @@ public class CommunicationController {
 
         try {
             final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-            Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, communicationDao.getCredentials(HTTP_TRANSPORT))
+            Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, communicationDao.getCredentials(HTTP_TRANSPORT, Email.SCOPES_LABELS))
                     .setApplicationName(APPLICATION_NAME)
                     .build();
 
@@ -104,7 +98,7 @@ public class CommunicationController {
 
         try {
             final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-            Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, communicationDao.getCredentials(HTTP_TRANSPORT))
+            Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, communicationDao.getCredentials(HTTP_TRANSPORT, Email.SCOPES_LABELS))
                     .setApplicationName(APPLICATION_NAME)
                     .build();
 
@@ -130,6 +124,26 @@ public class CommunicationController {
             ex.printStackTrace();
         }
         return false;
+    }
+
+    @GetMapping(path = "message")
+    public List<Message> getMessage() {
+        System.out.println("getMessage");
+
+        List<Message> messageList = null;
+
+        try {
+            final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+
+            messageList = this.communicationDao.inboxMessages(HTTP_TRANSPORT);
+            System.out.println("Size: " + messageList.size());
+            System.out.println("First: " + messageList.get(0).getSnippet());
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [getMessage], ex: " + ex);
+            ex.printStackTrace();
+        }
+        return messageList;
     }
 
 }

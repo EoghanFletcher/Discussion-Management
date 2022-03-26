@@ -1,5 +1,6 @@
 package com.middleware.middlewarediscussionmanagement;
 
+import business.Email;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.services.gmail.Gmail;
@@ -51,7 +52,7 @@ public class CommunicationDaoTest {
             System.out.println("getCredential");
 
             try {
-                Assert.assertNotNull(communicationDao.getCredentials(HTTP_TRANSPORT));
+                Assert.assertNotNull(communicationDao.getCredentials(HTTP_TRANSPORT, Email.SCOPES_LABELS));
             }
             catch(Exception ex) {
                 System.out.println("An error occurred [getCredential[Test]], ex: " + ex);
@@ -63,7 +64,7 @@ public class CommunicationDaoTest {
         public void getDrafts() {
             System.out.println("getDrafts");
 
-            Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, communicationDao.getCredentials(HTTP_TRANSPORT))
+            Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, communicationDao.getCredentials(HTTP_TRANSPORT, Email.SCOPES_LABELS))
                     .setApplicationName(APPLICATION_NAME)
                     .build();
 
@@ -115,7 +116,7 @@ public class CommunicationDaoTest {
 
             draftData = new HashMap<>();
 
-            Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, communicationDao.getCredentials(HTTP_TRANSPORT))
+            Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, communicationDao.getCredentials(HTTP_TRANSPORT, Email.SCOPES_LABELS))
                     .setApplicationName(APPLICATION_NAME)
                     .build();
 

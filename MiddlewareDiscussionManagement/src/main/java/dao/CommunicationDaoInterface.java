@@ -9,13 +9,14 @@ import com.google.api.services.gmail.model.Message;
 import javax.mail.internet.MimeMessage;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface CommunicationDaoInterface {
 
     public List<Message> getDrafts(NetHttpTransport HTTP_TRANSPORT);
     public Message getDraft(List<Message> messageList, String draftId);
 
-    public Credential getCredentials(NetHttpTransport HTTP_TRANSPORT);
+    public Credential getCredentials(NetHttpTransport HTTP_TRANSPORT, Set<String> scopes);
 
     public MimeMessage createMineMessage(Map draftData, NetHttpTransport HTTP_TRANSPORT);
 
@@ -26,5 +27,7 @@ public interface CommunicationDaoInterface {
     public Message updateDraft(Gmail service, String userId, MimeMessage mimeMessage, String draftId);
 
     public Message sendDraft(Gmail service, String userId, String draftId);
+
+    public List<Message> inboxMessages(NetHttpTransport HTTP_TRANSPORT);
 
 }

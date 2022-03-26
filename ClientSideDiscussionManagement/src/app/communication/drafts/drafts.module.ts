@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { DraftsPageRoutingModule } from './drafts-routing.module';
 
 import { DraftsPage } from './drafts.page';
+import { ComposeBtnComponent } from '../components/compose-btn/compose-btn.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { DraftsPage } from './drafts.page';
     IonicModule,
     DraftsPageRoutingModule
   ],
-  declarations: [DraftsPage]
+  declarations: [DraftsPage, ComposeBtnComponent]
 })
 export class DraftsPageModule {}

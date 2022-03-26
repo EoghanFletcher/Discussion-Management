@@ -6,6 +6,7 @@ import com.google.api.services.gmail.GmailScopes;
 
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +24,23 @@ public class Email {
      */
     // Add more scopes
 //    public static final List<String> SCOPES_LABELS = Collections.singletonList(GmailScopes.GMAIL_LABELS);
-      public static final Set<String> SCOPES_LABELS = GmailScopes.all();
+      public static final Set<String> SCOPES_LABELS = getScope();
     public static final String CREDENTIALS_FILE_PATH = "./keys/client_secret_691585599545-g0hg3r59jemdgse06f7q8p9skdnlt4uj.apps.googleusercontent.com.json";
+
+    public static Set<String> getScope() {
+        Set<String> scopeSet = new HashSet<>();
+        scopeSet.add(GmailScopes.GMAIL_READONLY);
+        scopeSet.add(GmailScopes.GMAIL_SEND);
+        scopeSet.add(GmailScopes.MAIL_GOOGLE_COM);
+        scopeSet.add(GmailScopes.GMAIL_MODIFY);
+        scopeSet.add(GmailScopes.GMAIL_INSERT);
+        scopeSet.add(GmailScopes.GMAIL_SETTINGS_SHARING);
+        scopeSet.add(GmailScopes.GMAIL_LABELS);
+        scopeSet.add(GmailScopes.GMAIL_SETTINGS_BASIC);
+        scopeSet.add(GmailScopes.GMAIL_COMPOSE);
+
+
+
+        return scopeSet;
+    }
 }

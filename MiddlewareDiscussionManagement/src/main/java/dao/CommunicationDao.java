@@ -11,7 +11,6 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.*;
-import com.google.cloud.firestore.DocumentSnapshot;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.mail.Session;
@@ -51,7 +50,6 @@ public class CommunicationDao implements CommunicationDaoInterface {
                 returnList = new ArrayList<>();
                 for (Draft draft : draftList) {
                     draftsResponse = service.users().drafts().get("me", draft.getId()).execute();
-//                    System.out.println("draftsResponse 0: " + draftsResponse.getMessage().toPrettyString());
                     returnList.add(draftsResponse.getMessage());
                 }
             }
@@ -71,17 +69,8 @@ public class CommunicationDao implements CommunicationDaoInterface {
         Draft draftsResponse = null;
 
         try {
-
             for (Message message : messageList) {
-                if (message.getId().equals(draftId)) {
-//                    System.out.println("raw: " + message.getRaw());
-//                    System.out.println("Yes, current draft id : " + message.getId() + ", draftId: " + draftId);
-                    retrievedDraft = message;
-                }
-                else {
-//                    System.out.println("no, current draft id : " + message.getId() + ", draftId: " + draftId);
-                }
-            }
+                System.out.println("draftId: " + draftId + ", message Id: " + message.getId()); if (message.getId().equals(draftId)) { retrievedDraft = message; } }
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [getDrafts], ex: " + ex);
@@ -99,7 +88,6 @@ public class CommunicationDao implements CommunicationDaoInterface {
         GoogleAuthorizationCodeFlow flow = null;
         LocalServerReceiver receiver = null;
         Credential credential = null;
-//        List<String> SCOPES = SCOPES_LABELS;
         Set<String> SCOPES = SCOPES_LABELS;
 
         try {
@@ -107,9 +95,7 @@ public class CommunicationDao implements CommunicationDaoInterface {
             System.out.println();
             Email.class.getResource(CREDENTIALS_FILE_PATH);
             InputStream in = new FileInputStream(CREDENTIALS_FILE_PATH);
-            if (in == null) {
-                throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
-            }
+            if (in == null) { throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH); }
             clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
             // Build flow and trigger user authorization request.
@@ -145,8 +131,6 @@ public class CommunicationDao implements CommunicationDaoInterface {
                     new InternetAddress(draftData.get("to").toString()));
             mineMessage.setSubject(draftData.get("subject").toString());
             mineMessage.setText(draftData.get("body").toString());
-
-
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [createMineMessage], ex: " + ex);
@@ -159,6 +143,7 @@ public class CommunicationDao implements CommunicationDaoInterface {
         System.out.println("createMessage");
 
         Message message = new Message();
+
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             mimeMessage.writeTo(buffer);
@@ -166,7 +151,6 @@ public class CommunicationDao implements CommunicationDaoInterface {
             String encodedEmail =  Base64.encodeBase64URLSafeString(bytes);
 
             message.setRaw(encodedEmail);
-
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [createMessage], ex: " + ex);
@@ -202,12 +186,10 @@ public class CommunicationDao implements CommunicationDaoInterface {
     @Override
     public Message sendDraft(Gmail service, String userId, String draftId) {
         System.out.println("sendDraft");
-        System.out.println("||||");
 
         Message message = null;
         Draft draft = null;
         MimeMessage mimeMessage = null;
-
 
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
@@ -215,37 +197,8 @@ public class CommunicationDao implements CommunicationDaoInterface {
 
         try {
             message = this.getDraft(this.getDrafts(HTTP_TRANSPORT), draftId);
-
-            System.out.println("MESSAGE: " + message.toPrettyString());
-
-            System.out.println("MESSAGE RAW: " + message.getRaw());
-
             Object test = message.getPayload().get("headers");
-
-            System.out.println("test: " + test);
-
-            System.out.println("Header parts: " + message.getPayload().getHeaders());
-
-            System.out.println("Header parts: " + message.getPayload().getHeaders());
             List<MessagePartHeader> messagePartHeaderList = message.getPayload().getHeaders();
-            System.out.println("messagePartHeaderList.get(0): " + messagePartHeaderList.get(0));
-            System.out.println("messagePartHeaderList.get(0).name: " + messagePartHeaderList.get(0).getName());
-            System.out.println("messagePartHeaderList.get(0).value: " + messagePartHeaderList.get(0).getValue());
-            System.out.println("messagePartHeaderList.get(1): " + messagePartHeaderList.get(1));
-            System.out.println("messagePartHeaderList.get(1).name: " + messagePartHeaderList.get(1).getName());
-            System.out.println("messagePartHeaderList.get(1).value: " + messagePartHeaderList.get(1).getValue());
-            System.out.println("messagePartHeaderList.get(2): " + messagePartHeaderList.get(2));
-            System.out.println("messagePartHeaderList.get(2).name: " + messagePartHeaderList.get(2).getName());
-            System.out.println("messagePartHeaderList.get(2).value: " + messagePartHeaderList.get(2).getValue());
-            System.out.println("messagePartHeaderList.get(3): " + messagePartHeaderList.get(3));
-            System.out.println("messagePartHeaderList.get(3).name: " + messagePartHeaderList.get(3).getName());
-            System.out.println("messagePartHeaderList.get(3).value: " + messagePartHeaderList.get(3).getValue());
-            System.out.println("messagePartHeaderList.get(4): " + messagePartHeaderList.get(4));
-            System.out.println("messagePartHeaderList.get(5): " + messagePartHeaderList.get(5));
-            System.out.println("messagePartHeaderList.get(5).name: " + messagePartHeaderList.get(5).getName());
-            System.out.println("messagePartHeaderList.get(5).value: " + messagePartHeaderList.get(5).getValue());
-            System.out.println("messagePartHeaderList.get(6): " + messagePartHeaderList.get(6));
-            System.out.println("messagePartHeaderList.get(7): " + messagePartHeaderList.get(7));
 
             draftData = new HashMap<>();
             draftData.put("to", messagePartHeaderList.get(3).getValue());
@@ -256,10 +209,7 @@ public class CommunicationDao implements CommunicationDaoInterface {
             mimeMessage = this.createMineMessage(draftData, HTTP_TRANSPORT);
             message = this.createMessage(mimeMessage);
             message.setId(draftId);
-
-
             message = service.users().messages().send(userId, message).execute();
-
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [sendDraft], ex: " + ex);

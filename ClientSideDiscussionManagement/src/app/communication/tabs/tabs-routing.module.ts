@@ -20,6 +20,10 @@ const routes: Routes = [
         path: 'drafts',
         loadChildren: () => import('../drafts/drafts.module').then( m => m.DraftsPageModule)
       },
+      // {
+      //   path: 'compose-message',
+      //   loadChildren: () => import('../compose-message/compose-message.module').then( m => m.ComposeMessagePageModule)
+      // },
     ]
   }
 ];

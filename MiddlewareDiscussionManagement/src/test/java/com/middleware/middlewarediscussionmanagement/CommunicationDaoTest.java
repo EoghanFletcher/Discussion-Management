@@ -40,13 +40,11 @@ public class CommunicationDaoTest {
         try {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
             communicationDao = new CommunicationDao();
-
         } catch (Exception ex) {
             System.out.println("An error occurred [setupData], ex: " + ex);
             ex.printStackTrace();
         }
     }
-
 
         @Test
         public void getCredential() {
@@ -145,9 +143,6 @@ public class CommunicationDaoTest {
 
                 message = communicationDao.createMessage(mimeMessage);
 
-                System.out.println("message: " + message);
-                System.out.println("message: " + message.getRaw());
-
                 Assert.assertNotNull(message);
                 Assert.assertTrue(message.getRaw() instanceof String);
 
@@ -157,10 +152,7 @@ public class CommunicationDaoTest {
 
                 draft = communicationDao.createDraft(service, "me", mimeMessage);
 
-                System.out.println("message: " + message);
-                System.out.println("message Id: " + message.getId());
                 Assert.assertNotNull(message);
-                System.out.println("create draft raw: " + message.getRaw());
                 Assert.assertTrue(message.getRaw() instanceof String);
 
                 System.out.println("==========");
@@ -170,10 +162,7 @@ public class CommunicationDaoTest {
                 messagesList = communicationDao.getDrafts(HTTP_TRANSPORT);
                 message = communicationDao.getDraft(messagesList, messagesList.get(0).getId());
 
-                System.out.println("message returned Snippet: " + message.getSnippet());
                 message = communicationDao.sendDraft(service, "me", message.getId());
-
-                System.out.println("sent message: " + message);
             } catch (Exception ex) {
                 System.out.println("An error occurred [sendMessage[Test]], ex: " + ex);
                 ex.printStackTrace();

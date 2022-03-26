@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>compose-message</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <form id="composeMessage" name="composeMessage" [formGroup]="postData" (ngSubmit)="sendMessage()">
+    <div id="toDiv">
+      <ion-label id="toLbl"></ion-label>
+      <ion-input id="to" name="to" formControlName="to" placeholder="To"></ion-input>
+    </div>    
+
+    <div id="subjectDiv">
+      <ion-label id="subjectLbl"></ion-label>
+      <ion-input id="subject" name="subject" formControlName="subject" placeholder="Subject"></ion-input>
+    </div>
+
+    <div id="bodyDiv">
+      <ion-label id="bodyLbl"></ion-label>
+      <ion-input id="body" name="body" formControlName="body" placeholder="Body"></ion-input>
+    </div>
+
+    <ion-button id="sendMessageBtn" name="sendMessageBtn" type="submit" expand="block" color="danger">SendMessage</ion-button>
+    <ion-button id="sendDraftBtn" name="sendDraftBtn" (click)="createDraft()" expand="block" color="primary">Create draft</ion-button>
+  </form>
+
+</ion-content>

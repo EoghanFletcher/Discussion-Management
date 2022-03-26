@@ -8,6 +8,7 @@ import { InboxPageRoutingModule } from './inbox-routing.module';
 
 import { InboxPage } from './inbox.page';
 import { UserInterfaceComponent } from '../user-interface/user-interface.component';
+import { ComposeBtnComponent } from '../components/compose-btn/compose-btn.component';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { UserInterfaceComponent } from '../user-interface/user-interface.compone
     IonicModule,
     InboxPageRoutingModule
   ],
-  declarations: [InboxPage, UserInterfaceComponent]
+  declarations: [InboxPage, UserInterfaceComponent, ComposeBtnComponent]
 })
 export class InboxPageModule {}

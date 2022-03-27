@@ -5,18 +5,20 @@
 </ion-header>
 
 <ion-content>
+  <app-sign-out></app-sign-out>
+  <app-navigation-menu-btn></app-navigation-menu-btn>
   <app-compose-btn></app-compose-btn>
 <!-- <app-user-interface></app-user-interface> -->
 
 <ion-list *ngFor="let dataItem of data | keyvalue" (click)="replyMessage(dataItem.value.payload.headers[24].value,
                                                                         dataItem.value.payload.headers[23].value,
                                                                         dataItem.value.payload.headers[22].value)">
-  <!-- <ion-item *ngIf="dataItem.value.payload.headers[22].name != 'undefined' && dataItem.value.payload.headers[23].name != 'undefined' && dataItem.value.payload.headers[24].name != 'undefined'"> -->
-  <!-- <ion-item-divider>{{ dataItem.value.payload.headers[24].name }} : {{ dataItem.value.payload.headers[24].value }}</ion-item-divider> -->
-                                                                          <!-- <ion-item-divider>{{ dataItem.value.payload.headers[23].name }} : {{ dataItem.value.payload.headers[23].value }}</ion-item-divider> -->
-                                                                          <!-- <ion-item-divider>{{ dataItem.value.payload.headers[22].name }} : {{ dataItem.value.payload.headers[22].value }}</ion-item-divider> -->
+  <!-- <ion-label *ngIf="dataItem.value.payload.headers[3].name != 'undefined' && dataItem.value.payload.headers[2].name != 'undefined' && dataItem.value.payload.headers[5].name != 'undefined'"> -->
+  <ion-item-divider>{{ dataItem.value.payload.headers[3].name }} : {{ dataItem.value.payload.headers[3].value }}</ion-item-divider>
+                                                                          <ion-item-divider>{{ dataItem.value.payload.headers[2].name }} : {{ dataItem.value.payload.headers[2].value }}</ion-item-divider>
+                                                                          <ion-item-divider>{{ dataItem.value.payload.headers[5].name }} : {{ dataItem.value.payload.headers[5].value }}</ion-item-divider>
                                                                           <ion-item>Snippet : {{ dataItem.value.snippet }}</ion-item>
-                                                                        <!-- </ion-item> -->
+                                                                        <!-- </ion-label> -->
                                                                           </ion-list>
 
 </ion-content>

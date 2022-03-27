@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+    <ion-back-button></ion-back-button>
     <ion-title>compose-message</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -22,7 +23,7 @@
       <ion-input id="body" name="body" formControlName="body" placeholder="Body"></ion-input>
     </div>
 
-    <ion-button id="sendMessageBtn" name="sendMessageBtn" type="submit" expand="block" color="danger">SendMessage</ion-button>
+    <ion-button id="sendMessageBtn" name="sendMessageBtn" type="submit" expand="block" color="danger">Send Message</ion-button>
     <ion-button id="sendDraftBtn" name="sendDraftBtn" (click)="createDraft()" expand="block" color="primary">Create draft</ion-button>
   </form>
 

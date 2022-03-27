@@ -9,6 +9,8 @@ import { InboxPageRoutingModule } from './inbox-routing.module';
 import { InboxPage } from './inbox.page';
 import { UserInterfaceComponent } from '../user-interface/user-interface.component';
 import { ComposeBtnComponent } from '../components/compose-btn/compose-btn.component';
+import { NavigationMenuBtnComponent } from 'src/app/NavigationMenuModal/components/navigation-menu-btn/navigation-menu-btn.component';
+import { SignOutComponent } from 'src/app/sign-out/sign-out.component';
 
 @NgModule({
   imports: [
@@ -17,6 +19,6 @@ import { ComposeBtnComponent } from '../components/compose-btn/compose-btn.compo
     IonicModule,
     InboxPageRoutingModule
   ],
-  declarations: [InboxPage, UserInterfaceComponent, ComposeBtnComponent]
+  declarations: [InboxPage, UserInterfaceComponent, ComposeBtnComponent, NavigationMenuBtnComponent, SignOutComponent]
 })
 export class InboxPageModule {}

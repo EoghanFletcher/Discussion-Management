@@ -8,6 +8,8 @@ import { DraftsPageRoutingModule } from './drafts-routing.module';
 
 import { DraftsPage } from './drafts.page';
 import { ComposeBtnComponent } from '../components/compose-btn/compose-btn.component';
+import { NavigationMenuBtnComponent } from 'src/app/NavigationMenuModal/components/navigation-menu-btn/navigation-menu-btn.component';
+import { SignOutComponent } from 'src/app/sign-out/sign-out.component';
 
 @NgModule({
   imports: [
@@ -16,6 +18,6 @@ import { ComposeBtnComponent } from '../components/compose-btn/compose-btn.compo
     IonicModule,
     DraftsPageRoutingModule
   ],
-  declarations: [DraftsPage, ComposeBtnComponent]
+  declarations: [DraftsPage, ComposeBtnComponent, NavigationMenuBtnComponent, SignOutComponent]
 })
 export class DraftsPageModule {}

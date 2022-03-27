@@ -7,11 +7,14 @@
 <ion-content>
   <app-compose-btn></app-compose-btn>
 <!-- <app-user-interface></app-user-interface> -->
+
 <ion-list *ngFor="let dataItem of data | keyvalue" (click)="viewMessage()">
+  <!-- <ion-item *ngIf="dataItem.value.payload.headers[22].name != 'undefined' && dataItem.value.payload.headers[23].name != 'undefined' && dataItem.value.payload.headers[24].name != 'undefined'"> -->
   <!-- <ion-item-divider>{{ dataItem.value.payload.headers[24].name }} : {{ dataItem.value.payload.headers[24].value }}</ion-item-divider> -->
                                                                           <!-- <ion-item-divider>{{ dataItem.value.payload.headers[23].name }} : {{ dataItem.value.payload.headers[23].value }}</ion-item-divider> -->
                                                                           <!-- <ion-item-divider>{{ dataItem.value.payload.headers[22].name }} : {{ dataItem.value.payload.headers[22].value }}</ion-item-divider> -->
                                                                           <ion-item>Snippet : {{ dataItem.value.snippet }}</ion-item>
+                                                                        <!-- </ion-item> -->
                                                                           </ion-list>
 
 </ion-content>

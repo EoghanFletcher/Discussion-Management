@@ -30,7 +30,7 @@ export class InboxPage implements OnInit {
     console.log("getEmails");
 
     let url = "http://localhost:8080/api/communication/message";
-    let response = this.http.get(url).subscribe(responseLamdba => { console.log(JSON.stringify(responseLamdba)),
+    let response = this.http.put(url, {"messageType":"INBOX"}).subscribe(responseLamdba => { console.log(JSON.stringify(responseLamdba)),
       this.data = responseLamdba,
     console.log("\nPosition 0: " + JSON.stringify(this.data[0])),
     console.log("\nPosition 0 : " + JSON.stringify(this.data[0].payload)),

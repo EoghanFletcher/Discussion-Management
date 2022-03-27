@@ -20,6 +20,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.security.GeneralSecurityException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static business.Email.*;
 
@@ -63,7 +64,7 @@ public class CommunicationDao implements CommunicationDaoInterface {
     }
 
     @Override
-    public List<Message> inboxMessages(NetHttpTransport HTTP_TRANSPORT) {
+    public List<Message> inboxSentMessages(NetHttpTransport HTTP_TRANSPORT, String messageLabel) {
         System.out.println("inboxMessages");
 
 
@@ -71,6 +72,8 @@ public class CommunicationDao implements CommunicationDaoInterface {
         Message messagesResponse = null;
         List<Message> returnList = null;
         Set<String> scopeSet = SCOPES_LABELS;
+        Map<String, String> dataMap = null;
+        List<String> labels = null;
 
 //        scopeSet.add(GmailScopes)
 
@@ -81,6 +84,7 @@ public class CommunicationDao implements CommunicationDaoInterface {
                     .setApplicationName(APPLICATION_NAME)
                     .build();
 
+            // Get Messages
             ListMessagesResponse listMessagesResponse = service.users().messages().list(user).execute();
             messagesList = listMessagesResponse.getMessages();
 
@@ -88,17 +92,27 @@ public class CommunicationDao implements CommunicationDaoInterface {
 
             if (!messagesList.isEmpty()) {
                 returnList = new ArrayList<>();
-            for (Message msg : messagesList) {
-                    messagesResponse = service.users().messages().get("me", msg.getId()).execute();
-//                System.out.println("\n");
-//                    System.out.println("message: " + messagesResponse);
-//                System.out.println("\n");
+                // Get full message
+                for (Message msg : messagesList) {
+                        messagesResponse = service.users().messages().get("me", msg.getId()).execute();
 
-                    returnList.add(messagesResponse);
+                        dataMap = new HashMap<>();
+                        labels = messagesResponse.getLabelIds();
+
+                        // Get label ids
+                        for (String mapMsg : labels) {
+                            dataMap.put(mapMsg, mapMsg);
+                        }
+
+                        // If the message is in the INBOX
+                        if (dataMap.containsKey(messageLabel.toUpperCase())) {
+                            returnList.add(messagesResponse);
+                        }
+
                 }
 
                 System.out.println("\n\n\n\n\n");
-                System.out.println(returnList.get(0));
+                System.out.println("here: " + returnList.get(0));
                 System.out.println("\n\n\n\n\n");
 //                System.out.println("\n\n0: " + returnList.get(0).getPayload().getHeaders().get(0));
 //                System.out.println("\n\n1: " + returnList.get(0).getPayload().getHeaders().get(1));

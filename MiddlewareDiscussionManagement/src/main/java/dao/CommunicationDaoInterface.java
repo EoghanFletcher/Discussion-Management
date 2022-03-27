@@ -28,6 +28,6 @@ public interface CommunicationDaoInterface {
 
     public Message sendDraft(Gmail service, String userId, String draftId);
 
-    public List<Message> inboxMessages(NetHttpTransport HTTP_TRANSPORT);
+    public List<Message> inboxSentMessages(NetHttpTransport HTTP_TRANSPORT, String messageLabel);
 
 }

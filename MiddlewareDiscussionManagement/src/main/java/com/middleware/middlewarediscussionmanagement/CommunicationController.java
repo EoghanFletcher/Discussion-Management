@@ -126,8 +126,8 @@ public class CommunicationController {
         return false;
     }
 
-    @GetMapping(path = "message")
-    public List<Message> getMessage() {
+    @PutMapping(path = "message")
+    public List<Message> getMessage(@RequestBody HashMap data) {
         System.out.println("getMessage");
 
         List<Message> messageList = null;
@@ -135,7 +135,11 @@ public class CommunicationController {
         try {
             final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
-            messageList = this.communicationDao.inboxMessages(HTTP_TRANSPORT);
+
+            System.out.println("data: " + data.entrySet());
+            String messageType = (String) data.get("messageType");
+
+            messageList = this.communicationDao.inboxSentMessages(HTTP_TRANSPORT, messageType);
             System.out.println("Size: " + messageList.size());
             System.out.println("First: " + messageList.get(0).getSnippet());
         }

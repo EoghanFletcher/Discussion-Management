@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { SentPageRoutingModule } from './sent-routing.module';
 
 import { SentPage } from './sent.page';
+import { ComposeBtnComponent } from '../components/compose-btn/compose-btn.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { SentPage } from './sent.page';
     IonicModule,
     SentPageRoutingModule
   ],
-  declarations: [SentPage]
+  declarations: [SentPage, ComposeBtnComponent]
 })
 export class SentPageModule {}

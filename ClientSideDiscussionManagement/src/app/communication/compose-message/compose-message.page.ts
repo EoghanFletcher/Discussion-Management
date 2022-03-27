@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { signOut } from 'firebase/auth';
 import { Email } from 'src/app/interface/email';
 import { FacadeService } from 'src/app/service/facade.service';
 
@@ -26,11 +27,23 @@ export class ComposeMessagePage implements OnInit {
     private facadeService: FacadeService,) { }
 
   ngOnInit() {
-    this.postData = new FormGroup({
+        this.postData = new FormGroup({
       to: new FormControl(""),
       subject: new FormControl(""),
       body: new FormControl(""),
     });
+
+    if (this.route.snapshot.data.special) {
+      
+      this.data = this.route.snapshot.data.special;
+      console.log("data: " + JSON.stringify(this.data));
+      this.postData = new FormGroup({
+        to: new FormControl(this.data["to"]),
+        subject: new FormControl(this.data["subject"] + "___REPLY"),
+        body: new FormControl(this.data["body"]),
+      });
+      
+    }
   }
 
   createDraft() {

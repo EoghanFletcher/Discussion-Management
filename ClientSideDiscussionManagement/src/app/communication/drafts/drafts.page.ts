@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Email } from 'src/app/interface/email';
 import { FacadeService } from 'src/app/service/facade.service';
 
 @Component({
@@ -39,5 +40,22 @@ export class DraftsPage implements OnInit {
     console.log("\nPosition 0 headers name: " + JSON.stringify(this.data[0].payload.headers[2].name)),
     console.log("\nPosition 0 headers value: " + JSON.stringify(this.data[0].payload.headers[2].value))
   });    
+  }
+
+  replyMessage(to: string, from: string, subject: string): void {
+    console.log("replyMessage")
+
+    console.log("to: " + to);
+    console.log("from: " + from);
+    console.log("subject: " + subject);
+
+    let emailMessage: Email = {
+      to: to,
+      subject: subject,
+      body: ""
+    }
+
+    this.facadeService.setDataDataService("emailMessage", emailMessage);
+    this.router.navigateByUrl("compose-message/emailMessage");
   }
 }

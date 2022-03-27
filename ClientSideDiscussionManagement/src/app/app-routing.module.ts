@@ -81,6 +81,13 @@ const routes: Routes = [
     path: 'compose-message',
     loadChildren: () => import('./communication/compose-message/compose-message.module').then( m => m.ComposeMessagePageModule)
   },
+  {
+    path: 'compose-message/:id',
+    resolve: {
+      special: DataResolverService,
+    },
+    loadChildren: () => import('./communication/compose-message/compose-message.module').then( m => m.ComposeMessagePageModule)
+  },
 
   
 

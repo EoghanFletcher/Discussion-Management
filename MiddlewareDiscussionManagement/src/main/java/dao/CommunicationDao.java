@@ -20,7 +20,6 @@ import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.security.GeneralSecurityException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static business.Email.*;
 
@@ -48,7 +47,6 @@ public class CommunicationDao implements CommunicationDaoInterface {
             if (draftList.isEmpty()) {
                 System.out.println("No drafts found.");
             } else {
-                System.out.println("Drafts:");
                 returnList = new ArrayList<>();
                 for (Draft draft : draftList) {
                     draftsResponse = service.users().drafts().get("me", draft.getId()).execute();
@@ -67,7 +65,6 @@ public class CommunicationDao implements CommunicationDaoInterface {
     public List<Message> inboxSentMessages(NetHttpTransport HTTP_TRANSPORT, String messageLabel) {
         System.out.println("inboxMessages");
 
-
         List<Message> messagesList = null;
         Message messagesResponse = null;
         List<Message> returnList = null;
@@ -75,10 +72,7 @@ public class CommunicationDao implements CommunicationDaoInterface {
         Map<String, String> dataMap = null;
         List<String> labels = null;
 
-//        scopeSet.add(GmailScopes)
-
         try {
-
             { try { HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport(); } catch (GeneralSecurityException e) { e.printStackTrace(); } catch (IOException e) {  e.printStackTrace(); } }
             Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT, scopeSet))
                     .setApplicationName(APPLICATION_NAME)
@@ -88,43 +82,24 @@ public class CommunicationDao implements CommunicationDaoInterface {
             ListMessagesResponse listMessagesResponse = service.users().messages().list(user).execute();
             messagesList = listMessagesResponse.getMessages();
 
-            System.out.println("size: " + messagesList.size());
-
             if (!messagesList.isEmpty()) {
                 returnList = new ArrayList<>();
                 // Get full message
                 for (Message msg : messagesList) {
-                        messagesResponse = service.users().messages().get("me", msg.getId()).execute();
+                    messagesResponse = service.users().messages().get("me", msg.getId()).execute();
+                    dataMap = new HashMap<>();
+                    labels = messagesResponse.getLabelIds();
 
-                        dataMap = new HashMap<>();
-                        labels = messagesResponse.getLabelIds();
+                    // Get label ids
+                    for (String mapMsg : labels) {
+                        dataMap.put(mapMsg, mapMsg);
+                    }
 
-                        // Get label ids
-                        for (String mapMsg : labels) {
-                            dataMap.put(mapMsg, mapMsg);
-                        }
-
-                        // If the message is in the INBOX
-                        if (dataMap.containsKey(messageLabel.toUpperCase())) {
-                            returnList.add(messagesResponse);
-                        }
-
+                    // If the message is in the INBOX
+                    if (dataMap.containsKey(messageLabel.toUpperCase())) {
+                        returnList.add(messagesResponse);
+                    }
                 }
-
-                System.out.println("\n\n\n\n\n");
-                System.out.println("here: " + returnList.get(0));
-                System.out.println("\n\n\n\n\n");
-//                System.out.println("\n\n0: " + returnList.get(0).getPayload().getHeaders().get(0));
-//                System.out.println("\n\n1: " + returnList.get(0).getPayload().getHeaders().get(1));
-//                System.out.println("\n\n2: " + returnList.get(0).getPayload().getHeaders().get(2));
-//                System.out.println("\n\n3: " + returnList.get(0).getPayload().getHeaders().get(3));
-//                System.out.println("\n\n4: " + returnList.get(0).getPayload().getHeaders().get(4));
-//                System.out.println("\n\n5: " + returnList.get(0).getPayload().getHeaders().get(5));
-//                System.out.println("\n\n6: " + returnList.get(0).getPayload().getHeaders().get(6));
-//                System.out.println("\n\n7: " + returnList.get(0).getPayload().getHeaders().get(7));
-//                System.out.println("\n\n8: " + returnList.get(0).getPayload().getHeaders().get(8));
-//                System.out.println("\n\n9: " + returnList.get(0).getPayload().getHeaders().get(9));
-//                System.out.println("\n\n10: " + returnList.get(0).getPayload().getHeaders().get(10));
             }
             System.out.println("returnList size: " + returnList.size());
         }
@@ -163,14 +138,13 @@ public class CommunicationDao implements CommunicationDaoInterface {
         LocalServerReceiver receiver = null;
         Credential credential = null;
         Set<String> SCOPES = scopes;
-//        scopes.remove(GmailScopes.GMAIL_METADATA);
 
         System.out.println("scopes: " + scopes);
         try {
             // Load client secrets.
             System.out.println();
             Email.class.getResource(CREDENTIALS_FILE_PATH);
-            InputStream in = new FileInputStream(CREDENTIALS_FILE_PATH);
+            InputStream in = this.getClass().getResourceAsStream(CREDENTIALS_FILE_PATH);
             if (in == null) { throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH); }
             clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 

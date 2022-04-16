@@ -10,6 +10,7 @@ import { GroupTaskDetailsPage } from './group-task-details.page';
 import { SignOutComponent } from 'src/app/sign-out/sign-out.component';
 import { LeaveGroupBtnComponent } from '../leave-group-btn/leave-group-btn.component';
 import { CreateTaskBtnComponent } from '../create-task-btn/create-task-btn.component';
+import { NavigationMenuBtnComponent } from 'src/app/NavigationMenuModal/components/navigation-menu-btn/navigation-menu-btn.component';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { CreateTaskBtnComponent } from '../create-task-btn/create-task-btn.compo
   declarations: [GroupTaskDetailsPage,
                 LeaveGroupBtnComponent,
                 CreateTaskBtnComponent,
+                NavigationMenuBtnComponent,
                 SignOutComponent]
 })
 export class GroupTaskDetailsPageModule {}

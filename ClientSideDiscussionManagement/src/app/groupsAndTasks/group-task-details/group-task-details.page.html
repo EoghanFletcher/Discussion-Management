@@ -1,14 +1,17 @@
 <ion-header>
   <ion-toolbar>
     <ion-back-button></ion-back-button>
-    <ion-title>Name: {{ group.key }} Details</ion-title>
-    Description:{{ group.value }}
+    <ion-title size="large">Group : {{ group.key }} </ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-title size="small">Description : {{ group.value }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
 <app-sign-out></app-sign-out>
+<app-navigation-menu-btn></app-navigation-menu-btn>
 <ion-button id="createTaskBtn" name="createTaskBtn" (click)="createTask()" color="primary" expand="block">Create Task</ion-button>
 <app-leave-group-btn></app-leave-group-btn>
 
@@ -17,7 +20,7 @@
   <ion-item-divider>Task name : {{ dataItem.value.taskName }}</ion-item-divider>
   <ion-item-divider>Task description : {{ dataItem.value.taskDescription }}</ion-item-divider>
   <ion-item-divider>Task type : {{ dataItem.value.taskType }}</ion-item-divider>
-  <ion-item-divider>Date and time of event: {{ dataItem.value.dateTimeOfEvent }}</ion-item-divider>
+  <ion-item-divider>Date and time of event : {{ dataItem.value.dateTimeOfEvent }}</ion-item-divider>
 
   <ion-item-divider class="ion-padding" *ngIf="group.administration != null">
   <ion-button color="danger" (click)="deleteDeactivateTask(dataItem.value.taskName)">Delete</ion-button>
@@ -25,14 +28,15 @@
 </ion-list>
 
 <ion-text *ngIf="group.requestsToLeave != null">
-  <ion-text>Request to leave group, {{ group.key }}</ion-text>
+  <h1>Requests to leave group</h1>
 
-  <ion-item *ngFor="let groupRequest of requestToLeaveData">
-  <ion-text>{{ groupRequest }}
+  <ion-list *ngFor="let groupRequest of requestToLeaveData">
+    <ion-item>Requested by : <b>{{ groupRequest }}</b></ion-item>
+    <ion-item-divider>
     <ion-button color="danger" (click)="requestsToLeaveVerdict('grant', groupRequest)">Grant Request</ion-button>
     <ion-button color="danger" (click)="requestsToLeaveVerdict('deny', groupRequest)">Deny Request</ion-button>
-  </ion-text>
-</ion-item>
+  </ion-item-divider>
+  </ion-list>
 </ion-text>
 
 <form id="addMember" name="addMember" [formGroup]="formData" (ngSubmit)="addMember()">

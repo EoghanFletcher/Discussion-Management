@@ -25,7 +25,7 @@ public class Email {
     // Add more scopes
 //    public static final List<String> SCOPES_LABELS = Collections.singletonList(GmailScopes.GMAIL_LABELS);
       public static final Set<String> SCOPES_LABELS = getScope();
-    public static final String CREDENTIALS_FILE_PATH = "./keys/client_secret_691585599545-g0hg3r59jemdgse06f7q8p9skdnlt4uj.apps.googleusercontent.com.json";
+    public static final String CREDENTIALS_FILE_PATH = "/client_secret_691585599545-g0hg3r59jemdgse06f7q8p9skdnlt4uj.apps.googleusercontent.com.json";
 
     public static Set<String> getScope() {
         Set<String> scopeSet = new HashSet<>();

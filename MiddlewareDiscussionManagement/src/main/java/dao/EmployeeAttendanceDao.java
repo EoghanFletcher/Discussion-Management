@@ -24,7 +24,7 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
         try {
             date = this.getCurrentDate();
             Firestore firestore = Dao.initialiseFirestore();
-            future = firestore.collection(databaseCollection).whereEqualTo("date", date).get();
+            future = firestore.collection(databaseCollection).get();
             documents = future.get().getDocuments();
 
             for (DocumentSnapshot document : documents) {
@@ -32,10 +32,9 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
             }
 
             Map dateMap = new HashMap();
-
-            dateMap.put("date", date);
+            dateMap.put("date", Map.of(date, date));
             Map hashMapUser = new HashMap();
-            hashMapUser.put(username, uId);
+            hashMapUser.put(username, Map.of(username, uId));
 
             if (documentSnapshot == null) {
                 writeResultApiFuture = firestore.collection(databaseCollection).document(date).set(dateMap);
@@ -50,6 +49,7 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
             }
             else {
                 writeResultApiFuture = firestore.collection(databaseCollection).document(date).update(hashMapUser);
+
             }
         }  catch (Exception ex) {
             System.out.println("An exception occurred [confirmAttendance], ex: " + ex.getMessage());

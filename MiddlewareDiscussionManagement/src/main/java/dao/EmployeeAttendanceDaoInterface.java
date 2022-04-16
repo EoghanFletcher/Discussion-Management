@@ -1,8 +1,16 @@
 package dao;
 
+import com.google.cloud.firestore.DocumentSnapshot;
+
+import java.util.List;
+
 public interface EmployeeAttendanceDaoInterface {
 
-    public boolean confirmAttendance(String uId, String username, String databaseCollection);
+    public DocumentSnapshot confirmAttendance(String uId, String username, String databaseCollection);
 
-    public String getDate();
+    public String getCurrentDate();
+
+    public DocumentSnapshot getListOfPresentEmployees(String databaseCollection);
+
+    public boolean createNode(String date, String username, String message, String databaseCollection);
 }

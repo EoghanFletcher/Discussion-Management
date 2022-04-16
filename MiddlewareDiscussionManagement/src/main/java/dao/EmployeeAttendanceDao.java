@@ -4,11 +4,13 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firestore.v1.Write;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
     @Override
-    public boolean confirmAttendance(String uId, String username, String databaseCollection) {
+    public DocumentSnapshot confirmAttendance(String uId, String username, String databaseCollection) {
         System.out.println("confirmAttendance");
 
         DocumentSnapshot documentSnapshot = null;
@@ -20,8 +22,76 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
         boolean result = false;
 
         try {
-            date = this.getDate();
+            date = this.getCurrentDate();
             Firestore firestore = Dao.initialiseFirestore();
+            future = firestore.collection(databaseCollection).whereEqualTo("date", date).get();
+            documents = future.get().getDocuments();
+
+            for (DocumentSnapshot document : documents) {
+                if (document.getId().equals(date)) { documentSnapshot = document; }
+            }
+
+            Map dateMap = new HashMap();
+
+            dateMap.put("date", date);
+            Map hashMapUser = new HashMap();
+            hashMapUser.put(username, uId);
+
+            if (documentSnapshot == null) {
+                writeResultApiFuture = firestore.collection(databaseCollection).document(date).set(dateMap);
+                writeResultApiFuture = firestore.collection(databaseCollection).document(date).update(hashMapUser);
+
+                // Check if document exists
+                documents = future.get().getDocuments();
+
+                for (DocumentSnapshot document : documents) {
+                    if (document.getId().equals(date)) { documentSnapshot = document; }
+                }
+            }
+            else {
+                writeResultApiFuture = firestore.collection(databaseCollection).document(date).update(hashMapUser);
+            }
+        }  catch (Exception ex) {
+            System.out.println("An exception occurred [confirmAttendance], ex: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return documentSnapshot;
+    }
+
+    @Override
+    public String getCurrentDate()  {
+        Calendar calendar = null;
+        String dateMonthYear = null;
+        try {
+            calendar = Calendar.getInstance();
+
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+        } catch (Exception ex) {
+            System.out.println("An exception occurred [getDate], ex: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        System.out.println(LocalDate.now());
+        return calendar.getTime().toString();
+    }
+
+    @Override
+    public DocumentSnapshot getListOfPresentEmployees(String databaseCollection) {
+        System.out.println("getListOfPresentEmployees");
+
+        String date = null;
+        ApiFuture<QuerySnapshot> future = null;
+        List<QueryDocumentSnapshot> documents = null;
+        List<DocumentSnapshot> listDocumentSnapshot = null;
+        DocumentSnapshot documentSnapshot = null;
+        try {
+            date = this.getCurrentDate();
+            Firestore firestore = Dao.initialiseFirestore();
+
             future = firestore.collection(databaseCollection).whereEqualTo("date", date).get();
             documents = future.get().getDocuments();
 
@@ -29,62 +99,34 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
                 System.out.println("document.getId(): " + document.getId());
                 if (document.getId().equals(date)) { documentSnapshot = document; }
             }
-
-            System.out.println();
-            System.out.println("uId: " + uId);
-            System.out.println("username: " + username);
-            System.out.println("databaseCollection: " + databaseCollection);
-            System.out.println("date: " + date);
-
-
-            Map dateMap = new HashMap();
-
-            dateMap.put("date", date);
-            Map hashMapUer = new HashMap();
-            hashMapUer.put(username, uId);
-
-            System.out.println(dateMap.entrySet());;
-
-
-
-            System.out.println("documentSnapshot: " + documentSnapshot);
-            if (documentSnapshot == null) {
-                System.out.println("null here ");
-                writeResultApiFuture = firestore.collection(databaseCollection).document(date).set(dateMap);
-                writeResultApiFuture = firestore.collection(databaseCollection).document(date).update(hashMapUer);
-            }
-            else {
-                System.out.println("not null");
-                writeResultApiFuture = firestore.collection(databaseCollection).document(date).update(hashMapUer);
-            }
-
-//            documents = firestore.collection(databaseCollection).document(date)
-
-
-        }  catch (Exception ex) {
-            System.out.println("An exception occurred [confirmAttendance], ex: " + ex.getMessage());
+        } catch (Exception ex) {
+            System.out.println("An exception occurred [getListOfPresentEmployees], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
-        return result;
+        return documentSnapshot;
     }
 
     @Override
-    public String getDate() {
-        Calendar calendar = null;
-        String year = null;
-        String month = null;
-        String date = null;
-        String dateMonthYear = null;
+    public boolean createNode(String date, String username, String message, String databaseCollection) {
+        System.out.println("createNode");
+
+        DocumentSnapshot documentSnapshot = null;
+        ApiFuture<WriteResult> writeResultApiFuture = null;
+        Firestore firestore = Dao.initialiseFirestore();
+        Map userData = null;
         try {
-            calendar = Calendar.getInstance();
-            year = String.valueOf(calendar.get(Calendar .YEAR));
-            month = String.valueOf(calendar.get(Calendar.MONTH));
-            date = String.valueOf(calendar.get(Calendar.DATE));
-            dateMonthYear = date + "-" + month + "-" + year;
+            EmployeeAttendanceDao employeeAttendanceDao = new EmployeeAttendanceDao();
+            // I will need to use a different list in the final version
+            documentSnapshot = employeeAttendanceDao.getListOfPresentEmployees(databaseCollection);
+            userData = (HashMap) documentSnapshot.getData().get(username);
+            userData.put("Note", message);
+
+            writeResultApiFuture = firestore.collection(databaseCollection).document(date).update(userData);
+
         } catch (Exception ex) {
-            System.out.println("An exception occurred [getDate], ex: " + ex.getMessage());
+            System.out.println("An exception occurred [createNode], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
-        return dateMonthYear;
+        return false;
     }
 }

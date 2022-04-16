@@ -12,8 +12,10 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EmployeeAttendanceDaoTest {
 
@@ -22,6 +24,8 @@ public class EmployeeAttendanceDaoTest {
     private static Firestore firestore = null;
     private static HashMap documentData = null;
     private static UserRecord userRecord = null;
+    private static UserRecord userRecord2 = null;
+    private static UserRecord userRecord3 = null;
     private static String uId = null;
     private static boolean result;
     private static DocumentSnapshot documentSnapshot = null;
@@ -47,11 +51,17 @@ public class EmployeeAttendanceDaoTest {
 
             firebaseAuthInstance.createUser(new UserRecord.CreateRequest().setEmail("JUnit@gmail.com").setPassword("JUnit@gmail.com"));
             Thread.sleep(2000);
-            userRecord = firebaseAuthInstance.getUserByEmail("JUnit@gmail.com");
+            userRecord = firebaseAuthInstance.getUserByEmail("junit@gmail.com");
+            Thread.sleep(2000);
+            userRecord2 = firebaseAuthInstance.getUserByEmail("eoghanfletcher1999@gmail.com");
+            Thread.sleep(2000);
+            userRecord3 = firebaseAuthInstance.getUserByEmail("eoghanfletcher99@gmail.com");
+            Thread.sleep(2000);
 
-            System.out.println("userRecord: " + userRecord.getUid());
 
+            System.out.println("userRecord.getUid(): " + userRecord.getUid());
             uId = userRecord.getUid();
+            System.out.println("uId: " + uId);
 
             firestore = Dao.initialiseFirestore();
 
@@ -72,7 +82,7 @@ public class EmployeeAttendanceDaoTest {
     public void getDate() {
         System.out.println("getDate");
 
-        System.out.println(employeeAttendanceDao.getDate());
+        Assert.assertSame(employeeAttendanceDao.getCurrentDate(), LocalDate.now());
     }
 
     @Test
@@ -84,9 +94,30 @@ public class EmployeeAttendanceDaoTest {
         System.out.println("databaseCollection: " + databaseCollection);
 
         try {
-//        System.out.println("employeeAttendanceDao.confirmAttendance(username, databaseCollection): " + employeeAttendanceDao.confirmAttendance(uId, username, databaseCollection));
-            employeeAttendanceDao.confirmAttendance(uId, username, databaseCollection);
-            employeeAttendanceDao.confirmAttendance("1234", "test", databaseCollection);
+            Assert.assertNotNull(employeeAttendanceDao.confirmAttendance(uId, username, databaseCollection));
+            System.out.println("userRecord2.getUid(): " + userRecord2.getUid());
+            Assert.assertNotNull(employeeAttendanceDao.confirmAttendance(userRecord2.getUid(), "userRecord2", databaseCollection));
+            Assert.assertNotNull(employeeAttendanceDao.confirmAttendance(userRecord3.getUid(), "userRecord3", databaseCollection));
+        }
+        catch(Exception ex) {
+            System.out.println("An error occurred [removeTestData], ex: " + ex);
+            ex.printStackTrace();
+        }
+    }
+
+    @Test
+    public void presentList() {
+        System.out.println("presentList");
+
+        try {
+            Map hashMap = employeeAttendanceDao.getListOfPresentEmployees(databaseCollection).getData();
+
+            Assert.assertTrue(hashMap.containsKey("date"));
+            Assert.assertTrue(hashMap.containsKey("userRecord2"));
+            Assert.assertTrue(hashMap.containsKey("userRecord3"));
+            Assert.assertTrue(hashMap.containsKey("JUnit"));
+
+            System.out.println("EntrySet: " + employeeAttendanceDao.getListOfPresentEmployees(databaseCollection).getData().entrySet());
 //            wait(2000);
 //            employeeAttendanceDao.confirmAttendance("1234", "test", databaseCollection);
         }
@@ -96,12 +127,27 @@ public class EmployeeAttendanceDaoTest {
         }
     }
 
-    @AfterClass
+    @Test
+    public void createNode() {
+        System.out.println("createNode");
+
+        String message = null;
+        try {
+             message = "Test was successful";
+            employeeAttendanceDao.createNode(employeeAttendanceDao.getCurrentDate(), username, message, databaseCollection);
+        }
+        catch(Exception ex) {
+            System.out.println("An error occurred [removeTestData], ex: " + ex);
+            ex.printStackTrace();
+        }
+    }
+
+//    @AfterClass
     public static void removeTestData() {
         System.out.println("removeTestData");
         try {
             documentData = new HashMap();
-//            firestore.recursiveDelete(collectionReference);
+            firestore.recursiveDelete(collectionReference);
             firebaseAuthInstance.deleteUser(userRecord.getUid());
         }
         catch(Exception ex) {

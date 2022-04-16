@@ -118,8 +118,6 @@ public class EmployeeAttendanceDaoTest {
             Assert.assertTrue(hashMap.containsKey("JUnit"));
 
             System.out.println("EntrySet: " + employeeAttendanceDao.getListOfPresentEmployees(databaseCollection).getData().entrySet());
-//            wait(2000);
-//            employeeAttendanceDao.confirmAttendance("1234", "test", databaseCollection);
         }
         catch(Exception ex) {
             System.out.println("An error occurred [removeTestData], ex: " + ex);

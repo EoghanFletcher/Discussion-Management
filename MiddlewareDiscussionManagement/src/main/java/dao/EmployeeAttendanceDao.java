@@ -115,13 +115,19 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
         Firestore firestore = Dao.initialiseFirestore();
         Map userData = null;
         try {
+
             EmployeeAttendanceDao employeeAttendanceDao = new EmployeeAttendanceDao();
             // I will need to use a different list in the final version
             documentSnapshot = employeeAttendanceDao.getListOfPresentEmployees(databaseCollection);
-            userData = (HashMap) documentSnapshot.getData().get(username);
-            userData.put("Note", message);
+            if (documentSnapshot.getData().get(username) != null) {
+                userData = new HashMap();
+                userData.put(username, documentSnapshot.getData().get(username));
+                userData.put("Note", message);
+                writeResultApiFuture = firestore.collection(databaseCollection).document(date).update(userData);
+            }
 
-            writeResultApiFuture = firestore.collection(databaseCollection).document(date).update(userData);
+
+
 
         } catch (Exception ex) {
             System.out.println("An exception occurred [createNode], ex: " + ex.getMessage());

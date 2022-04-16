@@ -13,4 +13,6 @@
 
 <ion-item *ngFor="let dataItem of data | keyvalue" (click)="modifyCredential(dataItem.key, dataItem.value)">{{ dataItem.key }} : {{ dataItem.value }}</ion-item>
 
+<ion-button id="googleSignin" name="googleSignin" (click)="linkGoogleAccount()">Link Google Account</ion-button>
+
 </ion-content>

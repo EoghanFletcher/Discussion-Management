@@ -26,4 +26,6 @@ public interface UserDaoInterface {
     public boolean removeProfileField(String uId, String username, String key, String databaseCollection);
 
     public List<DocumentSnapshot> listUsers(String databaseCollection);
+
+
 }

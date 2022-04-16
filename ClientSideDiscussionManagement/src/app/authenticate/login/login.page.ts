@@ -51,6 +51,7 @@ export class LoginPage implements OnInit {
       password: passwordString
     }
 
+    
     await this.facadeService.loginAuthenticationService(auth);
 
     if (typeof this.facadeService.getDataDataService("signedIn") !== 'undefined') {
@@ -63,15 +64,12 @@ export class LoginPage implements OnInit {
 
   }
 
-  loginGoogle() { // Needed to getEmail address
+  loginwithGoogle() { // Needed to getEmail address
+    console.log("loginwithGoogle");
     let result;
-    result = this.facadeService.authenticationService.googleSignin();
-    // const token = credential.accessToken;
-        // The signed-in user info.
-        const user = result.user;
-        console.log("user: " + JSON.stringify(user));
+    result = this.facadeService.authenticationService.googleSigninNewAccount().then((details: any) => {  });
 
-        
+    console.log("result: " + result);
   }
 
   navigateToPage(page) {

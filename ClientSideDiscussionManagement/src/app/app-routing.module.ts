@@ -73,6 +73,24 @@ const routes: Routes = [
     },
     loadChildren: () => import('./groupsAndTasks/create-task/create-task.module').then( m => m.CreateTaskPageModule)
   },
+  {
+    path: 'communication',
+    loadChildren: () => import('./communication/tabs/tabs.module').then( m => m.TabsPageModule)
+  },
+  {
+    path: 'compose-message',
+    loadChildren: () => import('./communication/compose-message/compose-message.module').then( m => m.ComposeMessagePageModule)
+  },
+  {
+    path: 'compose-message/:id',
+    resolve: {
+      special: DataResolverService,
+    },
+    loadChildren: () => import('./communication/compose-message/compose-message.module').then( m => m.ComposeMessagePageModule)
+  },
+
+  
+
 
 
 

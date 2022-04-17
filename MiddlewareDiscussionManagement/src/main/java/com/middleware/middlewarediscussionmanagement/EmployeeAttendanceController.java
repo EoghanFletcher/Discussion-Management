@@ -58,6 +58,9 @@ public class EmployeeAttendanceController {
     @PostMapping(path = "/addMasterList")
     public Map addMasterList(@RequestBody HashMap data) {
         System.out.println("addMasterList");
+
+        DocumentSnapshot documentSnapshot = null;
+
         try {
             System.out.println("data: " + data.entrySet());
 
@@ -65,7 +68,11 @@ public class EmployeeAttendanceController {
             String username = (String) data.get("username");
 
             System.out.println("*******");
-            return employeeAttendance.addMasterList(username, databaseCollection).getData();
+            documentSnapshot = employeeAttendance.addMasterList(username, databaseCollection);
+
+            if (documentSnapshot != null) {
+                return documentSnapshot.getData();
+            }
 
         }   catch (Exception ex) {
             System.out.println("An exception occurred [presentList], ex: " + ex.getMessage());

@@ -34,9 +34,11 @@ public class UserController {
 
             if (userRecordUId != null) {
                 if (usernameString == null) {
+                    System.out.println("login");
 //                    documentSnapshot = userDao.getUserDocumentByUId(uIdString, emailString, databaseCollection); }
                     documentSnapshot = userDao.getUserDocumentByEmail(emailString, databaseCollection); }
                 else {
+                    System.out.println("register");
                     documentSnapshot = userDao.register(uIdString, emailString, usernameString, databaseCollection); }
             }
         }

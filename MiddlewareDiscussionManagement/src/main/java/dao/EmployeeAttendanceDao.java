@@ -35,7 +35,7 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
 
 
                     userData = new HashMap();
-                    userData.put(username, Map.of(username, username));
+                    userData.put(username, Map.of("username", username));
 
                     firestore.collection(databaseCollection).document("MasterList").update(userData);
 
@@ -82,8 +82,9 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
 
 
             if (documentSnapshot == null) {
-                writeResultApiFuture = firestore.collection(databaseCollection).document(date).set(dateMap);
-                writeResultApiFuture = firestore.collection(databaseCollection).document(date).update(hashMapUser);
+                System.out.println("null");
+                writeResultApiFuture = firestore.collection(databaseCollection).document("date").collection(date).document("present").set(dateMap);
+                writeResultApiFuture = firestore.collection(databaseCollection).document("date").collection(date).document("present").update(hashMapUser);
 
                 // Check if document exists
                 documents = future.get().getDocuments();
@@ -91,7 +92,9 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
                 documentSnapshot = this.searchAttendances(documents, date);
             }
             else {
+                System.out.println("not null");
                 writeResultApiFuture = firestore.collection(databaseCollection).document(date).update(hashMapUser);
+                firestore.collection(databaseCollection).document("date").collection(date).document("absent").set(dateMap);
 
             }
         }  catch (Exception ex) {
@@ -128,7 +131,7 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
         Map hashMapUser = null;
         try {
             hashMapUser = new HashMap();
-            hashMapUser.put(username, Map.of(username, uId));
+            hashMapUser.put(username, Map.of("uId", uId, "username", username));
         } catch (Exception ex) {
             System.out.println("An exception occurred [getListOfPresentEmployees], ex: " + ex.getMessage());
             ex.printStackTrace();

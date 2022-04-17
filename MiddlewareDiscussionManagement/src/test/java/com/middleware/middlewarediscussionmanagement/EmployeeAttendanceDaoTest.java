@@ -33,7 +33,7 @@ public class EmployeeAttendanceDaoTest {
     private static List<QueryDocumentSnapshot> documents = null;
     private static List<DocumentSnapshot> listDocumentSnapshot = null;
     private static CollectionReference collectionReference = null;
-    private static String databaseCollection = "EmployeeAttendanceTest";
+    private static String databaseCollection = "EmployeeAttendance";
     private static String username = "JUnit";
     String key = "JUnit";
     String value = "UserTest";

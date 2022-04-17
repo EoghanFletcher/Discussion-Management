@@ -81,6 +81,7 @@ public class UserDao implements UserDaoInterface {
             System.out.println("documents size(): " + documents.size());
             if (documents.size() == 1) {
                 documentSnapshot = documents.get(0);
+                System.out.println("documentSnapshot: " + documentSnapshot.getData());
             }
         } catch (Exception ex) {
             System.out.println("An exception occurred [getUserDocument], ex: " + ex.getMessage());

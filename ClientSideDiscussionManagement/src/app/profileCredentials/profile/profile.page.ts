@@ -28,10 +28,10 @@ export class ProfilePage implements OnInit {
   ngOnInit() {
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
     this.data = this.facadeService.getDataDataService("uid");
 
-    this.getUserData();
+    await this.getUserData();
   }
   
   async getUserData() {
@@ -44,8 +44,14 @@ export class ProfilePage implements OnInit {
     let response = this.http.post<EmailPasswordProvider>(url, {"uId": this.facadeService.getDataDataService("uid"),
                                       "email": this.facadeService.getDataDataService("email"),
                                       "username": this.facadeService.getDataDataService("username")}
-    ).subscribe(responseLamdba => { this.data = responseLamdba,
-      this.dataService.setData("username", responseLamdba.username);
+    ).subscribe(responseLamdba => { console.log("responseLamdba: " + JSON.stringify(responseLamdba)),
+    console.log("responseLamdba.username: " + responseLamdba.username)
+    this.data = responseLamdba,
+      this.facadeService.setDataDataService("username", responseLamdba.username);
+      console.log("get: " + this.facadeService.getDataDataService("username")),
+
+      // After the data has been retrieved confirm the user has logged in today
+      this.confirmAttendance();
     });
   }
 
@@ -75,6 +81,18 @@ export class ProfilePage implements OnInit {
 
     this.facadeService.setDataDataService("id", credential);
     this.router.navigateByUrl("profile-crud/id");
+  }
+
+  async confirmAttendance() {
+    console.log("confirmAttendance");
+    console.log("uId: " + this.facadeService.getDataDataService("uid"));
+    console.log("username: " + this.facadeService.getDataDataService("username"));
+
+    let url = "http://localhost:8080/api/employeeAttendance/confirmAttendance";
+    let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
+                                              "username": this.facadeService.getDataDataService("username")}).subscribe(responseLamdba => { 
+      console.log(JSON.stringify(responseLamdba))
+   });    
   }
 
 }

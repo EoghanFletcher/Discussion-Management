@@ -13,6 +13,9 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
     public DocumentSnapshot confirmAttendance(String uId, String username, String databaseCollection) {
         System.out.println("confirmAttendance");
 
+        System.out.println("uId" + uId);
+        System.out.println("username" + username);
+
         DocumentSnapshot documentSnapshot = null;
         ApiFuture<QuerySnapshot> future = null;
         List<QueryDocumentSnapshot> documents = null;
@@ -60,6 +63,7 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
 
     @Override
     public String getCurrentDate()  {
+        System.out.println("getCurrentDate");
         Calendar calendar = null;
         String dateMonthYear = null;
         try {
@@ -92,7 +96,7 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
             date = this.getCurrentDate();
             Firestore firestore = Dao.initialiseFirestore();
 
-            future = firestore.collection(databaseCollection).whereEqualTo("date", date).get();
+            future = firestore.collection(databaseCollection).get(); // .whereEqualTo("date", date).get();
             documents = future.get().getDocuments();
 
             for (DocumentSnapshot document : documents) {

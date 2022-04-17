@@ -88,6 +88,14 @@ const routes: Routes = [
     },
     loadChildren: () => import('./communication/compose-message/compose-message.module').then( m => m.ComposeMessagePageModule)
   },
+  {
+    path: 'employee-attendance',
+    loadChildren: () => import('./employeeAttendance/tabs/tabs.module').then( m => m.TabsPageModule)
+  },
+
+
+
+
 
   
 

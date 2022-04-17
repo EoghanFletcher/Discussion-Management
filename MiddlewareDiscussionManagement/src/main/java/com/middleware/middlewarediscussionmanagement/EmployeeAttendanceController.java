@@ -13,7 +13,7 @@ import java.util.Map;
 @RequestMapping(path = "/api/employeeAttendance")
 public class EmployeeAttendanceController {
     EmployeeAttendanceDao employeeAttendance = new EmployeeAttendanceDao();
-    String databaseCollection = "employeeAttendance";
+    String databaseCollection = "EmployeeAttendance";
 
     @PostMapping(path = "/confirmAttendance")
     public Map confirmAttendance(@RequestBody HashMap data) {
@@ -24,7 +24,7 @@ public class EmployeeAttendanceController {
             String uIdString = (String) data.get("uId");
             String uIdUsername = (String) data.get("username");
 
-            return employeeAttendance.confirmAttendance(uIdString, uIdString, databaseCollection).getData();
+            return employeeAttendance.confirmAttendance(uIdString, uIdUsername, databaseCollection).getData();
 
         }   catch (Exception ex) {
             System.out.println("An exception occurred [getDate], ex: " + ex.getMessage());
@@ -39,6 +39,7 @@ public class EmployeeAttendanceController {
         try {
             System.out.println("data: " + data.entrySet());
 
+            System.out.println("*******");
             return employeeAttendance.getListOfPresentEmployees(databaseCollection).getData();
 
     }   catch (Exception ex) {

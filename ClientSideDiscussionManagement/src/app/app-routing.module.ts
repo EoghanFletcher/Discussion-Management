@@ -93,6 +93,9 @@ const routes: Routes = [
     loadChildren: () => import('./employeeAttendance/tabs/tabs.module').then( m => m.TabsPageModule)
   },
 
+  
+
+
 
 
 

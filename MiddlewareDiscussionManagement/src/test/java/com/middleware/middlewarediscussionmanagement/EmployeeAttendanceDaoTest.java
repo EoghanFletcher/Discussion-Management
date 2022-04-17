@@ -126,6 +126,26 @@ public class EmployeeAttendanceDaoTest {
     }
 
     @Test
+    public void listAllEmployees() {
+        System.out.println("listAllEmployees");
+
+        try {
+            Map hashMap = employeeAttendanceDao.getListOfAllEmployees(databaseCollection).getData();
+
+//            Assert.assertTrue(hashMap.containsKey("date"));
+//            Assert.assertTrue(hashMap.containsKey("userRecord2"));
+//            Assert.assertTrue(hashMap.containsKey("userRecord3"));
+//            Assert.assertTrue(hashMap.containsKey("JUnit"));
+
+            System.out.println("EntrySet: " + employeeAttendanceDao.getListOfAllEmployees(databaseCollection).getData().entrySet());
+        }
+        catch(Exception ex) {
+            System.out.println("An error occurred [removeTestData], ex: " + ex);
+            ex.printStackTrace();
+        }
+    }
+
+    @Test
     public void createNode() {
         System.out.println("createNode");
 

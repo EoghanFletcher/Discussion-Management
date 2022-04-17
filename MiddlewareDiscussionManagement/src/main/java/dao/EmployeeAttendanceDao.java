@@ -196,7 +196,35 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
 
     @Override
     public DocumentSnapshot getListOfAllEmployees(String databaseCollection) {
-        return null;
+        System.out.println("getListOfAllEmployees");
+
+        String date = null;
+        ApiFuture<QuerySnapshot> future = null;
+        List<QueryDocumentSnapshot> documents = null;
+        List<DocumentSnapshot> listDocumentSnapshot = null;
+        DocumentSnapshot documentSnapshot = null;
+        CollectionReference collectionReference = null;
+        try {
+            Firestore firestore = Dao.initialiseFirestore();
+            System.out.println("databaseCollection: " + databaseCollection);
+            date = this.getCurrentDate();
+            future = firestore.collection(databaseCollection).get();
+
+            documents = future.get().getDocuments();
+
+            System.out.println("entrySet: " + documents.size());
+            System.out.println("0: " + documents.get(0));
+
+            for (DocumentSnapshot document : documents) {
+                System.out.println("document.getId(): " + document.getId());
+                if (document.getId().equals("MasterList")) { documentSnapshot = document; }
+            }
+            System.out.println("documentSnapshot: " + documentSnapshot.getData().entrySet());
+        } catch (Exception ex) {
+            System.out.println("An exception occurred [getListOfPresentEmployees], ex: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return documentSnapshot;
     }
 
     @Override

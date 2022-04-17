@@ -12,6 +12,14 @@ const routes: Routes = [
       {
         path: 'present-employees',
         loadChildren: () => import('../present-employees/present-employees.module').then( m => m.PresentEmployeesPageModule)
+      },
+      {
+        path: 'absent-employees',
+        loadChildren: () => import('../absent-employees/absent-employees.module').then( m => m.AbsentEmployeesPageModule)
+      },
+      {
+        path: 'list-all-employees',
+        loadChildren: () => import('../list-all-employees/list-all-employees.module').then( m => m.ListAllEmployeesPageModule)
       }
     ]
   }

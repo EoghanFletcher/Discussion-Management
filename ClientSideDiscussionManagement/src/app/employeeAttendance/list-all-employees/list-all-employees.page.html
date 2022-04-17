@@ -1,0 +1,13 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>list-all-employees</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-sign-out></app-sign-out>
+  <app-navigation-menu-btn></app-navigation-menu-btn>
+  
+<ion-list *ngFor="let dataItem of data | keyvalue" (click)="viewEmployee(dataItem.value)">
+  <ion-item-divider>username : {{ dataItem.value.username }}</ion-item-divider></ion-list>
+</ion-content>

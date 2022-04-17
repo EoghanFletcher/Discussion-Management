@@ -4,22 +4,21 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { PresentEmployeesPageRoutingModule } from './present-employees-routing.module';
+import { ListAllEmployeesPageRoutingModule } from './list-all-employees-routing.module';
 
-import { PresentEmployeesPage } from './present-employees.page';
-import { SignOutComponent } from 'src/app/sign-out/sign-out.component';
+import { ListAllEmployeesPage } from './list-all-employees.page';
 import { NavigationMenuBtnComponent } from 'src/app/NavigationMenuModal/components/navigation-menu-btn/navigation-menu-btn.component';
+import { SignOutComponent } from 'src/app/sign-out/sign-out.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PresentEmployeesPageRoutingModule
+    ListAllEmployeesPageRoutingModule
   ],
-  declarations: [PresentEmployeesPage,
-  SignOutComponent,
-NavigationMenuBtnComponent
-]
+  declarations: [ListAllEmployeesPage,
+    SignOutComponent,
+    NavigationMenuBtnComponent]
 })
-export class PresentEmployeesPageModule {}
+export class ListAllEmployeesPageModule {}

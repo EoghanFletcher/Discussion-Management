@@ -18,7 +18,9 @@ public interface EmployeeAttendanceDaoInterface {
 
     public DocumentSnapshot searchAttendances(List<QueryDocumentSnapshot> documents, String entryName);
 
-    public DocumentSnapshot getListOfPresentEmployees(String databaseCollection);
+    public DocumentSnapshot getListOfPresentAbsentEmployees(String listType, String databaseCollection);
+
+    public DocumentSnapshot getListOfAllEmployees(String databaseCollection);
 
     public boolean createNode(String date, String username, String message, String databaseCollection);
 

@@ -110,14 +110,14 @@ public class EmployeeAttendanceDaoTest {
         System.out.println("presentList");
 
         try {
-            Map hashMap = employeeAttendanceDao.getListOfPresentEmployees(databaseCollection).getData();
+            Map hashMap = employeeAttendanceDao.getListOfPresentAbsentEmployees("Present", databaseCollection).getData();
 
             Assert.assertTrue(hashMap.containsKey("date"));
             Assert.assertTrue(hashMap.containsKey("userRecord2"));
             Assert.assertTrue(hashMap.containsKey("userRecord3"));
             Assert.assertTrue(hashMap.containsKey("JUnit"));
 
-            System.out.println("EntrySet: " + employeeAttendanceDao.getListOfPresentEmployees(databaseCollection).getData().entrySet());
+            System.out.println("EntrySet: " + employeeAttendanceDao.getListOfPresentAbsentEmployees("Present", databaseCollection).getData().entrySet());
         }
         catch(Exception ex) {
             System.out.println("An error occurred [removeTestData], ex: " + ex);

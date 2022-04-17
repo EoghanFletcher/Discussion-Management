@@ -29,9 +29,8 @@ export class PresentEmployeesPage implements OnInit {
   getList() {
     console.log("getList");
 
-    let url = "http://localhost:8080/api/employeeAttendance/presentList";
-    let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
-                                              "username": this.facadeService.getDataDataService("username")}).subscribe(responseLamdba => { 
+    let url = "http://localhost:8080/api/employeeAttendance/presentAbsentList";
+    let response = this.http.post(url, {"listType": "Present"}).subscribe(responseLamdba => { 
       console.log(JSON.stringify(responseLamdba)),
       this.data = responseLamdba
    });    

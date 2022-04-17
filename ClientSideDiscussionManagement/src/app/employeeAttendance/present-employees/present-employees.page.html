@@ -8,11 +8,7 @@
   <app-sign-out></app-sign-out>
   <app-navigation-menu-btn></app-navigation-menu-btn>
   
-<!-- <app-user-interface></app-user-interface> -->
-
 <ion-list *ngFor="let dataItem of data | keyvalue" (click)="viewEmployee(dataItem.value)">
-  <!-- <ion-label *ngIf="dataItem.value.payload.headers[3].name != 'undefined' && dataItem.value.payload.headers[2].name != 'undefined' && dataItem.value.payload.headers[5].name != 'undefined'"> -->
-  <ion-item-divider>{{ dataItem.value }} : {{ dataItem.value }}</ion-item-divider>
-                                                                        <!-- </ion-label> -->
-                                                                          </ion-list>
+  <ion-item-divider>uId : {{ dataItem.value.uId }}</ion-item-divider>
+                    <ion-item-divider>username : {{ dataItem.value.username }}</ion-item-divider></ion-list>
 </ion-content>

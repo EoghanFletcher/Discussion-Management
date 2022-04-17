@@ -40,19 +40,37 @@ public class EmployeeAttendanceController {
         return null;
     }
 
-    @PostMapping(path = "/presentList")
-    public Map presentList(@RequestBody HashMap data) {
+    @PostMapping(path = "/presentAbsentList")
+    public Map presentAbsentList(@RequestBody HashMap data) {
         System.out.println("presentList");
         try {
             System.out.println("data: " + data.entrySet());
 
+            String listType = (String) data.get("listType");
+
             System.out.println("*******");
-            return employeeAttendance.getListOfPresentEmployees(databaseCollection).getData();
+            return employeeAttendance.getListOfPresentAbsentEmployees(listType, databaseCollection).getData();
 
     }   catch (Exception ex) {
         System.out.println("An exception occurred [presentList], ex: " + ex.getMessage());
         ex.printStackTrace();
     }
+        return null;
+    }
+
+    @PostMapping(path = "/listAllEmployees")
+    public Map listAllEmployees(@RequestBody HashMap data) {
+        System.out.println("listAllEmployees");
+        try {
+            System.out.println("data: " + data.entrySet());
+
+            System.out.println("*******");
+            return employeeAttendance.getListOfAllEmployees(databaseCollection).getData();
+
+        }   catch (Exception ex) {
+            System.out.println("An exception occurred [listAllEmployees], ex: " + ex.getMessage());
+            ex.printStackTrace();
+        }
         return null;
     }
 

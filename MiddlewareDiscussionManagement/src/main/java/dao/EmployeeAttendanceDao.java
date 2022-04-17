@@ -160,30 +160,43 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
     }
 
     @Override
-    public DocumentSnapshot getListOfPresentEmployees(String databaseCollection) {
-        System.out.println("getListOfPresentEmployees");
+    public DocumentSnapshot getListOfPresentAbsentEmployees(String listType, String databaseCollection) {
+        System.out.println("getListOfPresentAbsentEmployees");
 
         String date = null;
         ApiFuture<QuerySnapshot> future = null;
         List<QueryDocumentSnapshot> documents = null;
         List<DocumentSnapshot> listDocumentSnapshot = null;
         DocumentSnapshot documentSnapshot = null;
+        CollectionReference collectionReference = null;
         try {
-            date = this.getCurrentDate();
             Firestore firestore = Dao.initialiseFirestore();
+            System.out.println("databaseCollection: " + databaseCollection);
+            date = this.getCurrentDate();
+            collectionReference = firestore.collection(databaseCollection).document("Date").collection(date);
 
-            future = firestore.collection(databaseCollection).get(); // .whereEqualTo("date", date).get();
+            future = collectionReference.get(); // .whereEqualTo("date", date).get();
             documents = future.get().getDocuments();
+
+            System.out.println("entrySet: " + documents.size());
+            System.out.println("0: " + documents.get(0));
+            System.out.println("1: " + documents.get(1));
 
             for (DocumentSnapshot document : documents) {
                 System.out.println("document.getId(): " + document.getId());
-                if (document.getId().equals(date)) { documentSnapshot = document; }
+                if (document.getId().equals(listType)) { documentSnapshot = document; }
             }
+            System.out.println("documentSnapshot: " + documentSnapshot.getData().entrySet());
         } catch (Exception ex) {
             System.out.println("An exception occurred [getListOfPresentEmployees], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
         return documentSnapshot;
+    }
+
+    @Override
+    public DocumentSnapshot getListOfAllEmployees(String databaseCollection) {
+        return null;
     }
 
     @Override
@@ -198,7 +211,7 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
 
             EmployeeAttendanceDao employeeAttendanceDao = new EmployeeAttendanceDao();
             // I will need to use a different list in the final version
-            documentSnapshot = employeeAttendanceDao.getListOfPresentEmployees(databaseCollection);
+//            documentSnapshot = employeeAttendanceDao.getListOfPresentEmployees(databaseCollection);
             if (documentSnapshot.getData().get(username) != null) {
                 userData = new HashMap();
                 userData.put(username, documentSnapshot.getData().get(username));

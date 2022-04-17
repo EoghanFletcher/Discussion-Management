@@ -140,6 +140,21 @@ public class EmployeeAttendanceDaoTest {
         }
     }
 
+    @Test
+    public void addMasterList() {
+        System.out.println("addMasterList");
+
+        String message = null;
+        try {
+            message = "Test was successful";
+            employeeAttendanceDao.addMasterList(username, "EmployeeAttendance");
+        }
+        catch(Exception ex) {
+            System.out.println("An error occurred [removeTestData], ex: " + ex);
+            ex.printStackTrace();
+        }
+    }
+
 //    @AfterClass
     public static void removeTestData() {
         System.out.println("removeTestData");

@@ -1,5 +1,6 @@
 package com.middleware.middlewarediscussionmanagement;
 
+import com.google.cloud.firestore.DocumentSnapshot;
 import dao.EmployeeAttendanceDao;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,13 +19,18 @@ public class EmployeeAttendanceController {
     @PostMapping(path = "/confirmAttendance")
     public Map confirmAttendance(@RequestBody HashMap data) {
         System.out.println("confirmAttendance");
+        DocumentSnapshot documentSnapshot = null;
         try {
             System.out.println("data: " + data.entrySet());
 
             String uIdString = (String) data.get("uId");
-            String uIdUsername = (String) data.get("username");
+            String username = (String) data.get("username");
 
-            return employeeAttendance.confirmAttendance(uIdString, uIdUsername, databaseCollection).getData();
+            documentSnapshot = employeeAttendance.confirmAttendance(uIdString, username, databaseCollection);
+
+            if (documentSnapshot != null) {
+                return documentSnapshot.getData();
+            }
 
         }   catch (Exception ex) {
             System.out.println("An exception occurred [getDate], ex: " + ex.getMessage());
@@ -46,6 +52,25 @@ public class EmployeeAttendanceController {
         System.out.println("An exception occurred [presentList], ex: " + ex.getMessage());
         ex.printStackTrace();
     }
+        return null;
+    }
+
+    @PostMapping(path = "/addMasterList")
+    public Map addMasterList(@RequestBody HashMap data) {
+        System.out.println("addMasterList");
+        try {
+            System.out.println("data: " + data.entrySet());
+
+            String uIdString = (String) data.get("uId");
+            String username = (String) data.get("username");
+
+            System.out.println("*******");
+            return employeeAttendance.addMasterList(username, databaseCollection).getData();
+
+        }   catch (Exception ex) {
+            System.out.println("An exception occurred [presentList], ex: " + ex.getMessage());
+            ex.printStackTrace();
+        }
         return null;
     }
 

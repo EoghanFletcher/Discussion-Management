@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -21,7 +22,8 @@ export class RegisterPage implements OnInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private facadeService: FacadeService) { }
+    private facadeService: FacadeService,
+    private http: HttpClient) { }
 
   ngOnInit() {
     this.postData = new FormGroup({
@@ -60,6 +62,9 @@ export class RegisterPage implements OnInit {
 
     await this.facadeService.registerAuthenticationService(auth);
 
+    // Add the user to the list of registered users
+    this.addMasterList(emailString, usernameString);
+
     if (typeof this.facadeService.getDataDataService("signedIn") !== 'undefined') {
       this.router.navigateByUrl("profile");  
     }
@@ -71,6 +76,17 @@ export class RegisterPage implements OnInit {
   navigateToPage(page) {
     console.log("navigateToPage");
     this.router.navigateByUrl(page);
+  }
+
+  addMasterList(email, username) {
+    console.log("addMasterList");
+    console.log("uId: " + this.facadeService.getDataDataService("uid"));
+    console.log("username: " + this.facadeService.getDataDataService("username"));
+
+    let url = "http://localhost:8080/api/employeeAttendance/addMasterList";
+    let response = this.http.post(url, {"username": username }).subscribe(responseLamdba => { 
+      console.log(JSON.stringify(responseLamdba))
+   });   
   }
 
 }

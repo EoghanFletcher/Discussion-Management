@@ -100,5 +100,31 @@ public class EmployeeAttendanceController {
         return null;
     }
 
+    @PostMapping(path = "/createNote")
+    public Boolean createNote(@RequestBody HashMap data) {
+        System.out.println("createNote");
+
+        DocumentSnapshot documentSnapshot = null;
+        boolean result = false;
+
+        try {
+            System.out.println("data: " + data.entrySet());
+
+            String username = (String) data.get("username");
+            String title = (String) data.get("title");
+            String message = (String) data.get("message");
+
+            System.out.println("data: " + data.entrySet());
+
+            System.out.println("*******");
+            result = employeeAttendance.createNode(username, title, message, "Present", databaseCollection);
+
+        }   catch (Exception ex) {
+            System.out.println("An exception occurred [createNote], ex: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
 
 }

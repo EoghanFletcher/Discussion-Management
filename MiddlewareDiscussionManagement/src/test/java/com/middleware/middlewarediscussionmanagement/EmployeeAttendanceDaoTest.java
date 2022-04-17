@@ -150,15 +150,34 @@ public class EmployeeAttendanceDaoTest {
         System.out.println("createNode");
 
         String message = null;
+        String title = null;
         try {
-             message = "Test was successful";
-            employeeAttendanceDao.createNode(employeeAttendanceDao.getCurrentDate(), username, message, databaseCollection);
+            title = "Test result";
+            message = "Test was successful";
+            employeeAttendanceDao.createNode(employeeAttendanceDao.getCurrentDate(), username, title, message, databaseCollection);
         }
         catch(Exception ex) {
             System.out.println("An error occurred [removeTestData], ex: " + ex);
             ex.printStackTrace();
         }
     }
+    @Test
+    public void getNotes() {
+        System.out.println("getNotes");
+
+        String message = null;
+        String title = null;
+        try {
+            title = "Test result";
+            message = "Test was successful";
+            employeeAttendanceDao.getNotes( username, "Present", databaseCollection);
+        }
+        catch(Exception ex) {
+            System.out.println("An error occurred [getNotes], ex: " + ex);
+            ex.printStackTrace();
+        }
+    }
+
 
     @Test
     public void addMasterList() {

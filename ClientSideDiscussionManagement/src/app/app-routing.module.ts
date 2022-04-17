@@ -102,7 +102,11 @@ const routes: Routes = [
       special: DataResolverService,
     },
     loadChildren: () => import('./employeeAttendance/view-employee/view-employee.module').then( m => m.ViewEmployeePageModule)
+  },  {
+    path: 'create-note',
+    loadChildren: () => import('./employeeAttendance/create-note/create-note.module').then( m => m.CreateNotePageModule)
   },
+
 
 
   

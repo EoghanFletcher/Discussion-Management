@@ -9,6 +9,7 @@ import { PresentEmployeesPageRoutingModule } from './present-employees-routing.m
 import { PresentEmployeesPage } from './present-employees.page';
 import { SignOutComponent } from 'src/app/sign-out/sign-out.component';
 import { NavigationMenuBtnComponent } from 'src/app/NavigationMenuModal/components/navigation-menu-btn/navigation-menu-btn.component';
+import { CreateNoteBtnComponent } from '../components/create-note-btn/create-note-btn.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { NavigationMenuBtnComponent } from 'src/app/NavigationMenuModal/componen
   ],
   declarations: [PresentEmployeesPage,
   SignOutComponent,
-NavigationMenuBtnComponent
+NavigationMenuBtnComponent,
+CreateNoteBtnComponent
 ]
 })
 export class PresentEmployeesPageModule {}

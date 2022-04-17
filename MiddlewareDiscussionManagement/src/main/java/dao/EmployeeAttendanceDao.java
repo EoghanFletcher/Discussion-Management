@@ -228,29 +228,72 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
     }
 
     @Override
-    public boolean createNode(String date, String username, String message, String databaseCollection) {
+    public boolean createNode(String username, String title, String message, String listType, String databaseCollection) {
         System.out.println("createNode");
+
+        System.out.println("username: " + username);
+        System.out.println("title: " + title);
+        System.out.println("message: " + message);
+        System.out.println("listType: " + listType);
+        System.out.println("databaseCollection: " + databaseCollection);
 
         DocumentSnapshot documentSnapshot = null;
         ApiFuture<WriteResult> writeResultApiFuture = null;
         Firestore firestore = Dao.initialiseFirestore();
+        String date = null;
         Map userData = null;
-        try {
 
+        try {
             EmployeeAttendanceDao employeeAttendanceDao = new EmployeeAttendanceDao();
-            // I will need to use a different list in the final version
+            date = this.getCurrentDate();
 //            documentSnapshot = employeeAttendanceDao.getListOfPresentEmployees(databaseCollection);
-            if (documentSnapshot.getData().get(username) != null) {
+//            if (documentSnapshot.getData().get(username) != null) {
                 userData = new HashMap();
-                userData.put(username, documentSnapshot.getData().get(username));
-                userData.put("Note", message);
-                writeResultApiFuture = firestore.collection(databaseCollection).document(date).update(userData);
-            }
+                userData.put(username, Map.of("username", username, "title", title, "message", message));
+                writeResultApiFuture = firestore.collection(databaseCollection).document("Date").collection(date).document(listType).collection("Notes").document(date).set(userData);
+//            }
         } catch (Exception ex) {
             System.out.println("An exception occurred [createNode], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public DocumentSnapshot getNotes(String username, String listType, String databaseCollection) {
+        System.out.println("getNote");
+
+        String date = null;
+        ApiFuture<QuerySnapshot> future = null;
+        List<QueryDocumentSnapshot> documents = null;
+        List<DocumentSnapshot> listDocumentSnapshot = null;
+        DocumentSnapshot documentSnapshot = null;
+        CollectionReference collectionReference = null;
+
+        try {
+            System.out.println("databaseCollection: " + databaseCollection);
+            date = this.getCurrentDate();
+
+            Firestore firestore = Dao.initialiseFirestore();
+            future = firestore.collection(databaseCollection).document("Date").collection(date).document(listType).collection("Notes").get();
+
+            documents = future.get().getDocuments();
+
+            System.out.println("entrySet: " + documents.size());
+            System.out.println("0: " + documents.get(0));
+
+            for (DocumentSnapshot document : documents) {
+                System.out.println("document.getId(): " + document.getId());
+                if (document.getId().equals(date)) { documentSnapshot = document; }
+            }
+            System.out.println("documentSnapshot: " + documentSnapshot.getData().entrySet());
+
+            return documentSnapshot;
+        } catch (Exception ex) {
+            System.out.println("An exception occurred [getNote], ex: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     @Override

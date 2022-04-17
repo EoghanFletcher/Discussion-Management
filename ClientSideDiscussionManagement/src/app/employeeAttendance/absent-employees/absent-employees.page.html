@@ -7,6 +7,7 @@
 <ion-content>
   <app-sign-out></app-sign-out>
   <app-navigation-menu-btn></app-navigation-menu-btn>
+  <app-create-note-btn></app-create-note-btn>
   
 <ion-list *ngFor="let dataItem of data | keyvalue" (click)="viewEmployee()">
                     <ion-item-divider>username : {{ dataItem.value.username }}</ion-item-divider></ion-list>

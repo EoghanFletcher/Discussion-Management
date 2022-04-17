@@ -27,6 +27,7 @@ export class ComposeMessagePage implements OnInit {
     private facadeService: FacadeService,) { }
 
   ngOnInit() {
+    console.log("ngOnInit");
         this.postData = new FormGroup({
       to: new FormControl(""),
       subject: new FormControl(""),

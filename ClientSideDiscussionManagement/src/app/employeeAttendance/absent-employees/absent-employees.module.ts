@@ -9,6 +9,7 @@ import { AbsentEmployeesPageRoutingModule } from './absent-employees-routing.mod
 import { AbsentEmployeesPage } from './absent-employees.page';
 import { NavigationMenuBtnComponent } from 'src/app/NavigationMenuModal/components/navigation-menu-btn/navigation-menu-btn.component';
 import { SignOutComponent } from 'src/app/sign-out/sign-out.component';
+import { CreateNoteBtnComponent } from '../components/create-note-btn/create-note-btn.component';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { SignOutComponent } from 'src/app/sign-out/sign-out.component';
   ],
   declarations: [AbsentEmployeesPage,
     SignOutComponent,
-  NavigationMenuBtnComponent]
+  NavigationMenuBtnComponent,
+  CreateNoteBtnComponent]
 })
 export class AbsentEmployeesPageModule {}

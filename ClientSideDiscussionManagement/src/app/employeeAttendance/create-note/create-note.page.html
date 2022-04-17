@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>create-note</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form id="createNote" name="createNote" [formGroup]="postData" (ngSubmit)="createNote()">
+    <div id="titleDiv">
+      <ion-label id="titleLbl"></ion-label>
+      <ion-input id="title" name="title" formControlName="title" placeholder="Title"></ion-input>
+    </div>    
+
+    <div id="messageDiv">
+      <ion-label id="messageLbl"></ion-label>
+      <ion-input id="message" name="message" formControlName="message" placeholder="Message"></ion-input>
+    </div>
+
+    <ion-button id="createNoteBtn" name="createNoteBtn" type="submit" expand="block" color="danger">Create note</ion-button>
+  </form>
+</ion-content>

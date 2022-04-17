@@ -22,7 +22,9 @@ public interface EmployeeAttendanceDaoInterface {
 
     public DocumentSnapshot getListOfAllEmployees(String databaseCollection);
 
-    public boolean createNode(String date, String username, String message, String databaseCollection);
+    public boolean createNode(String username, String title, String message, String listType, String databaseCollection);
+
+    public DocumentSnapshot getNotes(String username, String listType, String databaseCollection);
 
     public DocumentSnapshot copyMasterList(String databaseCollection);
 }

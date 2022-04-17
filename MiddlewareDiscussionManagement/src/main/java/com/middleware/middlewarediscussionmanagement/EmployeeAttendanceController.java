@@ -126,5 +126,32 @@ public class EmployeeAttendanceController {
         return false;
     }
 
+    @PostMapping(path = "/getNotes")
+    public Map getNotes(@RequestBody HashMap data) {
+        System.out.println("getNotes");
+
+        DocumentSnapshot documentSnapshot = null;
+
+        try {
+            System.out.println("data: " + data.entrySet());
+
+            String username = (String) data.get("username");
+
+            System.out.println("data: " + data.entrySet());
+
+            System.out.println("*******");
+            documentSnapshot = employeeAttendance.getNotes(username, "Present", databaseCollection);
+
+            if (documentSnapshot != null) {
+                return documentSnapshot.getData();
+            }
+
+        }   catch (Exception ex) {
+            System.out.println("An exception occurred [getNotes], ex: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
 
 }

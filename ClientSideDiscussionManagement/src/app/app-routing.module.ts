@@ -92,6 +92,18 @@ const routes: Routes = [
     path: 'employee-attendance',
     loadChildren: () => import('./employeeAttendance/tabs/tabs.module').then( m => m.TabsPageModule)
   },
+  {
+    path: 'view-employee',
+    loadChildren: () => import('./employeeAttendance/view-employee/view-employee.module').then( m => m.ViewEmployeePageModule)
+  },
+  {
+    path: 'view-employee/:id',
+    resolve: {
+      special: DataResolverService,
+    },
+    loadChildren: () => import('./employeeAttendance/view-employee/view-employee.module').then( m => m.ViewEmployeePageModule)
+  },
+
 
   
 

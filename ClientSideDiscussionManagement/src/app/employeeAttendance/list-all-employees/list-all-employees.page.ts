@@ -35,4 +35,11 @@ export class ListAllEmployeesPage implements OnInit {
       this.data = responseLamdba
    });    
   }  
+
+  viewEmployee() {
+    console.log("viewEmployee")
+
+    this.facadeService.setDataDataService("id", this.facadeService.getDataDataService("username"));
+    this.router.navigateByUrl("view-employee/id");
+  }
 }

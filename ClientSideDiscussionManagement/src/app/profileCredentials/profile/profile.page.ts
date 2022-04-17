@@ -48,6 +48,8 @@ export class ProfilePage implements OnInit {
     console.log("responseLamdba.username: " + responseLamdba.username)
     this.data = responseLamdba,
       this.facadeService.setDataDataService("username", responseLamdba.username);
+      this.facadeService.setDataDataService("userCredentials", responseLamdba);
+
       console.log("get: " + this.facadeService.getDataDataService("username")),
 
       // After the data has been retrieved confirm the user has logged in today

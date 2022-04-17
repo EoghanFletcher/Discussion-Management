@@ -26,7 +26,8 @@ public class EmployeeAttendanceController {
             String uIdString = (String) data.get("uId");
             String username = (String) data.get("username");
 
-            documentSnapshot = employeeAttendance.confirmAttendance(uIdString, username, databaseCollection);
+            documentSnapshot = employeeAttendance.confirmAttendance(uIdString, username,
+                                                                    this.employeeAttendance.copyMasterList(databaseCollection), databaseCollection);
 
             if (documentSnapshot != null) {
                 return documentSnapshot.getData();

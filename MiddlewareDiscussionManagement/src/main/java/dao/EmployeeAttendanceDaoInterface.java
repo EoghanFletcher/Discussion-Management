@@ -10,7 +10,7 @@ public interface EmployeeAttendanceDaoInterface {
 
     public DocumentSnapshot addMasterList(String username, String databaseCollection);
 
-    public DocumentSnapshot confirmAttendance(String uId, String username, String databaseCollection);
+    public DocumentSnapshot confirmAttendance(String uId, String username, DocumentSnapshot copy, String databaseCollection);
 
     public String getCurrentDate();
 
@@ -21,4 +21,6 @@ public interface EmployeeAttendanceDaoInterface {
     public DocumentSnapshot getListOfPresentEmployees(String databaseCollection);
 
     public boolean createNode(String date, String username, String message, String databaseCollection);
+
+    public DocumentSnapshot copyMasterList(String databaseCollection);
 }

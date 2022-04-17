@@ -53,7 +53,8 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
     }
 
     @Override
-    public DocumentSnapshot confirmAttendance(String uId, String username, String databaseCollection) {
+
+    public DocumentSnapshot confirmAttendance(String uId, String username, DocumentSnapshot copy, String databaseCollection) {
         System.out.println("confirmAttendance");
 
         System.out.println("uId" + uId);
@@ -66,6 +67,7 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
         WriteResult writeResult = null;
         ApiFuture<WriteResult> writeResultApiFuture = null;
         boolean result = false;
+        Map deleteMap = new HashMap();
 
         try {
             date = this.getCurrentDate();
@@ -74,27 +76,27 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
             documents = future.get().getDocuments();
 
             documentSnapshot = this.searchAttendances(documents, date);
-
-
             Map dateMap = new HashMap();
             dateMap.put("date", Map.of(date, date));
             Map hashMapUser  = this.createMap(uId, username);
-
+            deleteMap.put(username, FieldValue.delete());
 
             if (documentSnapshot == null) {
                 System.out.println("null");
-                writeResultApiFuture = firestore.collection(databaseCollection).document("date").collection(date).document("present").set(dateMap);
-                writeResultApiFuture = firestore.collection(databaseCollection).document("date").collection(date).document("present").update(hashMapUser);
+                writeResultApiFuture = firestore.collection(databaseCollection).document("Date").collection(date).document("Present").set(hashMapUser);
+                writeResultApiFuture = firestore.collection(databaseCollection).document("Date").collection(date).document("Absent").set(copy.getData());
+                writeResultApiFuture = firestore.collection(databaseCollection).document("Date").collection(date).document("Absent").update(deleteMap);
+
 
                 // Check if document exists
                 documents = future.get().getDocuments();
-
                 documentSnapshot = this.searchAttendances(documents, date);
             }
             else {
                 System.out.println("not null");
                 writeResultApiFuture = firestore.collection(databaseCollection).document(date).update(hashMapUser);
-                firestore.collection(databaseCollection).document("date").collection(date).document("absent").set(dateMap);
+                firestore.collection(databaseCollection).document("date").collection(date).document("Present").update(hashMapUser);
+                writeResultApiFuture = firestore.collection(databaseCollection).document("Date").collection(date).document("Absent").update(deleteMap);
 
             }
         }  catch (Exception ex) {
@@ -208,5 +210,37 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
             ex.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public DocumentSnapshot copyMasterList(String databaseCollection) {
+        System.out.println("copyMasterList");
+        ApiFuture<QuerySnapshot> future = null;
+        List<QueryDocumentSnapshot> documents = null;
+        DocumentSnapshot documentSnapshot = null;
+        Map userData = null;
+        final String masterList = "MasterList";
+
+        try {
+            Firestore firestore = Dao.initialiseFirestore();
+
+            future = firestore.collection(databaseCollection).get(); // .whereEqualTo("date", date).get();
+            documents = future.get().getDocuments();
+
+            for (DocumentSnapshot document : documents) {
+                System.out.println("document.getId(): " + document.getId());
+                if (document.getId().equals(masterList)) { documentSnapshot = document; }
+
+                System.out.println("entrySet: " + documentSnapshot.getData().entrySet());
+
+                if (documentSnapshot.getData().size() > 0) {
+                    return documentSnapshot;
+                }
+            }
+        } catch (Exception ex) {
+                System.out.println("An exception occurred [createNode], ex: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        return null;
     }
 }

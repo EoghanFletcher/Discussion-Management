@@ -94,10 +94,10 @@ public class EmployeeAttendanceDaoTest {
         System.out.println("databaseCollection: " + databaseCollection);
 
         try {
-            Assert.assertNotNull(employeeAttendanceDao.confirmAttendance(uId, username, databaseCollection));
+//            Assert.assertNotNull(employeeAttendanceDao.confirmAttendance(uId, username, databaseCollection));
             System.out.println("userRecord2.getUid(): " + userRecord2.getUid());
-            Assert.assertNotNull(employeeAttendanceDao.confirmAttendance(userRecord2.getUid(), "userRecord2", databaseCollection));
-            Assert.assertNotNull(employeeAttendanceDao.confirmAttendance(userRecord3.getUid(), "userRecord3", databaseCollection));
+//            Assert.assertNotNull(employeeAttendanceDao.confirmAttendance(userRecord2.getUid(), "userRecord2", databaseCollection));
+//            Assert.assertNotNull(employeeAttendanceDao.confirmAttendance(userRecord3.getUid(), "userRecord3", databaseCollection));
         }
         catch(Exception ex) {
             System.out.println("An error occurred [removeTestData], ex: " + ex);
@@ -151,6 +151,21 @@ public class EmployeeAttendanceDaoTest {
         }
         catch(Exception ex) {
             System.out.println("An error occurred [removeTestData], ex: " + ex);
+            ex.printStackTrace();
+        }
+    }
+
+    @Test
+    public void copyMasterList() {
+        System.out.println("copyMasterList");
+
+        String message = null;
+        try {
+
+            employeeAttendanceDao.copyMasterList("EmployeeAttendance");
+        }
+        catch(Exception ex) {
+            System.out.println("An error occurred [copyMasterList], ex: " + ex);
             ex.printStackTrace();
         }
     }

@@ -27,5 +27,7 @@ public interface UserDaoInterface {
 
     public List<DocumentSnapshot> listUsers(String databaseCollection);
 
+    public String testForConnectivity();
+
 
 }

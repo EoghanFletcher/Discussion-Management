@@ -101,4 +101,18 @@ public class UserController {
         System.out.println("return");
         return documentListData;
         }
+
+    @GetMapping(path = "testForConnectivity")
+    public String testForConnectivity () {
+        System.out.println("testForConnectivity");
+
+        try {
+            return userDao.testForConnectivity();
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [testForConnectivity], ex: " + ex);
+            ex.printStackTrace();
+        }
+        return null;
     }
+}

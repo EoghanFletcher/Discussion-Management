@@ -245,4 +245,18 @@ public class UserDao implements UserDaoInterface {
         }
         return listDocumentSnapshot;
     }
+
+    @Override
+    public String testForConnectivity() {
+        System.out.println("testForConnectivity");
+
+        try {
+                return "Connection established";
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [listUsers], ex: " + ex);
+            ex.printStackTrace();
+        }
+        return null;
+    }
 }

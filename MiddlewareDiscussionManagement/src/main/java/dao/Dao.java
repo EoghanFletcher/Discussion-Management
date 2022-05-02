@@ -7,6 +7,9 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
+
+import static business.Email.CREDENTIALS_FILE_PATH;
 
 public class Dao {
     public static Firestore initialiseFirestore() {
@@ -25,13 +28,15 @@ public class Dao {
         System.out.println("initialiseFirebaseConnection");
 
         try {
-            FileInputStream accountCredentials = new FileInputStream("./keys/discussionmanagement-a9065-firebase-adminsdk-eqdn6-bcec425738.json");
+
+            InputStream accountCredentials =  Dao.class.getResourceAsStream("/discussionmanagement-a9065-firebase-adminsdk-eqdn6-bcec425738.json");
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(accountCredentials))
                     .setDatabaseUrl("https://ProjectPrototype-DemoApp-DkIT.firebaseio.com/")
                     .build();
 
             System.out.println(FirebaseApp.initializeApp(options));
+            System.out.println("\nExecuting...\n");
         }
         catch (Exception ex) {
             System.out.println("An exception occurred, failed to connect to database [initialiseFirebaseConnection], ex: " + ex);

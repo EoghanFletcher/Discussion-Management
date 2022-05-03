@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { signOut } from 'firebase/auth';
 import { Email } from 'src/app/interface/email';
 import { FacadeService } from 'src/app/service/facade.service';
+import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-compose-message',
@@ -56,7 +57,7 @@ export class ComposeMessagePage implements OnInit {
         body: this.postData.get("body").value
       }
 
-        let url = "http://localhost:8080/api/communication/draft";
+        let url = urlComponent + "communication/draft";
       let response = this.http.post(url, {"to": this.email.to,
                                           "from": this.facadeService.getDataDataService("email"),
                                           "subject": this.email.subject,
@@ -74,7 +75,7 @@ export class ComposeMessagePage implements OnInit {
       body: this.postData.get("body").value
     }
 
-    let url = "http://localhost:8080/api/communication/message";
+    let url = urlComponent + "communication/message";
     let response = this.http.post(url, {"to": this.email.to,
                                         "from": this.facadeService.getDataDataService("email"),
                                         "subject": this.email.subject,

@@ -59,10 +59,16 @@ aws ec2 authorize-security-group-ingress --group-id $SG.GroupId --cidr 0.0.0.0/0
     # Authorise HTTP, for all traffic
     Write-Host 'Open Port 80'
 aws ec2 authorize-security-group-ingress --group-id $SG.GroupId --cidr 0.0.0.0/0 --protocol tcp --port 80
+aws ec2 authorize-security-group-ingress --group-id $SG.GroupId --cidr 0.0.0.0/0 --protocol tcp --port 8080
 
     # Authorise HTTPS, for all traffic
     Write-Host 'Open Port 443'
 aws ec2 authorize-security-group-ingress --group-id $SG.GroupId --cidr 0.0.0.0/0 --protocol tcp --port 443
+    Write-Host ''
+
+    # Authorise HTTPS, for all traffic
+    Write-Host 'Open Port 8080'
+aws ec2 authorize-security-group-ingress --group-id $SG.GroupId --cidr 0.0.0.0/0 --protocol tcp --port 8080
     Write-Host ''
 
 

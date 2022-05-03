@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FacadeService } from 'src/app/service/facade.service';
+import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-create-task',
@@ -37,7 +38,7 @@ export class CreateTaskPage implements OnInit {
   createTask() {
     console.log("createTask");
 
-    let url = "http://localhost:8080/api/groupAndTask/createTask";
+    let url = urlComponent + "groupAndTask/createTask";
 
     let taskNameString: string = this.formData.get("taskName").value;
     let taskDescriptionString: string = this.formData.get("taskDescription").value;
@@ -58,7 +59,7 @@ export class CreateTaskPage implements OnInit {
   getEvents() {
     console.log("listEvents");
 
-    let url = "http://localhost:8080/api/groupAndTask/listEvents";
+    let url = urlComponent + "groupAndTask/listEvents";
 
     let response = this.http.get(url).subscribe(responseLamdba => { this.events = responseLamdba });    
   }

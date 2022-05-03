@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FacadeService } from 'src/app/service/facade.service';
+import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-present-employees',
@@ -31,7 +32,7 @@ export class PresentEmployeesPage implements OnInit {
   getList() {
     console.log("getList");
 
-    let url = "http://localhost:8080/api/employeeAttendance/presentAbsentList";
+    let url = urlComponent + "employeeAttendance/presentAbsentList";
     let response = this.http.post(url, {"listType": "Present"}).subscribe(responseLamdba => { 
       console.log(JSON.stringify(responseLamdba)),
       this.data = responseLamdba
@@ -48,7 +49,7 @@ export class PresentEmployeesPage implements OnInit {
   getNotes() {
     console.log("getNotes");
 
-    let url = "http://localhost:8080/api/employeeAttendance/getNotes";
+    let url = urlComponent + "employeeAttendance/getNotes";
     let response = this.http.post(url, {"username": this.facadeService.getDataDataService("username")}).subscribe(responseLamdba => { 
       console.log(JSON.stringify(responseLamdba)),
       this.notes = responseLamdba

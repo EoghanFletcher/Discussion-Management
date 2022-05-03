@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FacadeService } from 'src/app/service/facade.service';
+import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-list-all-employees',
@@ -29,7 +30,7 @@ export class ListAllEmployeesPage implements OnInit {
   getList() {
     console.log("getList");
 
-    let url = "http://localhost:8080/api/employeeAttendance/listAllEmployees";
+    let url = urlComponent + "employeeAttendance/listAllEmployees";
     let response = this.http.post(url, {  }).subscribe(responseLamdba => { 
       console.log(JSON.stringify(responseLamdba)),
       this.data = responseLamdba

@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { EmailPasswordProvider } from '../../interface/email-password-provider';
 import { FacadeService } from '../../service/facade.service';
+import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-login',

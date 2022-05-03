@@ -6,6 +6,7 @@ import { EmailPasswordProvider } from '../../interface/email-password-provider';
 import { AuthenticationService } from '../../service/authentication.service';
 import { DataService } from '../../service/data.service';
 import { FacadeService } from '../../service/facade.service';
+import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-register',
@@ -83,7 +84,7 @@ export class RegisterPage implements OnInit {
     console.log("uId: " + this.facadeService.getDataDataService("uid"));
     console.log("username: " + this.facadeService.getDataDataService("username"));
 
-    let url = "http://localhost:8080/api/employeeAttendance/addMasterList";
+    let url = urlComponent + "employeeAttendance/addMasterList";
     let response = this.http.post(url, {"username": username }).subscribe(responseLamdba => { 
       console.log(JSON.stringify(responseLamdba))
    });   

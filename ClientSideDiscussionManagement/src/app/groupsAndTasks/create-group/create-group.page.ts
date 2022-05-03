@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FacadeService } from 'src/app/service/facade.service';
+import {urlComponent} from '../../GlobalVariables/global-variables';
+
 
 @Component({
   selector: 'app-create-group',
@@ -33,7 +35,7 @@ export class CreateGroupPage implements OnInit {
     let groupName: string = this.formData.get("groupName").value;
     let groupDescription: string = this.formData.get("groupDescription").value;
 
-    let url = "http://localhost:8080/api/groupAndTask/createGroup";
+    let url = urlComponent + "groupAndTask/createGroup";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
                                         "username": this.facadeService.getDataDataService("username"),
                                         "groupName": groupName, "groupDescription": groupDescription}

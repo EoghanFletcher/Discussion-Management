@@ -4,6 +4,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Note } from 'src/app/interface/note';
 import { FacadeService } from 'src/app/service/facade.service';
+import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-create-note',
@@ -49,7 +50,7 @@ export class CreateNotePage implements OnInit {
       message: this.postData.get("message").value
     }
 
-    let url = "http://localhost:8080/api/employeeAttendance/createNote";
+    let url = urlComponent + "employeeAttendance/createNote";
     let response = this.http.post(url, {"username": this.note.username,
                                         "title": this.note.title,
                                         "message": this.note.message

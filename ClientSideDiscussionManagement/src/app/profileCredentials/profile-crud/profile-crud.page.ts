@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SelectedCredential } from '../../interface/selected-credential';
 import { FacadeService } from '../../service/facade.service';
+import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-profile-crud',
@@ -40,7 +41,7 @@ export class ProfileCrudPage implements OnInit {
 
     let chosenValue: string = this.postData.get("value").value;
 
-    let url = "http://localhost:8080/api/credentials/update";
+    let url = urlComponent + "credentials/update";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
                                         "username": this.facadeService.getDataDataService("username"),
                                         "chosenKey": this.facadeService.getDataDataService("id").key,
@@ -61,7 +62,7 @@ export class ProfileCrudPage implements OnInit {
         keySelected !== "uId" || 
         keySelected !== "username") {
           console.log("not equal");
-    let url = "http://localhost:8080/api/credentials/delete";
+    let url = urlComponent + "credentials/delete";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
                                         "username": this.facadeService.getDataDataService("username"),
                                         "deleteKey": keySelected}

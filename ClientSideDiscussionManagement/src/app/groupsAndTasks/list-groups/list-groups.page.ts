@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SelectedGroup } from 'src/app/interface/selected-group';
 import { FacadeService } from 'src/app/service/facade.service';
+import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-list-groups',
@@ -34,7 +35,7 @@ export class ListGroupsPage implements OnInit {
 
   getGroupsInvolvingUser() {
     console.log("getUserData");
-    let url = "http://localhost:8080/api/groupAndTask/listGroups";
+    let url = urlComponent + "groupAndTask/listGroups";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
                                       "username": this.facadeService.getDataDataService("username")}
     ).subscribe(responseLamdba => { this.data = responseLamdba });    

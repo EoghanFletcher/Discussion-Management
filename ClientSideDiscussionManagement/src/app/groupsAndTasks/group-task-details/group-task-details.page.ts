@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SelectedGroup } from 'src/app/interface/selected-group';
 import { FacadeService } from 'src/app/service/facade.service';
+import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-group-task-details',
@@ -61,7 +62,7 @@ export class GroupTaskDetailsPage implements OnInit {
 getAllUsers() {
   console.log("getAllUsers");
 
-  let url = "http://localhost:8080/api/user/getAllUsers";
+  let url = urlComponent + "user/getAllUsers";
     let response = this.http.post(url, {  }
     ).subscribe(responseLamdba => { // this.data = responseLamdba,
                                     console.log("responseLamdba: " + JSON.stringify(responseLamdba)),
@@ -89,7 +90,7 @@ addMember() {
 
   let chosenUser: string = this.formData.get("chosenUser").value;
 
-  let url = "http://localhost:8080/api/groupAndTask/groupAddMember";
+  let url = urlComponent + "groupAndTask/groupAddMember";
     let response = this.http.post(url, {"username": chosenUser,
                                        "groupName": this.group.key}
     ).subscribe(responseLamdba => { this.data = responseLamdba });
@@ -102,7 +103,7 @@ requestsToLeaveVerdict(verdict, username) {
   console.log("groupName: " + this.group.key);
   console.log("verdict: " + verdict);
 
-  let url = "http://localhost:8080/api/groupAndTask/leaveGroupVerdict";
+  let url = urlComponent + "groupAndTask/leaveGroupVerdict";
     let response = this.http.post(url, {"username": username,
                                        "groupName": this.group.key,
                                         "verdict": verdict}
@@ -117,7 +118,7 @@ createTask() {
 getTasks() {
   console.log("getTasks");
 
-  let url = "http://localhost:8080/api/groupAndTask/listTasks";
+  let url = urlComponent + "groupAndTask/listTasks";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
                                        "groupName": this.group.key}
     ).subscribe(responseLamdba => { this.data = responseLamdba });
@@ -126,7 +127,7 @@ getTasks() {
 deleteDeactivateTask(taskName) {
 console.log("deleteDeactivateTask");
 
-  let url = "http://localhost:8080/api/groupAndTask/deactivateTask";
+  let url = urlComponent + "groupAndTask/deactivateTask";
     let response = this.http.post(url, {"groupName": this.group.key,
                                       "taskName": taskName}
     ).subscribe(responseLamdba => { this.data = responseLamdba });

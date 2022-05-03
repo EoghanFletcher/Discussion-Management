@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>absent-employees</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-sign-out></app-sign-out>
+  <app-navigation-menu-btn></app-navigation-menu-btn>
+  <app-create-note-btn></app-create-note-btn>
+  
+<ion-list *ngFor="let dataItem of data | keyvalue" (click)="viewEmployee()">
+                    <ion-item-divider>username : {{ dataItem.value.username }}</ion-item-divider></ion-list>
+
+<ion-text *ngIf="notes != null">
+  <h1>Notes made regarding today's absence</h1>
+  <ion-list *ngFor="let note of notes | keyvalue" (click)="viewEmployee()">
+  <ion-item-divider>Title : {{ note.value.title }}</ion-item-divider>
+  <ion-item-divider>Message : {{ note.value.message }}</ion-item-divider>
+  </ion-list>
+</ion-text>
+</ion-content>

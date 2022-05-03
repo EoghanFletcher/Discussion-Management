@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EmailPasswordProvider } from '../interface/email-password-provider';
 import { DataService } from './data.service';
+import {urlComponent} from '../GlobalVariables/global-variables';
+
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,7 @@ export class ProfileService {
 
 async getUserData() {
   console.log("profileService:getUserData")
-  let url = "http://localhost:8080/api/user/authenticateEmailPassword";
+  let url = urlComponent + "user/authenticateEmailPassword";
 
     // let response = 
     await this.http.post<EmailPasswordProvider>(url, {"uId": this.dataService.getData("uid"),

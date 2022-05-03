@@ -34,9 +34,11 @@ public class UserController {
 
             if (userRecordUId != null) {
                 if (usernameString == null) {
+                    System.out.println("login");
 //                    documentSnapshot = userDao.getUserDocumentByUId(uIdString, emailString, databaseCollection); }
                     documentSnapshot = userDao.getUserDocumentByEmail(emailString, databaseCollection); }
                 else {
+                    System.out.println("register");
                     documentSnapshot = userDao.register(uIdString, emailString, usernameString, databaseCollection); }
             }
         }
@@ -99,4 +101,18 @@ public class UserController {
         System.out.println("return");
         return documentListData;
         }
+
+    @GetMapping(path = "testForConnectivity")
+    public String testForConnectivity () {
+        System.out.println("testForConnectivity");
+
+        try {
+            return userDao.testForConnectivity();
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [testForConnectivity], ex: " + ex);
+            ex.printStackTrace();
+        }
+        return null;
     }
+}

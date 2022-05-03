@@ -13,7 +13,7 @@ export class ComposeBtnComponent implements OnInit {
   ngOnInit() {}
 
   composeMessage() {
-    this.router.navigateByUrl("compose-message")
+    this.router.navigateByUrl("compose-message");
   }
 
 }

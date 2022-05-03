@@ -88,6 +88,33 @@ const routes: Routes = [
     },
     loadChildren: () => import('./communication/compose-message/compose-message.module').then( m => m.ComposeMessagePageModule)
   },
+  {
+    path: 'employee-attendance',
+    loadChildren: () => import('./employeeAttendance/tabs/tabs.module').then( m => m.TabsPageModule)
+  },
+  {
+    path: 'view-employee',
+    loadChildren: () => import('./employeeAttendance/view-employee/view-employee.module').then( m => m.ViewEmployeePageModule)
+  },
+  {
+    path: 'view-employee/:id',
+    resolve: {
+      special: DataResolverService,
+    },
+    loadChildren: () => import('./employeeAttendance/view-employee/view-employee.module').then( m => m.ViewEmployeePageModule)
+  },  {
+    path: 'create-note',
+    loadChildren: () => import('./employeeAttendance/create-note/create-note.module').then( m => m.CreateNotePageModule)
+  },
+
+
+
+  
+
+
+
+
+
 
   
 

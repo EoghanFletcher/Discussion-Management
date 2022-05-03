@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Email } from 'src/app/interface/email';
 import { FacadeService } from 'src/app/service/facade.service';
+import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-drafts',
@@ -31,7 +32,7 @@ export class DraftsPage implements OnInit {
   getEmails() {
     console.log("getEmails");
 
-    let url = "http://localhost:8080/api/communication/getDrafts";
+    let url = urlComponent + "communication/getDrafts";
     let response = this.http.get(url).subscribe(responseLamdba => { console.log(JSON.stringify(responseLamdba)),
       this.data = responseLamdba,
     console.log("\nPosition 0: " + JSON.stringify(this.data[0]))

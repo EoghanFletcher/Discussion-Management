@@ -1,0 +1,33 @@
+ssh ec2-user@[public ip address] -i ~/.ssh/labsuser.pem
+
+cd ~/DiscussionManagement
+
+sudo yum -y install httpd git elinks
+sudo systemctl enable httpd
+sudo systemctl start httpd
+
+sudo git --version
+
+sudo git clone https://github.com/EoghanFletcher/Discussion-Management.git
+sudo git checkout -b employeeAttendance
+sudo git pull origin employeeAttendance
+sudo git pull origin master
+
+sudo chmod a+rwx Discussion-Management/
+
+sudo amazon-linux-extras install java-openjdk11
+
+java -jar MiddlewareDiscussionManagement-0.0.1-SNAPSHOT.jar
+
+http://184.73.53.70/Discussion-Management/MiddlewareDiscussionManagement/src/main/java/com/middleware/middlewarediscussionmanagement/UserController.java
+
+
+
+
+
+Login to EC2
+Make sure the sever has public DNS and the security group accepts custom tcp on port 8080 (EC2 - (Choose instance) Security group ..and add another inbound rule)
+
+Make sure DNS hostname is enabled (VPC - (Choose VPC) Actions - Edit DNS hostnames ... Yes
+
+

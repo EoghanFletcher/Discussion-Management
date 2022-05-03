@@ -11,7 +11,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
@@ -91,3 +90,15 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+# Secrets and client information
+
+**/ClientSideDiscussionManagement/resources/
+**/MiddlewareDiscussionManagement/keys/
+**/MiddlewareDiscussionManagement/tokens/
+**/MiddlewareDiscussionManagement/src/main/resources/
+
+# Configuration files
+**/ClientSideDiscussionManagement/android/
+**/ClientSideDiscussionManagement/capacitor.config.ts
+**/ClientSideDiscussionManagement/config.xml

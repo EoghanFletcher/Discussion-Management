@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>view-employee</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<app-sign-out></app-sign-out>
+  <app-navigation-menu-btn></app-navigation-menu-btn>
+  <ion-back-button></ion-back-button>
+
+<ion-content>
+  <h1>{{ username }}'s credentials</h1>
+  <ion-item *ngFor="let dataItem of data | keyvalue">{{ dataItem.key }} : {{ dataItem.value }}</ion-item>
+</ion-content>

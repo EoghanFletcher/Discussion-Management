@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Email } from 'src/app/interface/email';
 import { FacadeService } from 'src/app/service/facade.service';
+import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-sent',
@@ -31,7 +32,7 @@ export class SentPage implements OnInit {
   getEmails() {
     console.log("getEmails");
 
-    let url = "http://localhost:8080/api/communication/message";
+    let url = urlComponent + "communication/message";
     let response = this.http.put(url, {"messageType":"SENT"}).subscribe(responseLamdba => { console.log(JSON.stringify(responseLamdba)),
       this.data = responseLamdba,
     console.log("\nPosition 0: " + JSON.stringify(this.data[0])),

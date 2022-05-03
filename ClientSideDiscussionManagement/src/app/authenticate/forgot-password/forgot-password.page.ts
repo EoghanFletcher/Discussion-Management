@@ -5,6 +5,7 @@ import { ForgotPassword } from '../../interface/forgot-password';
 import { AuthenticationService } from '../../service/authentication.service';
 import { DataService } from '../../service/data.service';
 import { FacadeService } from '../../service/facade.service';
+import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-forgot-password',

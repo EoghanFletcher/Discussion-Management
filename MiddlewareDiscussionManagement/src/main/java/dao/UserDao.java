@@ -81,6 +81,7 @@ public class UserDao implements UserDaoInterface {
             System.out.println("documents size(): " + documents.size());
             if (documents.size() == 1) {
                 documentSnapshot = documents.get(0);
+                System.out.println("documentSnapshot: " + documentSnapshot.getData());
             }
         } catch (Exception ex) {
             System.out.println("An exception occurred [getUserDocument], ex: " + ex.getMessage());
@@ -243,5 +244,19 @@ public class UserDao implements UserDaoInterface {
             ex.printStackTrace();
         }
         return listDocumentSnapshot;
+    }
+
+    @Override
+    public String testForConnectivity() {
+        System.out.println("testForConnectivity");
+
+        try {
+                return "Connection established";
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [listUsers], ex: " + ex);
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

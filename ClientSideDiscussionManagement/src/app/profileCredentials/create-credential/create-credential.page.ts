@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SelectedCredential } from 'src/app/interface/selected-credential';
 import { FacadeService } from 'src/app/service/facade.service';
+import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-create-credential',
@@ -38,7 +39,7 @@ export class CreateCredentialPage implements OnInit {
     let chosenKey: string = this.postData.get("chosenKey").value;
     let chosenValue: string = this.postData.get("chosenValue").value;
 
-    let url = "http://localhost:8080/api/credentials/create";
+    let url = urlComponent + "credentials/create";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
                                         "username": this.facadeService.getDataDataService("username"),
                                         "chosenKey": chosenKey,

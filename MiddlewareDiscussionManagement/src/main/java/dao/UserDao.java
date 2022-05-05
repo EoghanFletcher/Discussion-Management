@@ -41,7 +41,7 @@ public class UserDao implements UserDaoInterface {
         try {
             Firestore firestore = Dao.initialiseFirestore();
 
-            future = firestore.collection(databaseCollection).whereEqualTo("uid", uid).get();
+            future = firestore.collection(databaseCollection).whereEqualTo("uId", uid).get();
             documents = future.get().getDocuments();
 
             // Only one value should  be returned
@@ -112,11 +112,16 @@ public class UserDao implements UserDaoInterface {
             documents = future.get().getDocuments();
 
             if (documents.size() == 0) {
-                ApiFuture<WriteResult> writeResultApiFuture = firestore.collection(databaseCollection).document().set(documentData);
+                ApiFuture<WriteResult> writeResultApiFuture = firestore.collection(databaseCollection).document(uid).set(documentData);
+                Thread.sleep(2000);
+                System.out.println("yes: 0");
             }
 
             future = firestore.collection(databaseCollection).whereEqualTo("username", username).get();
             documents = future.get().getDocuments();
+            System.out.println(" document size: " + documents.size());
+
+            System.out.println("username: " + username);
 
             for (DocumentSnapshot document : documents) {
                 if (document.getData().get("username").equals(username)) {
@@ -184,6 +189,7 @@ public class UserDao implements UserDaoInterface {
 
     @Override
     public boolean removeProfileField(String uId, String username, String key, String databaseCollection) {
+        System.out.println("removeProfileField");
         DocumentSnapshot documentSnapshot = null;
         ApiFuture<QuerySnapshot> future = null;
         List<QueryDocumentSnapshot> documents = null;
@@ -202,7 +208,14 @@ public class UserDao implements UserDaoInterface {
 
             Map documentData = null;
             documentData = documentSnapshot.getData();
-            documentData.put(key, FieldValue.delete());
+            System.out.println("data1: " + documentData.entrySet());
+
+            if (documentData.containsKey(key)) {
+                documentData.put(key, FieldValue.delete());
+            }
+            else {
+                return result;
+            }
 
             documentReference = firestore.collection(databaseCollection).document(documentSnapshot.getId());
             writeResultApiFuture = documentReference.update(documentData);

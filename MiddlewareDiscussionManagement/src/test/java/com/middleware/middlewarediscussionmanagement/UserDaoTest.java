@@ -3,24 +3,19 @@ package com.middleware.middlewarediscussionmanagement;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
+import com.sun.source.tree.AssertTree;
 import dao.Dao;
 import dao.UserDao;
-import org.hamcrest.CoreMatchers;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import com.google.firebase.auth.UserRecord;
 import com.google.firebase.auth.UserRecord.CreateRequest;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class UserDaoTest {
     private static UserDao userDao = null;
@@ -28,11 +23,9 @@ public class UserDaoTest {
     private static Firestore firestore = null;
     private static HashMap documentData = null;
     private static UserRecord userRecord = null;
-    private static String uId = null;
     private static boolean result;
     private static DocumentSnapshot documentSnapshot = null;
     private static ApiFuture<QuerySnapshot> future = null;
-    private static List<QueryDocumentSnapshot> documents = null;
     private static List<DocumentSnapshot> listDocumentSnapshot = null;
     private static CollectionReference collectionReference = null;
     private static String databaseCollection = "UserTest";
@@ -61,167 +54,160 @@ public class UserDaoTest {
             documentData.put("email", userRecord.getEmail());
             documentData.put("username", username);
 
+            System.out.println("entryset: " + documentData.entrySet());
+
             collectionReference = firestore.collection(databaseCollection);
-            collectionReference.document().set(documentData);
+//            collectionReference.document().set(documentData);
         }
         catch(Exception ex) {
             System.out.println("An error occurred [setupData], ex: " + ex);
             ex.printStackTrace();
         }
-
     }
 
     @Test
     public void getAuthenticationInstance() {
         System.out.println("getAuthenticationInstance");
 
+        System.out.println("==========");
+        System.out.println("getAuthenticationInstance");
+        System.out.println("==========");
+
         Assert.assertEquals(firebaseAuthInstance, userDao.getAuthenticationInstance());
+
     }
 
     @Test
     public void getUserDocument() {
-        System.out.println("getUserDocument_Valid");
+        System.out.println("getUserDocument");
 
-//        System.out.println("uId: " + userDao.getUserDocument(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData().entrySet());
+        System.out.println("==========");
+        System.out.println("Valid");
+        System.out.println("==========\n");
+
+        System.out.println("==========");
+        System.out.println("register");
+        System.out.println("==========");
+
+
+        System.out.println("uId: " + documentData.get("uId").toString());
+        System.out.println("email: " + documentData.get("email").toString());
+        System.out.println("username: " + documentData.get("username").toString());
+
+        documentSnapshot = userDao.register(documentData.get("uId").toString(), documentData.get("email").toString(), documentData.get("username").toString(), databaseCollection);
+        System.out.println("documentSnapshot: " + documentSnapshot.getData().entrySet());
+        System.out.println("documentData: " + documentData.entrySet());
+        Assert.assertNotNull("The value returned is null", documentSnapshot);
+        Assert.assertTrue("the values are not equal (uId)", documentSnapshot.getData().get("uId").toString().equals(documentData.get("uId").toString()));
+        Assert.assertTrue("the values are not equal (email)", documentSnapshot.getData().get("email").toString().equals(documentData.get("email").toString()));
+        Assert.assertTrue("the values are not equal (username)", documentSnapshot.getData().get("username").toString().equals(documentData.get("username").toString()));
+
+        System.out.println("here1");
+
+        System.out.println("==========");
+        System.out.println("getUserDocumentByUId");
+        System.out.println("==========");
 
         Assert.assertEquals("Documents should be equal", userRecord.getUid(),
                 userDao.getUserDocumentByUId(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData().get("uId"));
 
-        System.out.println("getUserDocument_Invalid");
+        System.out.println("here2");
 
-        Assert.assertNull("Documents should not be equal",
-                userDao.getUserDocumentByUId("fakeUid", "fakeEmail", databaseCollection));
-    }
+        System.out.println("==========");
+        System.out.println("getUserDocumentByEmail");
+        System.out.println("==========");
 
-    @Test
-    public void register() {
-        System.out.println("register_Valid");
+        Assert.assertEquals("Documents should be equal", userRecord.getEmail(),
+                userDao.getUserDocumentByEmail(userRecord.getEmail(), databaseCollection).getData().get("email"));
 
-        documentSnapshot = userDao.register("testRegister", "testRegister@gmail.com", "usernameTest", databaseCollection);
-        Assert.assertNotNull("The value returned is null", documentSnapshot);
-        Assert.assertTrue("the values are not equal", documentSnapshot.getData().get("uId").toString().equals("testRegister"));
+        System.out.println("==========");
+        System.out.println("Invalid");
+        System.out.println("==========\n");
 
-        System.out.println("register_Invalid");
+        System.out.println("==========");
+        System.out.println("register - Existing account");
+        System.out.println("==========");
 
-        // The method should return the user created in the valid method
-        documentSnapshot = userDao.register("testRegister", "testRegister@gmail.com", "usernameTest", databaseCollection);
-        Assert.assertNotNull("The value returned is null", documentSnapshot);
-        Assert.assertTrue("the values are not equal", documentSnapshot.getData().get("uId").toString().equals("testRegister"));
-    }
+        documentSnapshot = userDao.register(documentData.get("uId").toString(), documentData.get("email").toString(), documentData.get("username").toString(), databaseCollection);
+        Assert.assertEquals(documentData.get("uId"), documentSnapshot.get("uId"));
+        Assert.assertEquals(documentData.get("email"), documentSnapshot.get("email"));
+        Assert.assertEquals(documentData.get("username"), documentSnapshot.get("username"));
 
-    @Test
-    public void getUid() {
-        System.out.println("getUid_Valid");
+        System.out.println("==========");
+        System.out.println("getUserDocumentByUId");
+        System.out.println("==========");
 
-        Assert.assertEquals(userRecord.getUid(), userDao.getUId(userRecord.getUid(), firebaseAuthInstance).getUid());
+        Assert.assertNull("Documents should be not equal",
+                userDao.getUserDocumentByUId("invalid", "invalid", databaseCollection));
 
-        System.out.println("getUid_Invalid");
+        System.out.println("==========");
+        System.out.println("getUserDocumentByEmail");
+        System.out.println("==========");
 
-        Assert.assertNull("The value returned is null", userDao.getUId("test", firebaseAuthInstance));
-    }
+        Assert.assertNull("Documents should be not equal",
+                userDao.getUserDocumentByEmail("invalid@emailaddress.com", databaseCollection));
 
-    @Test
-    public void createUpdateProfileField_Valid() {
-        System.out.println("createUpdateProfileField_Valid");
+        System.out.println("==========");
+        System.out.println("createUpdateProfileField - Create");
+        System.out.println("==========");
 
+        Assert.assertTrue((userDao.createUpdateProfileField(documentSnapshot.getData().get("uId").toString(),
+                                                            documentSnapshot.getData().get("username").toString(),
+                                                        "testCredential",
+                                                        "createCredentialTest",
+                                                            databaseCollection)));
 
-        try {
-            System.out.println("\n CREATE_ProfileField_Valid \n");
-            // Create Field
+        System.out.println("==========");
+        System.out.println("createUpdateProfileField - Update");
+        System.out.println("==========");
 
-            Assert.assertEquals("failed to create field", true,
-                    userDao.createUpdateProfileField(userRecord.getUid(), username, key, value, databaseCollection));
-            // Get Data
-            documentData = (HashMap) userDao.getUserDocumentByUId(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData();
-//          future = firestore.collection("UserTest").whereEqualTo("uId", userRecord.getUid()).get();
-//          documentData = (HashMap) future.get().getDocuments().get(0).getData();
-            Assert.assertEquals("failed to retrieve data after create", userRecord.getUid().toString(),
-                    documentData.get("uId").toString());
+        Assert.assertTrue((userDao.createUpdateProfileField(documentSnapshot.getData().get("uId").toString(),
+                                                            documentSnapshot.getData().get("username").toString(),
+                                                            "testCredential",
+                                                            "updateCredentialTest",
+                                                            databaseCollection)));
 
-            Assert.assertEquals("failed to retrieve data after create (check value)", value,
-                    documentData.get(key).toString());
+        System.out.println("==========");
+        System.out.println("removeProfileField");
+        System.out.println("==========");
 
+        Assert.assertTrue((userDao.removeProfileField(documentSnapshot.getData().get("uId").toString(),
+                                                            documentSnapshot.getData().get("username").toString(),
+                                                        "testCredential",
+                                                            databaseCollection)));
 
+        System.out.println("==========");
+        System.out.println("removeProfileField - Does not exist");
+        System.out.println("==========");
 
+        System.out.println("here: " + userDao.removeProfileField(documentSnapshot.getData().get("uId").toString(),
+                documentSnapshot.getData().get("username").toString(),
+                "DoesNotExist",
+                databaseCollection));
 
+        Assert.assertFalse(userDao.removeProfileField(documentSnapshot.getData().get("uId").toString(),
+                documentSnapshot.getData().get("username").toString(),
+                "DoesNotExist",
+                databaseCollection));
 
-
-
-
-            System.out.println("\n UPDATE_ProfileField_Valid \n");
-            // Update
-
-            String updatedValue = "newValue";
-
-            Assert.assertEquals("failed to update field", true,
-                    userDao.createUpdateProfileField(userRecord.getUid(), username, key, updatedValue, databaseCollection));
-
-
-            documentData = (HashMap) userDao.getUserDocumentByUId(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData();
-
-            System.out.println("document data: " + key + ": " + documentData.get(key));
-            System.out.println("updatedValue: " + updatedValue);
-            Assert.assertEquals("failed to retrieve data after update", updatedValue,
-                    documentData.get(key).toString());
-
-
-
-
-
-
-
-
-            System.out.println("\n REMOVE_ProfileField_Valid \n");
-            // Remove
-
-            System.out.println("username: " + username);
-            System.out.println("key: " + key);
-
-            System.out.println("database collection: " + databaseCollection);
-//            Function is slightly broken
-            Assert.assertTrue("failed to remove field",
-                    userDao.removeProfileField(userRecord.getUid(), username, key, databaseCollection));
-
-            // When not using multithreading the program runs on a single thread
-            Thread.sleep(2000);
-
-            future = firestore.collection(databaseCollection).whereEqualTo("uId", userRecord.getUid()).get();
-          Map returnedValue = (HashMap) future.get().getDocuments().get(0).getData();
-            System.out.println("check: " + returnedValue.get(key));
-            Assert.assertNull("failed to retrieve data after update", returnedValue.get(key));
-
-
-
-
-            System.out.println("\n CREATE_ProfileField_Invalid \n");
-
-//        REMINDER uId is never used, remove from method
-            Assert.assertEquals("failed to create field_FakeUsername", false,
-                    userDao.createUpdateProfileField(userRecord.getUid(), "fakeUsername", key, value, databaseCollection));
-        }
-        catch(Exception ex) {
-            System.out.println("An error occurred [createProfileField_Valid], ex: " + ex);
-            ex.printStackTrace();
-        }
-    }
-
-    @Test
-    public void listUsers() {
+        System.out.println("==========");
         System.out.println("listUsers");
+        System.out.println("==========");
 
-        System.out.println("\n listUsers_Valid \n");
+        Assert.assertEquals(1, userDao.listUsers(databaseCollection).size());
 
-        listDocumentSnapshot = userDao.listUsers(databaseCollection);
+        Map collectionData = userDao.listUsers(databaseCollection).get(0).getData();
 
-        Assert.assertEquals("Position 0 returned by listUsers() was not equal to the expected value",
-                "JUnit",
-                listDocumentSnapshot.get(0).getData().get("username"));
+        Assert.assertEquals(collectionData.get("uId"), documentSnapshot.get("uId"));
+        Assert.assertEquals(collectionData.get("email"), documentSnapshot.get("email"));
+        Assert.assertEquals(collectionData.get("username"), documentSnapshot.get("username"));
+    }
 
-        System.out.println("\n listUsers_Invalid \n");
+    @Test
+    public void testForConnectivity() {
+        System.out.println("testForConnectivity");
 
-        Assert.assertNotEquals("Position 0 returned by listUsers() was not equal to the expected value",
-                "usernameFalse",
-                listDocumentSnapshot.get(0).getData().get("username"));
+        Assert.assertEquals("Connection established", userDao.testForConnectivity());
     }
 
 

@@ -6,11 +6,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Draft;
 import com.google.api.services.gmail.model.Message;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.UserRecord;
 import dao.CommunicationDao;
-import dao.Dao;
-import dao.UserDao;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -75,8 +71,8 @@ public class CommunicationDaoTest {
 
 
                 draftData = new HashMap<>();
-                draftData.put("to", "eoghanfletcher1999@gmail.com");
-                draftData.put("from", "eoghanfletcher1999@gmail.com");
+                draftData.put("to", Email.emailAddress);
+                draftData.put("from", Email.emailAddress);
                 draftData.put("subject", "gmail API draft");
                 draftData.put("body", "testDataffffff");
 
@@ -126,15 +122,15 @@ public class CommunicationDaoTest {
                 System.out.println("==========");
 
                 draftData = new HashMap<>();
-                draftData.put("to", "eoghanfletcher1999@gmail.com");
-                draftData.put("from", "eoghanfletcher1999@gmail.com");
+                draftData.put("to", Email.emailAddress);
+                draftData.put("from", Email.emailAddress);
                 draftData.put("subject", "Gmail API Test");
                 draftData.put("body", "Test Data \n I hope this goes to my email address");
 
                 mimeMessage = communicationDao.createMineMessage(draftData, HTTP_TRANSPORT);
 
-                Assert.assertEquals("eoghanfletcher1999@gmail.com", mimeMessage.getFrom()[0].toString());
-                Assert.assertEquals("eoghanfletcher1999@gmail.com", mimeMessage.getAllRecipients()[0].toString());
+                Assert.assertEquals(Email.emailAddress, mimeMessage.getFrom()[0].toString());
+                Assert.assertEquals(Email.emailAddress, mimeMessage.getAllRecipients()[0].toString());
                 Assert.assertEquals("Gmail API Test", mimeMessage.getSubject());
                 Assert.assertEquals("Test Data \n I hope this goes to my email address", mimeMessage.getContent());
 
@@ -166,18 +162,6 @@ public class CommunicationDaoTest {
                 message = communicationDao.sendDraft(service, "me", message.getId());
             } catch (Exception ex) {
                 System.out.println("An error occurred [sendMessage[Test]], ex: " + ex);
-                ex.printStackTrace();
-            }
-        }
-
-        @AfterClass
-        public static void removeTestData() {
-            System.out.println("removeTestData");
-            try {
-
-            }
-            catch(Exception ex) {
-                System.out.println("An error occurred [removeTestData], ex: " + ex);
                 ex.printStackTrace();
             }
         }

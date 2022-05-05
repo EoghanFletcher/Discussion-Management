@@ -44,8 +44,7 @@ public class UserDao implements UserDaoInterface {
             future = firestore.collection(databaseCollection).whereEqualTo("uId", uid).get();
             documents = future.get().getDocuments();
 
-            // Only one value should  be returned
-            System.out.println("documents size(): " + documents.size());
+            // Only one document should  be returned
             if (documents.size() == 1) {
                 documentSnapshot = documents.get(0);
             }
@@ -77,11 +76,9 @@ public class UserDao implements UserDaoInterface {
             future = firestore.collection(databaseCollection).whereEqualTo("email", email).get();
             documents = future.get().getDocuments();
 
-            // Only one value should  be returned
-            System.out.println("documents size(): " + documents.size());
+            // Only one document should  be returned
             if (documents.size() == 1) {
                 documentSnapshot = documents.get(0);
-                System.out.println("documentSnapshot: " + documentSnapshot.getData());
             }
         } catch (Exception ex) {
             System.out.println("An exception occurred [getUserDocument], ex: " + ex.getMessage());
@@ -114,14 +111,10 @@ public class UserDao implements UserDaoInterface {
             if (documents.size() == 0) {
                 ApiFuture<WriteResult> writeResultApiFuture = firestore.collection(databaseCollection).document(uid).set(documentData);
                 Thread.sleep(2000);
-                System.out.println("yes: 0");
             }
 
             future = firestore.collection(databaseCollection).whereEqualTo("username", username).get();
             documents = future.get().getDocuments();
-            System.out.println(" document size: " + documents.size());
-
-            System.out.println("username: " + username);
 
             for (DocumentSnapshot document : documents) {
                 if (document.getData().get("username").equals(username)) {
@@ -190,6 +183,7 @@ public class UserDao implements UserDaoInterface {
     @Override
     public boolean removeProfileField(String uId, String username, String key, String databaseCollection) {
         System.out.println("removeProfileField");
+
         DocumentSnapshot documentSnapshot = null;
         ApiFuture<QuerySnapshot> future = null;
         List<QueryDocumentSnapshot> documents = null;
@@ -208,7 +202,6 @@ public class UserDao implements UserDaoInterface {
 
             Map documentData = null;
             documentData = documentSnapshot.getData();
-            System.out.println("data1: " + documentData.entrySet());
 
             if (documentData.containsKey(key)) {
                 documentData.put(key, FieldValue.delete());
@@ -243,11 +236,8 @@ public class UserDao implements UserDaoInterface {
             future = firestore.collection(databaseCollection).get();
             documents = future.get().getDocuments();
 
-            System.out.println("documents size(): " + documents.size());
-
             listDocumentSnapshot = new ArrayList<>();
             for (DocumentSnapshot document: documents) {
-                System.out.println("document: " + document.getData());
                     listDocumentSnapshot.add(document);
             }
 
@@ -263,9 +253,7 @@ public class UserDao implements UserDaoInterface {
     public String testForConnectivity() {
         System.out.println("testForConnectivity");
 
-        try {
-                return "Connection established";
-        }
+        try { return "Connection established"; }
         catch (Exception ex) {
             System.out.println("An exception occurred [listUsers], ex: " + ex);
             ex.printStackTrace();

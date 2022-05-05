@@ -4,7 +4,6 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
-import com.sun.source.tree.AssertTree;
 import dao.Dao;
 import dao.UserDao;
 import org.junit.AfterClass;
@@ -14,7 +13,6 @@ import org.junit.Test;
 import com.google.firebase.auth.UserRecord.CreateRequest;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class UserDaoTest {
@@ -23,15 +21,11 @@ public class UserDaoTest {
     private static Firestore firestore = null;
     private static HashMap documentData = null;
     private static UserRecord userRecord = null;
-    private static boolean result;
     private static DocumentSnapshot documentSnapshot = null;
     private static ApiFuture<QuerySnapshot> future = null;
-    private static List<DocumentSnapshot> listDocumentSnapshot = null;
     private static CollectionReference collectionReference = null;
     private static String databaseCollection = "UserTest";
     private static String username = "JUnit";
-    String key = "JUnit";
-    String value = "UserTest";
 
     @BeforeClass
     public static void setupData() {
@@ -49,15 +43,11 @@ public class UserDaoTest {
 
             firestore = Dao.initialiseFirestore();
 
-
             documentData.put("uId", userRecord.getUid());
             documentData.put("email", userRecord.getEmail());
             documentData.put("username", username);
 
-            System.out.println("entryset: " + documentData.entrySet());
-
             collectionReference = firestore.collection(databaseCollection);
-//            collectionReference.document().set(documentData);
         }
         catch(Exception ex) {
             System.out.println("An error occurred [setupData], ex: " + ex);
@@ -74,12 +64,11 @@ public class UserDaoTest {
         System.out.println("==========");
 
         Assert.assertEquals(firebaseAuthInstance, userDao.getAuthenticationInstance());
-
     }
 
     @Test
-    public void getUserDocument() {
-        System.out.println("getUserDocument");
+    public void authenticateAndCredentials() {
+        System.out.println("authenticateAndCredentials");
 
         System.out.println("==========");
         System.out.println("Valid");
@@ -89,20 +78,11 @@ public class UserDaoTest {
         System.out.println("register");
         System.out.println("==========");
 
-
-        System.out.println("uId: " + documentData.get("uId").toString());
-        System.out.println("email: " + documentData.get("email").toString());
-        System.out.println("username: " + documentData.get("username").toString());
-
         documentSnapshot = userDao.register(documentData.get("uId").toString(), documentData.get("email").toString(), documentData.get("username").toString(), databaseCollection);
-        System.out.println("documentSnapshot: " + documentSnapshot.getData().entrySet());
-        System.out.println("documentData: " + documentData.entrySet());
         Assert.assertNotNull("The value returned is null", documentSnapshot);
         Assert.assertTrue("the values are not equal (uId)", documentSnapshot.getData().get("uId").toString().equals(documentData.get("uId").toString()));
         Assert.assertTrue("the values are not equal (email)", documentSnapshot.getData().get("email").toString().equals(documentData.get("email").toString()));
         Assert.assertTrue("the values are not equal (username)", documentSnapshot.getData().get("username").toString().equals(documentData.get("username").toString()));
-
-        System.out.println("here1");
 
         System.out.println("==========");
         System.out.println("getUserDocumentByUId");
@@ -110,8 +90,6 @@ public class UserDaoTest {
 
         Assert.assertEquals("Documents should be equal", userRecord.getUid(),
                 userDao.getUserDocumentByUId(userRecord.getUid(), userRecord.getEmail(), databaseCollection).getData().get("uId"));
-
-        System.out.println("here2");
 
         System.out.println("==========");
         System.out.println("getUserDocumentByEmail");
@@ -210,8 +188,6 @@ public class UserDaoTest {
         Assert.assertEquals("Connection established", userDao.testForConnectivity());
     }
 
-
-
     @AfterClass
     public static void removeTestData() {
         System.out.println("removeTestData");
@@ -225,5 +201,4 @@ public class UserDaoTest {
             ex.printStackTrace();
         }
     }
-
 }

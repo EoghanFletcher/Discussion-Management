@@ -14,9 +14,9 @@ public interface GroupTaskDaoInterface {
 
     public boolean createTask(String username, String groupName, String taskName, String taskDescription, String taskType,  /* Date */  String dateTimeOfEvent, String databaseCollection);
 
-    public boolean deactivateTask(String groupName, String taskName);
+    public boolean deactivateTask(String groupName, String taskName, String databaseCollection);
 
-    public ApiFuture<WriteResult> addGroupMember(String email, Firestore firestore, String groupName, String databaseCollection);
+    public boolean addGroupMember(String email, Firestore firestore, String groupName, String databaseCollection);
 
     public List<DocumentSnapshot> listTasks(String groupName, String databaseCollection);
 
@@ -26,7 +26,7 @@ public interface GroupTaskDaoInterface {
 
     public boolean removeRequestToLeave(String groupName, String username, String databaseCollection);
 
-    public ApiFuture<WriteResult> assignAdminPrivileges(Firestore firestore, String groupName, String username);
+    public boolean assignAdminPrivileges(Firestore firestore, String groupName, String username, String databaseCollection);
 
     public DocumentSnapshot listEvents(String databaseCollection);
 }

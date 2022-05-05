@@ -36,19 +36,19 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
                 // Create group
                 documentData.put("groupName", groupName);
                 documentData.put("groupDescription", groupDescription);
-                writeResultApiFuture = firestore.collection("Group").document(groupName).set(documentData);
+                writeResultApiFuture = firestore.collection(databaseCollection).document(groupName).set(documentData);
 
                 // Create Membership
                 groupTaskDao = new GroupTaskDao();
 
-                writeResultApiFuture = groupTaskDao.addGroupMember(username,firestore, groupName, "Group");
-                writeResultApiFuture = groupTaskDao.assignAdminPrivileges(firestore, groupName, username);
+                result = groupTaskDao.addGroupMember(username,firestore, groupName, databaseCollection);
+                if (result) { groupTaskDao.assignAdminPrivileges(firestore, groupName, username, databaseCollection); }
             }
             else {
                 // Update group
                 if (groupDescription != "") {
                     documentData.put("groupDescription", groupDescription);
-                    documentReference = firestore.collection("Group").document(groupName);
+                    documentReference = firestore.collection(databaseCollection).document(groupName);
                     writeResultApiFuture = documentReference.update(documentData);
                 }
             }
@@ -60,14 +60,21 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
         return result;
     }
 
-    public ApiFuture<WriteResult> addGroupMember(String username, Firestore firestore, String groupName, String databaseCollection) {
+    public boolean addGroupMember(String username, Firestore firestore, String groupName, String databaseCollection) {
         System.out.println("addGroupMember");
 
         ApiFuture<WriteResult> writeResultApiFuture = null;
+        ApiFuture<QuerySnapshot> future = null;
+        List<QueryDocumentSnapshot> documents = null;
+        DocumentReference documentReference = null;
+        ApiFuture<DocumentSnapshot> apiFutureDocumentSnapshot = null;
+        DocumentSnapshot documentSnapshot = null;
+        Map dataMap = null;
+        boolean result = false;
 
         try {
 //            groupData.put("RequestToLeave", Map.of(username, username));
-//            writeResultApiFuture = firestore.collection("Group").document(groupName).update(groupData);
+//            writeResultApiFuture = firestore.collection(databaseCollection").document(groupName).update(groupData);
 
 
 
@@ -75,10 +82,21 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             membershipData.put("Membership." + username, Map.of(username, username));
 //            membershipData.put("Membership." + username, username);
             writeResultApiFuture = firestore.collection(databaseCollection).document(groupName).update(membershipData);
+
+            Thread.sleep(2000);
+            documentReference = firestore.collection(databaseCollection).document(groupName);
+            apiFutureDocumentSnapshot = documentReference.get();
+            documentSnapshot = apiFutureDocumentSnapshot.get();
+            dataMap = documentSnapshot.getData();
+            Thread.sleep(2000);
+
+            if (((Map) dataMap.get("Membership")).containsKey(username)) {
+                result = true;
+            }
         } catch(Exception ex) {
             System.out.println("An exception occurred [addGroupMember], ex: " + ex);
         }
-        return writeResultApiFuture;
+        return result;
     }
 
     @Override
@@ -106,7 +124,18 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             documentData.put("createdBy", username);
             documentData.put("status", "active");
 
-            writeResultApiFuture = collectionReferenceTask.document().set(documentData);
+            writeResultApiFuture = collectionReferenceTask.document(taskName).set(documentData);
+
+            Thread.sleep(2000);
+
+                future = collectionReferenceTask.get();
+                documents = future.get().getDocuments();
+
+                for (DocumentSnapshot document: documents) {
+                    if (document.getData().get("taskName").equals(taskName)) {
+                        result = true;
+                    }
+                }
         } catch(Exception ex) {
             System.out.println("An exception occurred [createTask], ex: " + ex);
         }
@@ -114,22 +143,22 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
     }
 
     @Override
-    public boolean deactivateTask(String groupName, String taskName) {
+    public boolean deactivateTask(String groupName, String taskName, String databaseCollection) {
         System.out.println("deactivateTask");
         DocumentSnapshot documentSnapshot = null;
 //        ApiFuture<QuerySnapshot> future = null;
         DocumentReference documentReference = null;
         List<QueryDocumentSnapshot> documents = null;
-        Future<DocumentSnapshot> apiFutureFutre = null;
+        Future<DocumentSnapshot> apiFutureFuture = null;
         CollectionReference collectionReference = null;
 
         ApiFuture<QuerySnapshot> future = null;
         ApiFuture<WriteResult> writeResultApiFuture = null;
-
+        boolean result = false;
 
         try {
             Firestore firestore = Dao.initialiseFirestore();
-            collectionReference = firestore.collection("Group").document(groupName).collection("Task");
+            collectionReference = firestore.collection(databaseCollection).document(groupName).collection("Task");
             future = collectionReference.get();
             documents = future.get().getDocuments();
 
@@ -145,6 +174,18 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             documentReference = collectionReference.document((documentSnapshot.getId()));
             writeResultApiFuture = documentReference.update(documentData);
 
+
+            Thread.sleep(2000);
+
+            future = collectionReference.get();
+            documents = future.get().getDocuments();
+
+            for (DocumentSnapshot document: documents) {
+                if (document.getData().get("taskName").equals(taskName)) {
+                    result = true;
+                }
+            }
+
             for (DocumentSnapshot document: documents) {
                 documentSnapshot = document;
             }
@@ -152,7 +193,7 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             System.out.println("An exception occurred [deactivateTask], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
-        return false;
+        return result;
     }
 
     @Override
@@ -193,6 +234,7 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             future = collectionReferenceTask.get();
             documents = future.get().getDocuments();
 
+            System.out.println("taskList size: " + documents.size());
             listDocumentSnapshot = new ArrayList<>();
             for (DocumentSnapshot document: documents) {
 
@@ -206,9 +248,9 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
 
 //                System.out.println("simpleDateFormat: " + simpleDateFormat);
 
-            if (document.get("status").equals("active") /* && currentDate.after(dateTimeOfEvent) */) {
-                listDocumentSnapshot.add(document);
-            }
+                if (document.get("status").equals("active") /* && currentDate.after(dateTimeOfEvent) */) {
+                    listDocumentSnapshot.add(document);
+                }
             }
         } catch(Exception ex) {
             System.out.println("An exception occurred [listTasks], ex: " + ex);
@@ -221,13 +263,32 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
         System.out.println("requestToLeaveGroup");
 
         ApiFuture<WriteResult> writeResultApiFuture = null;
+        DocumentReference documentReference = null;
+        ApiFuture<DocumentSnapshot> apiFutureDocumentSnapshot = null;
+        DocumentSnapshot documentSnapshot = null;
+
         boolean result = false;
+        Map dataMap = null;
 
         try {
             Firestore firestore = Dao.initialiseFirestore();
             HashMap groupData = new HashMap();
             groupData.put("RequestToLeave", Map.of(username, username));
-            writeResultApiFuture = firestore.collection("Group").document(groupName).update(groupData);
+            writeResultApiFuture = firestore.collection(databaseCollection).document(groupName).update(groupData);
+
+            Thread.sleep(2000);
+            documentReference = firestore.collection(databaseCollection).document(groupName);
+            apiFutureDocumentSnapshot = documentReference.get();
+            documentSnapshot = apiFutureDocumentSnapshot.get();
+            dataMap = documentSnapshot.getData();
+            Thread.sleep(2000);
+
+
+            System.out.println("entryset: " + dataMap.entrySet());
+
+            if (((Map) dataMap.get("RequestToLeave")).containsKey(username)) {
+                result = true;
+            }
         } catch(Exception ex) {
             System.out.println("An exception occurred [requestToLeaveGroup], ex: " + ex);
         }
@@ -241,10 +302,14 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
         ApiFuture<WriteResult> writeResultApiFuture = null;
         boolean result = false;
         boolean removeRequest = false;
+        DocumentReference documentReference = null;
+        ApiFuture<DocumentSnapshot> apiFutureDocumentSnapshot = null;
+        DocumentSnapshot documentSnapshot = null;
+        Map dataMap = null;
 
         try {
             System.out.println("1");
-            removeRequest = removeRequestToLeave(groupName, username, "Group");
+            removeRequest = removeRequestToLeave(groupName, username, databaseCollection);
             System.out.println("2");
             System.out.println("removeRequest2: " + removeRequest);
 
@@ -256,7 +321,19 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
                 // If the user is not an administrator nothing will happen
                 groupData.put("Administration." + username, FieldValue.delete());
                 groupData.put("Membership." + username, FieldValue.delete());
-                writeResultApiFuture = firestore.collection("Group").document(groupName).update(groupData);
+                writeResultApiFuture = firestore.collection(databaseCollection).document(groupName).update(groupData);
+
+
+                Thread.sleep(2000);
+                documentReference = firestore.collection(databaseCollection).document(groupName);
+                apiFutureDocumentSnapshot = documentReference.get();
+                documentSnapshot = apiFutureDocumentSnapshot.get();
+                dataMap = documentSnapshot.getData();
+                Thread.sleep(2000);
+
+                if (!dataMap.containsKey(username)) {
+                    result = true;
+                }
             }
         } catch(Exception ex) {
             System.out.println("An exception occurred [grantRequestToLeave], ex: " + ex);
@@ -271,6 +348,10 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
 
         ApiFuture<WriteResult> writeResultApiFuture = null;
         boolean result = false;
+        DocumentReference documentReference = null;
+        ApiFuture<DocumentSnapshot> apiFutureDocumentSnapshot = null;
+        DocumentSnapshot documentSnapshot = null;
+        Map dataMap = null;
 
         try {
             Firestore firestore = Dao.initialiseFirestore();
@@ -278,9 +359,21 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             HashMap groupData = new HashMap();
             groupData.put("RequestToLeave." + username, FieldValue.delete());
 
-            writeResultApiFuture = firestore.collection("Group").document(groupName).update(groupData);
+            writeResultApiFuture = firestore.collection(databaseCollection).document(groupName).update(groupData);
 
-            result = true;
+
+            Thread.sleep(2000);
+            documentReference = firestore.collection(databaseCollection).document(groupName);
+            apiFutureDocumentSnapshot = documentReference.get();
+            documentSnapshot = apiFutureDocumentSnapshot.get();
+            dataMap = documentSnapshot.getData();
+            Thread.sleep(2000);
+
+            System.out.println("entryset: " + dataMap.entrySet());
+
+            if (!dataMap.containsKey(username)) {
+                result = true;
+            }
 
         } catch(Exception ex) {
             System.out.println("An exception occurred [removeRequestToLeave], ex: " + ex);
@@ -290,20 +383,38 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
     }
 
     @Override
-    public ApiFuture<WriteResult> assignAdminPrivileges(Firestore firestore, String groupName, String username) {
+    public boolean assignAdminPrivileges(Firestore firestore, String groupName, String username, String databaseCollection) {
         System.out.println("assignAdminPrivileges");
 
         ApiFuture<WriteResult> writeResultApiFuture = null;
+        ApiFuture<QuerySnapshot> future = null;
+        List<QueryDocumentSnapshot> documents = null;
+        DocumentReference documentReference = null;
+        ApiFuture<DocumentSnapshot> apiFutureDocumentSnapshot = null;
+        DocumentSnapshot documentSnapshot = null;
         boolean success = false;
+        Map dataMap = null;
 
         try {
             HashMap adminData = new HashMap();
-            adminData.put("Administration", Map.of(username, username));
-            writeResultApiFuture = firestore.collection("Group").document(groupName).update(adminData);
+            adminData.put("Administration." + username, Map.of(username, username));
+            writeResultApiFuture = firestore.collection(databaseCollection).document(groupName).update(adminData);
+
+
+            Thread.sleep(2000);
+            documentReference = firestore.collection(databaseCollection).document(groupName);
+            apiFutureDocumentSnapshot = documentReference.get();
+            documentSnapshot = apiFutureDocumentSnapshot.get();
+            dataMap = documentSnapshot.getData();
+            Thread.sleep(2000);
+
+            if (((Map) dataMap.get("Administration")).containsKey(username)) {
+                success = true;
+            }
         } catch(Exception ex) {
             System.out.println("An exception occurred [assignAdminPrivileges], ex: " + ex);
         }
-        return writeResultApiFuture;
+        return success;
     }
 
     @Override

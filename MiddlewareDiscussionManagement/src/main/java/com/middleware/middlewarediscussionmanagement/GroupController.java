@@ -12,6 +12,7 @@ import java.util.*;
 @RequestMapping(path = "/api/groupAndTask")
 public class GroupController {
     GroupTaskDao groupTaskDao = new GroupTaskDao();
+    String databaseCollection = "Group";
 
     @PostMapping(path = "/createGroup")
     public void createGroup(@RequestBody HashMap data) {
@@ -24,7 +25,7 @@ public class GroupController {
         String groupNameString = (String) data.get("groupName");
         String groupDescriptionString = (String) data.get("groupDescription");
 
-        groupTaskDao.createUpdateGroup(uIdString, usernameString, groupNameString, groupDescriptionString, "Group");
+        groupTaskDao.createUpdateGroup(uIdString, usernameString, groupNameString, groupDescriptionString, databaseCollection);
     }
 
     @PostMapping(path = "/listGroups")
@@ -37,7 +38,7 @@ public class GroupController {
         String uIdString = (String) data.get("uId");
         String username = (String) data.get("username");
 
-        listDocumentSnapshot = groupTaskDao.listGroups(uIdString, username, "Group");
+        listDocumentSnapshot = groupTaskDao.listGroups(uIdString, username, databaseCollection);
 
         documentListData = new ArrayList();
         for (DocumentSnapshot document : listDocumentSnapshot) { documentListData.add(document.getData()); }
@@ -56,7 +57,7 @@ public class GroupController {
 //        Date dateTimeOfEvent = (Date) data.get("dateTimeOfEvent");
         String dateTimeOfEvent = (String) data.get("dateTimeOfEvent");
 
-        boolean response = groupTaskDao.createTask(usernameString, groupNameString, taskNameString, taskDescriptionString, taskTypeString, dateTimeOfEvent, "Group");
+        boolean response = groupTaskDao.createTask(usernameString, groupNameString, taskNameString, taskDescriptionString, taskTypeString, dateTimeOfEvent, databaseCollection);
 
         System.out.println("response: " + response);
 
@@ -72,7 +73,7 @@ public class GroupController {
         String groupName = (String) data.get("groupName");
         String taskName = (String) data.get("taskName");
 
-        groupTaskDao.deactivateTask(groupName, taskName);
+        groupTaskDao.deactivateTask(groupName, taskName, databaseCollection);
     }
 
     @PostMapping(path = "/listTasks")
@@ -84,7 +85,7 @@ public class GroupController {
 
         String groupNameString = (String) data.get("groupName");
 
-        listDocumentSnapshot = groupTaskDao.listTasks(groupNameString, "Group");
+        listDocumentSnapshot = groupTaskDao.listTasks(groupNameString, databaseCollection);
 
         documentListData = new ArrayList();
         for (DocumentSnapshot document : listDocumentSnapshot) { documentListData.add(document.getData()); }
@@ -94,10 +95,11 @@ public class GroupController {
     @GetMapping(path = "/listEvents")
     public Map getEvents() {
         System.out.println("listEvents");
+        String eventCollection = "Event";
 
         DocumentSnapshot documentSnapshot = null;
 
-        documentSnapshot = groupTaskDao.listEvents("Event");
+        documentSnapshot = groupTaskDao.listEvents(eventCollection);
 
         return documentSnapshot.getData();
     }
@@ -113,7 +115,7 @@ public class GroupController {
 
         try {
 
-            result = groupTaskDao.requestToLeaveGroup(groupNameString, usernameString, "Group");
+            result = groupTaskDao.requestToLeaveGroup(groupNameString, usernameString, databaseCollection);
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [requestToLeaveGroup], ex: " + ex);
@@ -137,15 +139,15 @@ public class GroupController {
             String verdictString = (String) data.get("verdict");
 
             if (verdictString.equals("grant")) {
-                result = groupTaskDao.grantRequestToLeave(groupNameString, usernameString, "Group");
+                result = groupTaskDao.grantRequestToLeave(groupNameString, usernameString, databaseCollection);
             }
             else {
                 // Deny
                 System.out.println("deny");
-                result = groupTaskDao.removeRequestToLeave(groupNameString, usernameString, "Group");
+                result = groupTaskDao.removeRequestToLeave(groupNameString, usernameString, databaseCollection);
             }
 
-            result = groupTaskDao.removeRequestToLeave(groupNameString, usernameString, "Group");
+            result = groupTaskDao.removeRequestToLeave(groupNameString, usernameString, databaseCollection);
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [requestToLeaveGroup], ex: " + ex);
@@ -169,7 +171,7 @@ public class GroupController {
             String usernameString = (String) data.get("username");
             String groupNameString = (String) data.get("groupName");
 
-                /* result = */ groupTaskDao.addGroupMember(usernameString, firestore, groupNameString, "Group");
+                /* result = */ groupTaskDao.addGroupMember(usernameString, firestore, groupNameString, databaseCollection);
 
         }
         catch (Exception ex) {

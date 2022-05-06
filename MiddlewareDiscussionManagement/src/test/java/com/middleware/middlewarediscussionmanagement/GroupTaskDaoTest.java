@@ -9,7 +9,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import dao.Dao;
 import dao.GroupTaskDao;
-import dao.UserDao;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -50,8 +49,6 @@ public class GroupTaskDaoTest {
             documentData.put("email", userRecord.getEmail());
             documentData.put("username", username);
 
-            System.out.println("entryset: " + documentData.entrySet());
-
             collectionReference = firestore.collection(databaseCollection);
         }
         catch(Exception ex) {
@@ -79,10 +76,10 @@ public class GroupTaskDaoTest {
         System.out.println("==========");
 
         Assert.assertTrue(groupTaskDao.createUpdateGroup(documentData.get("uId").toString(),
-                username,
-                groupName,
-                "testGroupDescriptionUpdated",
-                databaseCollection));
+                                                        username,
+                                                        groupName,
+                                        "testGroupDescriptionUpdated",
+                                                    databaseCollection));
 
         System.out.println("==========");
         System.out.println("createTask");
@@ -150,7 +147,7 @@ public class GroupTaskDaoTest {
         System.out.println("removeTestData");
         try {
             documentData = new HashMap();
-//            firestore.recursiveDelete(collectionReference);
+            firestore.recursiveDelete(collectionReference);
             firebaseAuthInstance.deleteUser(userRecord.getUid());
         }
         catch(Exception ex) {

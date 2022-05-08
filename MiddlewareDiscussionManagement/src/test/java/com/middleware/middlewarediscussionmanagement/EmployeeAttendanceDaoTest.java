@@ -11,16 +11,13 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EmployeeAttendanceDaoTest {
     private static EmployeeAttendanceDao employeeAttendanceDao = null;
     private static FirebaseAuth firebaseAuthInstance = null;
     private static Firestore firestore = null;
-    private static HashMap documentData = null;
+    private static Map documentData = null;
     private static UserRecord userRecord = null;
     private static UserRecord userRecord2 = null;
     private static UserRecord userRecord3 = null;
@@ -32,7 +29,6 @@ public class EmployeeAttendanceDaoTest {
     private static List<DocumentSnapshot> listDocumentSnapshot = null;
     private static CollectionReference collectionReference = null;
     private static String databaseCollection = "EmployeeAttendanceTest";
-    CollectionReference dateCollection = null;
     private static String username = "JUnit";
     String key = "JUnit";
     String value = "UserTest";
@@ -46,9 +42,8 @@ public class EmployeeAttendanceDaoTest {
         Dao.initialiseFirebaseConnection();
 
         try {
-            employeeAttendanceDao = new EmployeeAttendanceDao();
-
             documentData = new HashMap();
+            employeeAttendanceDao = new EmployeeAttendanceDao();
             firebaseAuthInstance = FirebaseAuth.getInstance();
 
             firebaseAuthInstance.createUser(new UserRecord.CreateRequest().setEmail("JUnit@gmail.com").setPassword("JUnit@gmail.com"));
@@ -64,13 +59,8 @@ public class EmployeeAttendanceDaoTest {
             userRecord3 = firebaseAuthInstance.getUserByEmail("junit@gmail.com3");
             Thread.sleep(2000);
 
-
-            System.out.println("userRecord.getUid(): " + userRecord.getUid());
             uId = userRecord.getUid();
-            System.out.println("uId: " + uId);
-
             firestore = Dao.initialiseFirestore();
-
             collectionReference = firestore.collection(databaseCollection);
         } catch (Exception ex) {
             System.out.println("An error occurred [setupData], ex: " + ex);
@@ -78,24 +68,11 @@ public class EmployeeAttendanceDaoTest {
         }
     }
 
-//    @Test
-    public void getDate() {
-        System.out.println("getDate");
-
-        System.out.println("here: " + LocalDate.now().toString());
-        System.out.println("here2: " + employeeAttendanceDao.getCurrentDate().toString());
-
-        Assert.assertTrue(LocalDate.now().toString().contains(employeeAttendanceDao.getCurrentDate().toString()));
-    }
-
     @Test
     public void attendanceFunctionality() {
         System.out.println("attendanceFunctionality");
 
         try {
-
-            System.out.println("attendanceFunctionality");
-
             System.out.println("==========");
             System.out.println("addMasterList - None in list");
             System.out.println("==========");
@@ -109,101 +86,92 @@ public class EmployeeAttendanceDaoTest {
             System.out.println("==========");
 
             documentSnapshot = employeeAttendanceDao.addMasterList(username + "2", databaseCollection);
-            System.out.println("size 3 : " + documentSnapshot.getData().entrySet());
             Assert.assertTrue(documentSnapshot.getData().size() == 2);
-
-
 
             System.out.println("==========");
             System.out.println("copyMasterList");
             System.out.println("==========");
 
-            System.out.println("first: " + employeeAttendanceDao.copyMasterList(databaseCollection).getData());
-            System.out.println("second: " + documentSnapshot.getData());
             Thread.sleep(5000);
             Assert.assertTrue(employeeAttendanceDao.copyMasterList(databaseCollection).getData().equals(documentSnapshot.getData()));
             System.out.println("copy master list: " + employeeAttendanceDao.copyMasterList(databaseCollection).getData());
 
             System.out.println("==========");
-            System.out.println("confirmAttendancefff");
+            System.out.println("confirmAttendance");
             System.out.println("==========");
 
             Thread.sleep(5000);
-                System.out.println("here");
-            System.out.println("confirmAttendance: " + employeeAttendanceDao.confirmAttendance(userRecord.getUid(),
+            Assert.assertTrue(employeeAttendanceDao.confirmAttendance(userRecord.getUid(),
                                                                     username,
                                                                     employeeAttendanceDao.copyMasterList(databaseCollection),
-                                                                    databaseCollection).getData());
-                System.out.println("here11");
+                                                                    databaseCollection).getData().containsKey(username));
 
-                System.out.println("==========");
-                System.out.println("searchAttendances");
-                System.out.println("==========");
+            System.out.println("==========");
+            System.out.println("searchAttendances");
+            System.out.println("==========");
 
+            date = employeeAttendanceDao.getCurrentDate();
+            future = firestore.collection(databaseCollection).document("Date").collection(date).get();
+            documents = future.get().getDocuments();
+            documentSnapshot = employeeAttendanceDao.searchAttendances(documents, "Present");
 
-                date = employeeAttendanceDao.getCurrentDate();
-                future = firestore.collection(databaseCollection).document("Date").collection(date).get();
-                documents = future.get().getDocuments();
-                documentSnapshot = employeeAttendanceDao.searchAttendances(documents, "Present");
-            System.out.println("documentSnapshot searchAttendances: " + documentSnapshot);
+            System.out.println("==========");
+            System.out.println("getListOfPresentAbsentEmployees - present");
+            System.out.println("==========");
 
-                System.out.println("==========");
-                System.out.println("getListOfPresentAbsentEmployees - present");
-                System.out.println("==========");
-
-                documentSnapshot = employeeAttendanceDao.getListOfPresentAbsentEmployees("Present", databaseCollection);
+            documentSnapshot = employeeAttendanceDao.getListOfPresentAbsentEmployees("Present", databaseCollection);
             System.out.println(documentSnapshot.getData());
-                Assert.assertTrue(documentSnapshot.getData().containsKey(username));
+            Assert.assertTrue(documentSnapshot.getData().containsKey(username));
 
-                System.out.println("==========");
-                System.out.println("searchAttendances - absent");
-                System.out.println("==========");
+            System.out.println("==========");
+            System.out.println("searchAttendances - absent");
+            System.out.println("==========");
 
-                documentSnapshot = employeeAttendanceDao.getListOfPresentAbsentEmployees("Absent", databaseCollection);
+            documentSnapshot = employeeAttendanceDao.getListOfPresentAbsentEmployees("Absent", databaseCollection);
             System.out.println(documentSnapshot.getData());
             Assert.assertTrue(documentSnapshot.getData().containsKey(username + "2"));
 
-                System.out.println("==========");
-                System.out.println("getListOfAllEmployees");
-                System.out.println("==========");
+            System.out.println("==========");
+            System.out.println("getListOfAllEmployees");
+            System.out.println("==========");
 
-                documentSnapshot = employeeAttendanceDao.getListOfAllEmployees(databaseCollection);
-            System.out.println(documentSnapshot.getData());
+            documentSnapshot = employeeAttendanceDao.getListOfAllEmployees(databaseCollection);
             Assert.assertTrue(documentSnapshot.getData().containsKey(username));
-                Assert.assertTrue(documentSnapshot.getData().containsKey(username + "2"));
-                        System.out.println("==========");
-                        System.out.println("createNode - present");
-                        System.out.println("==========");
+            Assert.assertTrue(documentSnapshot.getData().containsKey(username + "2"));
 
-                        Assert.assertTrue(employeeAttendanceDao.createNode(username, title, message, "Present", databaseCollection));
+            System.out.println("==========");
+            System.out.println("createNode - present");
+            System.out.println("==========");
+
+            Assert.assertTrue(employeeAttendanceDao.createNode(username, title, message, "Present", databaseCollection));
 
             System.out.println("==========");
             System.out.println("createNode - Absent");
             System.out.println("==========");
 
-                        Assert.assertTrue(employeeAttendanceDao.createNode(username + "2", title, message, "Absent", databaseCollection));
+            Assert.assertTrue(employeeAttendanceDao.createNode(username + "2", title, message, "Absent", databaseCollection));
 
-                        System.out.println("==========");
-                        System.out.println("getNotes");
-                        System.out.println("==========");
+            System.out.println("==========");
+            System.out.println("getNotes Present");
+            System.out.println("==========");
 
-                        documentSnapshot = employeeAttendanceDao.getNotes(username, "Present", databaseCollection);
-                        Assert.assertTrue(documentSnapshot.getData().containsKey(username));
+            documentSnapshot = employeeAttendanceDao.getNotes(username, "Present", databaseCollection);
+            Assert.assertTrue(documentSnapshot.getData().containsKey(username));
 
+            System.out.println("==========");
+            System.out.println("getNotes Absent");
+            System.out.println("==========");
 
-                        documentSnapshot = employeeAttendanceDao.getNotes(username, "Absent", databaseCollection);
-                        Assert.assertTrue(documentSnapshot.getData().containsKey(username + "2"));
+            documentSnapshot = employeeAttendanceDao.getNotes(username, "Absent", databaseCollection);
+            Assert.assertTrue(documentSnapshot.getData().containsKey(username + "2"));
 
-                        System.out.println("==========");
-                        System.out.println("createMap");
-                        System.out.println("==========");
+            System.out.println("==========");
+            System.out.println("createMap");
+            System.out.println("==========");
 
-                        Map createdMap = null;
-
-                        createdMap = employeeAttendanceDao.createMap(userRecord.getUid(), username);
-                        Assert.assertTrue(createdMap.containsKey(username));
+            documentData = employeeAttendanceDao.createMap(userRecord.getUid(), username);
+            Assert.assertTrue(documentData.containsKey(username));
         }
-
         catch (Exception ex) {
             System.out.println("An error occurred [attendanceFunctionality], ex: " + ex);
             ex.printStackTrace();

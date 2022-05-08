@@ -1,15 +1,10 @@
 package dao;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
+
 import com.google.api.core.ApiFuture;
-import com.google.auth.oauth2.AccessToken;
-import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -20,10 +15,8 @@ public class UserDao implements UserDaoInterface {
 
         FirebaseAuth firebaseAuthInstance = null;
 
-        try {
-            firebaseAuthInstance = FirebaseAuth.getInstance();
-
-        } catch (Exception ex) {
+        try { firebaseAuthInstance = FirebaseAuth.getInstance(); }
+        catch (Exception ex) {
             System.out.println("An exception occurred [getAuthenticationInstance], ex:" + ex);
             ex.printStackTrace();
         }
@@ -45,17 +38,12 @@ public class UserDao implements UserDaoInterface {
             documents = future.get().getDocuments();
 
             // Only one document should  be returned
-            if (documents.size() == 1) {
-                documentSnapshot = documents.get(0);
-            }
+            if (documents.size() == 1) { documentSnapshot = documents.get(0); }
             else {
-                for (DocumentSnapshot document : documents) {
-                    if (document.get("uid").equals(uid)) {
-                        documentSnapshot = document;
-                    }
-                }
+                for (DocumentSnapshot document : documents) { if (document.get("uid").equals(uid)) { documentSnapshot = document; } }
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             System.out.println("An exception occurred [getUserDocument], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -77,10 +65,9 @@ public class UserDao implements UserDaoInterface {
             documents = future.get().getDocuments();
 
             // Only one document should  be returned
-            if (documents.size() == 1) {
-                documentSnapshot = documents.get(0);
-            }
-        } catch (Exception ex) {
+            if (documents.size() == 1) { documentSnapshot = documents.get(0); }
+        }
+        catch (Exception ex) {
             System.out.println("An exception occurred [getUserDocument], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -103,7 +90,6 @@ public class UserDao implements UserDaoInterface {
             documentData.put("email", email);
             documentData.put("username", username);
 
-
             // Check if document exists
             future = firestore.collection(databaseCollection).whereEqualTo("username", username).get();
             documents = future.get().getDocuments();
@@ -121,7 +107,8 @@ public class UserDao implements UserDaoInterface {
                     documentSnapshot = document;
                 }
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             System.out.println("An exception occurred [register], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -129,17 +116,16 @@ public class UserDao implements UserDaoInterface {
         return documentSnapshot;
     }
 
-
     @Override
     public UserRecord getUId(String uId, FirebaseAuth firebaseAuthInstance) {
         DocumentSnapshot documentSnapshot = null;
         ApiFuture result = null;
         UserRecord userRecord = null;
 
-        try {
-            userRecord = firebaseAuthInstance.getUser(uId);
-        } catch (Exception ex) {
+        try { userRecord = firebaseAuthInstance.getUser(uId); }
+        catch (Exception ex) {
             System.out.println("An exception occurred [getUId], ex: " + ex);
+            ex.printStackTrace();
         }
         return userRecord;
     }
@@ -160,23 +146,19 @@ public class UserDao implements UserDaoInterface {
             future = firestore.collection(databaseCollection).whereEqualTo("username", username).get();
             documents = future.get().getDocuments();
 
-            for (DocumentSnapshot document : documents) {
-
-                if (document.get("username").equals(username)) {
-                    documentSnapshot = document;
-                }
-            }
+            for (DocumentSnapshot document : documents) { if (document.get("username").equals(username)) {  documentSnapshot = document; } }
 
             HashMap documentData = new HashMap();
             documentData.put(key, value);
             documentReference = firestore.collection(databaseCollection).document(documentSnapshot.getId());
 
             writeResultApiFuture = documentReference.update(documentData);
-        } catch(Exception ex) {
-            System.out.println("An exception occurred [createProfileField], ex: " + ex);
+            if (writeResultApiFuture != null) { result = true; }
         }
-
-        if (writeResultApiFuture != null) { result = true; }
+        catch(Exception ex) {
+            System.out.println("An exception occurred [createProfileField], ex: " + ex);
+            ex.printStackTrace();
+        }
         return result;
     }
 
@@ -191,33 +173,28 @@ public class UserDao implements UserDaoInterface {
         DocumentReference documentReference = null;
         ApiFuture<WriteResult> writeResultApiFuture = null;
         boolean result = false;
+        Map documentData = null;
 
         try {
             Firestore firestore = Dao.initialiseFirestore();
             // Get snapshot
             future = firestore.collection(databaseCollection).whereEqualTo("uId", uId).get();
             documents = future.get().getDocuments();
-            for (DocumentSnapshot document : documents) { if (document.get("uId").equals(uId)) { documentSnapshot = document; }
-            }
+            for (DocumentSnapshot document : documents) { if (document.get("uId").equals(uId)) { documentSnapshot = document; } }
 
-            Map documentData = null;
             documentData = documentSnapshot.getData();
 
-            if (documentData.containsKey(key)) {
-                documentData.put(key, FieldValue.delete());
-            }
-            else {
-                return result;
-            }
+            if (documentData.containsKey(key)) { documentData.put(key, FieldValue.delete()); }
+            else { return result;  }
 
             documentReference = firestore.collection(databaseCollection).document(documentSnapshot.getId());
             writeResultApiFuture = documentReference.update(documentData);
-        } catch (Exception ex) {
+
+            if (writeResultApiFuture != null) { result = true; }
+        }
+        catch (Exception ex) {
             System.out.println("An exception occurred [removeProfileField], ex: " + ex.getMessage());
             ex.printStackTrace();
-        }
-        if (writeResultApiFuture != null) {
-            result = true;
         }
         return result;
     }
@@ -237,10 +214,7 @@ public class UserDao implements UserDaoInterface {
             documents = future.get().getDocuments();
 
             listDocumentSnapshot = new ArrayList<>();
-            for (DocumentSnapshot document: documents) {
-                    listDocumentSnapshot.add(document);
-            }
-
+            for (DocumentSnapshot document: documents) { listDocumentSnapshot.add(document); }
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [listUsers], ex: " + ex);

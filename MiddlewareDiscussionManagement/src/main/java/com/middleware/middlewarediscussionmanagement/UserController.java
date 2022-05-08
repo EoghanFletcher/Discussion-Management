@@ -35,7 +35,6 @@ public class UserController {
             if (userRecordUId != null) {
                 if (usernameString == null) {
                     System.out.println("login");
-//                    documentSnapshot = userDao.getUserDocumentByUId(uIdString, emailString, databaseCollection); }
                     documentSnapshot = userDao.getUserDocumentByEmail(emailString, databaseCollection); }
                 else {
                     System.out.println("register");
@@ -46,36 +45,6 @@ public class UserController {
             System.out.println("An exception occurred [authenticate], ex: " + ex);
             ex.printStackTrace();
         }
-
-        return  documentSnapshot.getData();
-    }
-
-    // Email password is used ot identify a user's document. It must be created before a user signs in with a provider
-    @PostMapping(path = "/authenticatProvider")
-    public Map authenticateProvider(@RequestBody HashMap data) {
-
-        DocumentSnapshot documentSnapshot = null;
-        UserRecord userRecord = null;
-
-        try {
-            String uIdString = (String) data.get("uId");
-            String emailString = (String) data.get("email");
-            String usernameString = (String) data.get("username");
-
-            FirebaseAuth firebaseAuth = userDao.getAuthenticationInstance();
-            UserRecord userRecordUId = userDao.getUId(uIdString, firebaseAuth);
-
-            if (userRecordUId != null) {
-                if (usernameString == null) {
-                    documentSnapshot = userDao.getUserDocumentByEmail(emailString, databaseCollection);
-                }
-            }
-        }
-        catch (Exception ex) {
-            System.out.println("An exception occurred [authenticate], ex: " + ex);
-            ex.printStackTrace();
-        }
-
         return  documentSnapshot.getData();
     }
 

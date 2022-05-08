@@ -20,8 +20,8 @@ public class EmployeeAttendanceController {
     public Map confirmAttendance(@RequestBody HashMap data) {
         System.out.println("confirmAttendance");
         DocumentSnapshot documentSnapshot = null;
+
         try {
-            System.out.println("data: " + data.entrySet());
 
             String uIdString = (String) data.get("uId");
             String username = (String) data.get("username");
@@ -29,11 +29,9 @@ public class EmployeeAttendanceController {
             documentSnapshot = employeeAttendance.confirmAttendance(uIdString, username,
                                                                     this.employeeAttendance.copyMasterList(databaseCollection), databaseCollection);
 
-            if (documentSnapshot != null) {
-                return documentSnapshot.getData();
-            }
-
-        }   catch (Exception ex) {
+            if (documentSnapshot != null) { return documentSnapshot.getData(); }
+        }
+        catch (Exception ex) {
             System.out.println("An exception occurred [getDate], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -43,16 +41,14 @@ public class EmployeeAttendanceController {
     @PostMapping(path = "/presentAbsentList")
     public Map presentAbsentList(@RequestBody HashMap data) {
         System.out.println("presentList");
-        try {
-            System.out.println("data: " + data.entrySet());
 
+        try {
             String listType = (String) data.get("listType");
 
-            System.out.println("*******");
             return employeeAttendance.getListOfPresentAbsentEmployees(listType, databaseCollection).getData();
-
-    }   catch (Exception ex) {
-        System.out.println("An exception occurred [presentList], ex: " + ex.getMessage());
+        }
+        catch (Exception ex) {
+        System.out.println("An exception occurred [presentAbsentList], ex: " + ex.getMessage());
         ex.printStackTrace();
     }
         return null;
@@ -61,13 +57,9 @@ public class EmployeeAttendanceController {
     @PostMapping(path = "/listAllEmployees")
     public Map listAllEmployees(@RequestBody HashMap data) {
         System.out.println("listAllEmployees");
-        try {
-            System.out.println("data: " + data.entrySet());
 
-            System.out.println("*******");
-            return employeeAttendance.getListOfAllEmployees(databaseCollection).getData();
-
-        }   catch (Exception ex) {
+        try { return employeeAttendance.getListOfAllEmployees(databaseCollection).getData(); }
+        catch (Exception ex) {
             System.out.println("An exception occurred [listAllEmployees], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -81,20 +73,15 @@ public class EmployeeAttendanceController {
         DocumentSnapshot documentSnapshot = null;
 
         try {
-            System.out.println("data: " + data.entrySet());
-
             String uIdString = (String) data.get("uId");
             String username = (String) data.get("username");
 
-            System.out.println("*******");
             documentSnapshot = employeeAttendance.addMasterList(username, databaseCollection);
 
-            if (documentSnapshot != null) {
-                return documentSnapshot.getData();
-            }
-
-        }   catch (Exception ex) {
-            System.out.println("An exception occurred [presentList], ex: " + ex.getMessage());
+            if (documentSnapshot != null) { return documentSnapshot.getData(); }
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [addMasterList], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
         return null;
@@ -108,18 +95,13 @@ public class EmployeeAttendanceController {
         boolean result = false;
 
         try {
-            System.out.println("data: " + data.entrySet());
-
             String username = (String) data.get("username");
             String title = (String) data.get("title");
             String message = (String) data.get("message");
 
-            System.out.println("data: " + data.entrySet());
-
-            System.out.println("*******");
             result = employeeAttendance.createNode(username, title, message, "Present", databaseCollection);
-
-        }   catch (Exception ex) {
+        }
+        catch (Exception ex) {
             System.out.println("An exception occurred [createNote], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -133,25 +115,16 @@ public class EmployeeAttendanceController {
         DocumentSnapshot documentSnapshot = null;
 
         try {
-            System.out.println("data: " + data.entrySet());
-
             String username = (String) data.get("username");
-
-            System.out.println("data: " + data.entrySet());
-
-            System.out.println("*******");
             documentSnapshot = employeeAttendance.getNotes(username, "Present", databaseCollection);
 
-            if (documentSnapshot != null) {
-                return documentSnapshot.getData();
-            }
+            if (documentSnapshot != null) { return documentSnapshot.getData(); }
 
-        }   catch (Exception ex) {
+        }
+        catch (Exception ex) {
             System.out.println("An exception occurred [getNotes], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
         return null;
     }
-
-
 }

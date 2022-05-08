@@ -18,19 +18,25 @@ public class GroupController {
     public void createGroup(@RequestBody HashMap data) {
         System.out.println("createGroup");
 
-        System.out.println("data: " + data.entrySet());
 
+        try {
         String uIdString = (String) data.get("uId");
         String usernameString = (String) data.get("username");
         String groupNameString = (String) data.get("groupName");
         String groupDescriptionString = (String) data.get("groupDescription");
 
         groupTaskDao.createUpdateGroup(uIdString, usernameString, groupNameString, groupDescriptionString, databaseCollection);
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [deleteCredential], ex: " + ex);
+            ex.printStackTrace();
+        }
     }
 
     @PostMapping(path = "/listGroups")
     public List<DocumentSnapshot> listGroups(@RequestBody HashMap data) {
         System.out.println("listGroups");
+
 
         List<DocumentSnapshot> listDocumentSnapshot = null;
         List documentListData = null;
@@ -38,17 +44,25 @@ public class GroupController {
         String uIdString = (String) data.get("uId");
         String username = (String) data.get("username");
 
-        listDocumentSnapshot = groupTaskDao.listGroups(uIdString, username, databaseCollection);
+        try {
+            listDocumentSnapshot = groupTaskDao.listGroups(uIdString, username, databaseCollection);
 
-        documentListData = new ArrayList();
-        for (DocumentSnapshot document : listDocumentSnapshot) { documentListData.add(document.getData()); }
+            documentListData = new ArrayList();
+            for (DocumentSnapshot document : listDocumentSnapshot) { documentListData.add(document.getData()); }
+            }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [deleteCredential], ex: " + ex);
+            ex.printStackTrace();
+        }
         return documentListData;
     }
 
     @PostMapping(path = "/createTask")
     public boolean createTask(@RequestBody HashMap data) {
         System.out.println("createTask_Controller");
+        boolean response = false;
 
+        try {
         String usernameString = (String) data.get("username");
         String groupNameString = (String) data.get("groupName");
         String taskNameString = (String) data.get("taskName");
@@ -57,10 +71,14 @@ public class GroupController {
 //        Date dateTimeOfEvent = (Date) data.get("dateTimeOfEvent");
         String dateTimeOfEvent = (String) data.get("dateTimeOfEvent");
 
-        boolean response = groupTaskDao.createTask(usernameString, groupNameString, taskNameString, taskDescriptionString, taskTypeString, dateTimeOfEvent, databaseCollection);
+        response = groupTaskDao.createTask(usernameString, groupNameString, taskNameString, taskDescriptionString, taskTypeString, dateTimeOfEvent, databaseCollection);
 
-        System.out.println("response: " + response);
 
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [deleteCredential], ex: " + ex);
+            ex.printStackTrace();
+        }
         return response;
     }
 
@@ -70,10 +88,17 @@ public class GroupController {
 
         boolean deleted = false;
 
+        try {
+
         String groupName = (String) data.get("groupName");
         String taskName = (String) data.get("taskName");
 
         groupTaskDao.deactivateTask(groupName, taskName, databaseCollection);
+        }
+        catch (Exception ex) {
+            System.out.println("An exception occurred [deleteCredential], ex: " + ex);
+            ex.printStackTrace();
+        }
     }
 
     @PostMapping(path = "/listTasks")

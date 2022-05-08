@@ -10,7 +10,6 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
-import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.*;
 import org.apache.commons.codec.binary.Base64;
 
@@ -23,6 +22,8 @@ import java.util.*;
 
 import static business.Email.*;
 
+
+// The design of the functions which enable Communications (Email) functionality are heavily influenced by the Gmail API's documentation
 public class CommunicationDao implements CommunicationDaoInterface {
 
     Email email = new Email();
@@ -44,14 +45,10 @@ public class CommunicationDao implements CommunicationDaoInterface {
         try {
             ListDraftsResponse listDraftsResponse = service.users().drafts().list(user).execute();
             draftList = listDraftsResponse.getDrafts();
-            if (draftList.isEmpty()) {
-                System.out.println("No drafts found.");
-            } else {
-                returnList = new ArrayList<>();
-                for (Draft draft : draftList) {
-                    draftsResponse = service.users().drafts().get("me", draft.getId()).execute();
-                    returnList.add(draftsResponse.getMessage());
-                }
+            returnList = new ArrayList<>();
+            for (Draft draft : draftList) {
+                draftsResponse = service.users().drafts().get("me", draft.getId()).execute();
+                returnList.add(draftsResponse.getMessage());
             }
         }
         catch (Exception ex) {
@@ -74,9 +71,7 @@ public class CommunicationDao implements CommunicationDaoInterface {
 
         try {
             { try { HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport(); } catch (GeneralSecurityException e) { e.printStackTrace(); } catch (IOException e) {  e.printStackTrace(); } }
-            Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT, scopeSet))
-                    .setApplicationName(APPLICATION_NAME)
-                    .build();
+            Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT, scopeSet)).setApplicationName(APPLICATION_NAME).build();
 
             // Get Messages
             ListMessagesResponse listMessagesResponse = service.users().messages().list(user).execute();
@@ -91,17 +86,12 @@ public class CommunicationDao implements CommunicationDaoInterface {
                     labels = messagesResponse.getLabelIds();
 
                     // Get label ids
-                    for (String mapMsg : labels) {
-                        dataMap.put(mapMsg, mapMsg);
-                    }
+                    for (String mapMsg : labels) { dataMap.put(mapMsg, mapMsg); }
 
                     // If the message is in the INBOX
-                    if (dataMap.containsKey(messageLabel.toUpperCase())) {
-                        returnList.add(messagesResponse);
-                    }
+                    if (dataMap.containsKey(messageLabel.toUpperCase())) { returnList.add(messagesResponse); }
                 }
             }
-            System.out.println("returnList size: " + returnList.size());
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [inboxMessages], ex: " + ex);
@@ -117,10 +107,7 @@ public class CommunicationDao implements CommunicationDaoInterface {
         Message retrievedDraft = null;
         Draft draftsResponse = null;
 
-        try {
-            for (Message message : messageList) {
-                System.out.println("draftId: " + draftId + ", message Id: " + message.getId()); if (message.getId().equals(draftId)) { retrievedDraft = message; } }
-        }
+        try { for (Message message : messageList) { if (message.getId().equals(draftId)) { retrievedDraft = message; } } }
         catch (Exception ex) {
             System.out.println("An exception occurred [getDrafts], ex: " + ex);
             ex.printStackTrace();
@@ -132,14 +119,12 @@ public class CommunicationDao implements CommunicationDaoInterface {
         System.out.println("getCredentials");
 //        https://developers.google.com/gmail/api/quickstart/java
 
-
         GoogleClientSecrets clientSecrets = null;
         GoogleAuthorizationCodeFlow flow = null;
         LocalServerReceiver receiver = null;
         Credential credential = null;
         Set<String> SCOPES = scopes;
 
-        System.out.println("scopes: " + scopes);
         try {
             // Load client secrets.
             System.out.println();
@@ -199,7 +184,6 @@ public class CommunicationDao implements CommunicationDaoInterface {
             mimeMessage.writeTo(buffer);
             byte[] bytes = buffer.toByteArray();
             String encodedEmail =  Base64.encodeBase64URLSafeString(bytes);
-
             message.setRaw(encodedEmail);
         }
         catch (Exception ex) {
@@ -229,20 +213,13 @@ public class CommunicationDao implements CommunicationDaoInterface {
     }
 
     @Override
-    public Message updateDraft(Gmail service, String userId, MimeMessage mimeMessage, String draftId) {
-        return null;
-    }
-
-    @Override
     public Message sendDraft(Gmail service, String userId, String draftId) {
         System.out.println("sendDraft");
 
         Message message = null;
         Draft draft = null;
         MimeMessage mimeMessage = null;
-
         Properties props = new Properties();
-        Session session = Session.getDefaultInstance(props, null);
         Map<String, String> draftData = null;
 
         try {

@@ -32,6 +32,7 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
                 userData.put(username, Map.of("username", username));
 
                 firestore.collection(databaseCollection).document("MasterList").set(userData);
+                Thread.sleep(2000);
             }
 
                 System.out.println(">= 1");
@@ -92,7 +93,7 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
         try {
             date = this.getCurrentDate();
             Firestore firestore = Dao.initialiseFirestore();
-            future = firestore.collection(databaseCollection).get();
+            future = firestore.collection(databaseCollection).document("Date").collection(date).get();
             documents = future.get().getDocuments();
             System.out.println("documents: " + documents.size());
 
@@ -103,18 +104,18 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
             deleteMap.put(username, FieldValue.delete());
 
             if (documentSnapshot == null) {
-                System.out.println("null");
+                System.out.println("isnull");
                 writeResultApiFuture = firestore.collection(databaseCollection).document("Date").collection(date).document("Present").set(hashMapUser);
                 writeResultApiFuture = firestore.collection(databaseCollection).document("Date").collection(date).document("Absent").set(copy.getData());
                 writeResultApiFuture = firestore.collection(databaseCollection).document("Date").collection(date).document("Absent").update(deleteMap);
 
 
-                Thread.sleep(5000);
+                Thread.sleep(10000);
                 // Check if document exists
                 future = firestore.collection(databaseCollection).document("Date").collection(date).get();
                 documents = future.get().getDocuments();
                 System.out.println("123456");
-                documentSnapshot = this.searchAttendances(documents, date);
+                documentSnapshot = this.searchAttendances(documents, "Present");
             }
             else {
                 System.out.println("not null");
@@ -173,6 +174,12 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
         DocumentSnapshot documentSnapshot = null;
 
         System.out.println("documents.size(): " + documents.size());
+
+        if (documents.size() > 0) {
+            System.out.println("greater than: " + documents.get(0).getId());
+//            System.out.println("greater than: " + documents.get(1).getId());
+
+        }
         try {
             System.out.println("entryname: " + entryName);
             for (DocumentSnapshot document : documents) {
@@ -271,6 +278,12 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
         String date = null;
         Map userData = null;
 
+        ApiFuture<QuerySnapshot> future = null;
+        List<QueryDocumentSnapshot> documents = null;
+        DocumentReference documentReference = null;
+        ApiFuture<DocumentSnapshot> apiFutureDocumentSnapshot = null;
+        boolean result = false;
+
         try {
             EmployeeAttendanceDao employeeAttendanceDao = new EmployeeAttendanceDao();
             date = this.getCurrentDate();
@@ -280,16 +293,38 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
                 userData.put(username, Map.of("username", username, "title", title, "message", message));
                 writeResultApiFuture = firestore.collection(databaseCollection).document("Date").collection(date).document(listType).collection("Notes").document(date).set(userData);
 //            }
+
+            Thread.sleep(2000);
+            documentReference = firestore.collection(databaseCollection).document("Date").collection(date).document(listType).collection("Notes").document(date);
+            apiFutureDocumentSnapshot = documentReference.get();
+            documentSnapshot = apiFutureDocumentSnapshot.get();
+            userData = documentSnapshot.getData();
+            Thread.sleep(2000);
+
+            System.out.println("userData entrySet: " + userData.entrySet());
+
+            System.out.println("get username: " + userData.get(username));
+
+            if (userData.get(username) != null) {
+                result = true;
+            }
+
+
+
+
+
+
+
         } catch (Exception ex) {
             System.out.println("An exception occurred [createNode], ex: " + ex.getMessage());
             ex.printStackTrace();
         }
-        return false;
+        return result;
     }
 
     @Override
     public DocumentSnapshot getNotes(String username, String listType, String databaseCollection) {
-        System.out.println("getNote");
+        System.out.println("getNotes");
 
         String date = null;
         ApiFuture<QuerySnapshot> future = null;
@@ -297,6 +332,8 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
         List<DocumentSnapshot> listDocumentSnapshot = null;
         DocumentSnapshot documentSnapshot = null;
         CollectionReference collectionReference = null;
+
+        System.out.println("listType: " + listType);
 
         try {
             System.out.println("databaseCollection: " + databaseCollection);

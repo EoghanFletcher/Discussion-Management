@@ -63,6 +63,8 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
     public boolean addGroupMember(String username, Firestore firestore, String groupName, String databaseCollection) {
         System.out.println("addGroupMember");
 
+        System.out.println("username: " + username);
+
         ApiFuture<WriteResult> writeResultApiFuture = null;
         ApiFuture<QuerySnapshot> future = null;
         List<QueryDocumentSnapshot> documents = null;
@@ -190,7 +192,7 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             listDocumentSnapshot = new ArrayList<>();
             for (DocumentSnapshot document: documents) { if (((Map) document.getData().get("Membership")).containsKey(username)) { listDocumentSnapshot.add(document); } }
         } catch(Exception ex) {
-            System.out.println("An exception occurred [listGroup], ex: " + ex);
+            System.out.println("An exception occurred [listGroups], ex: " + ex);
         }
         return listDocumentSnapshot;
     }
@@ -214,17 +216,7 @@ public class GroupTaskDao implements GroupTaskDaoInterface {
             listDocumentSnapshot = new ArrayList<>();
             for (DocumentSnapshot document: documents) {
 
-//                SimpleDateFormat format = new SimpleDateFormat(("YYYY-MM-DDTHH:mmZ"));
-//
-//                Date currentDate = new Date();
-//                Date dateTimeOfEvent = new Date();
-
-
-//                Date simpleDateFormat = new SimpleDateFormat("YYYY-MM-DDTHH:mmZ").parse((String) document.get("dateTimeOfEvent"));
-
-//                System.out.println("simpleDateFormat: " + simpleDateFormat);
-
-                if (document.get("status").equals("active") /* && currentDate.after(dateTimeOfEvent) */) {
+                if (document.get("status").equals("active")) {
                     listDocumentSnapshot.add(document);
                 }
             }

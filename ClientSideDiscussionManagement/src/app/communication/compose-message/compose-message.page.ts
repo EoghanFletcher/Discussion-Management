@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { signOut } from 'firebase/auth';
 import { Email } from 'src/app/interface/email';
 import { FacadeService } from 'src/app/service/facade.service';
 import {urlComponent} from '../../GlobalVariables/global-variables';
@@ -83,5 +82,4 @@ export class ComposeMessagePage implements OnInit {
     ).subscribe(responseLamdba => { "" });
     this.router.navigateByUrl("communication/inbox");  
   }
-
 }

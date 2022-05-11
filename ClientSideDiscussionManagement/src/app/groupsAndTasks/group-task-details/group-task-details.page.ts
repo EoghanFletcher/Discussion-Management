@@ -40,22 +40,9 @@ export class GroupTaskDetailsPage implements OnInit {
 
     if (this.group.requestsToLeave != null) {
     this.requestToLeaveData = Object.keys(this.group.requestsToLeave);
-  }
-
-  // if (this.group.members != null) {
-  //   console.log("yes, member");
-  //   this.search = Object.keys(this.group.members);
-  //   console.log("search[0]: " + this.search[0]);
-  // }
-  else {
-    console.log("no, member");
-  }
-
-    // console.log("typeof: " + typeof(this.requestToLeaveData[0]));
-    // console.log("requestToLeaveData[0]: " + this.requestToLeaveData[0]);
+    }
   }
   this.getTasks();
-
   this.getAllUsers();
 }
 
@@ -64,9 +51,7 @@ getAllUsers() {
 
   let url = urlComponent + "user/getAllUsers";
     let response = this.http.post(url, {  }
-    ).subscribe(responseLamdba => { // this.data = responseLamdba,
-                                    console.log("responseLamdba: " + JSON.stringify(responseLamdba)),
-                                    this.search = responseLamdba; });
+    ).subscribe(responseLamdba => { this.search = responseLamdba; });
 }
 
 getStaff(event) {

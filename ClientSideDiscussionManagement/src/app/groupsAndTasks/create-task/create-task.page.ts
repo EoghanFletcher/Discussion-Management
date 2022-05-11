@@ -52,7 +52,7 @@ export class CreateTaskPage implements OnInit {
                                       "taskType": taskTypeString,
                                       "dateTimeOfEvent": dateTimeOfEventString}
     ).subscribe(responseLamdba => { this.data = responseLamdba });    
-9
+
     this.router.navigateByUrl("list-groups");
   }
 
@@ -60,8 +60,6 @@ export class CreateTaskPage implements OnInit {
     console.log("listEvents");
 
     let url = urlComponent + "groupAndTask/listEvents";
-
     let response = this.http.get(url).subscribe(responseLamdba => { this.events = responseLamdba });    
   }
-
 }

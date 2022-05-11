@@ -11,7 +11,6 @@
   
 <ion-list *ngFor="let dataItem of data | keyvalue" (click)="viewEmployee()">
                     <ion-item-divider>username : {{ dataItem.value.username }}</ion-item-divider></ion-list>
-
 <ion-text *ngIf="notes != null">
   <h1>Notes made regarding today's absence</h1>
   <ion-list *ngFor="let note of notes | keyvalue" (click)="viewEmployee()">

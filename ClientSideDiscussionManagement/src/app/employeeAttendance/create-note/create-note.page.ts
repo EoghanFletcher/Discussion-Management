@@ -14,8 +14,8 @@ import {urlComponent} from '../../GlobalVariables/global-variables';
 export class CreateNotePage implements OnInit {
 
   note: Note;
-
   data: any;
+
   private postData: FormGroup;
   private title: FormControl;
   private message: FormControl;
@@ -33,10 +33,7 @@ export class CreateNotePage implements OnInit {
     });
 
     if (this.route.snapshot.data.special) {
-      
       this.data = this.route.snapshot.data.special;
-      console.log("data: " + JSON.stringify(this.data));
-      
     }
   }
 
@@ -54,9 +51,6 @@ export class CreateNotePage implements OnInit {
     let response = this.http.post(url, {"username": this.note.username,
                                         "title": this.note.title,
                                         "message": this.note.message
-                                        }).subscribe(responseLamdba => { 
-      console.log(JSON.stringify(responseLamdba))
-   });    
+                                        }).subscribe(responseLamdba => {  });    
   }
-
 }

@@ -22,7 +22,6 @@ public class EmployeeAttendanceController {
         DocumentSnapshot documentSnapshot = null;
 
         try {
-
             String uIdString = (String) data.get("uId");
             String username = (String) data.get("username");
 
@@ -119,7 +118,6 @@ public class EmployeeAttendanceController {
             documentSnapshot = employeeAttendance.getNotes(username, "Present", databaseCollection);
 
             if (documentSnapshot != null) { return documentSnapshot.getData(); }
-
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [getNotes], ex: " + ex.getMessage());

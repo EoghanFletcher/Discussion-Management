@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>create-task</ion-title>
     <ion-back-button></ion-back-button>
+    <ion-title>Create Task</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -13,14 +13,12 @@
     <ion-item>
       <ion-label>Event type</ion-label>
     <ion-select id="taskType" name="taskType" formControlName="taskType" multiple="false">
-
-      <ion-select-option [value]="eventItem.value" *ngFor="let eventItem of events | keyvalue">{{ eventItem.value}}</ion-select-option>
-
+    <ion-select-option [value]="eventItem.value" *ngFor="let eventItem of events | keyvalue">{{ eventItem.value}}</ion-select-option>
     </ion-select>
   </ion-item>
 
     <ion-datetime id="dateTimeOfEvent" name="dateTimeOfEvent" type="dateTime" formControlName="dateTimeOfEvent"></ion-datetime>
-
-      <ion-button id="createTaskBtn" name="createTaskBtn" type="submit" color="primary" expand="block">Create Task</ion-button>
+    
+    <ion-button id="createTaskBtn" name="createTaskBtn" type="submit" color="primary" expand="block">Create Task</ion-button>
   </form>
 </ion-content>

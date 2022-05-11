@@ -37,8 +37,8 @@ export class FacadeService {
 
   constructor(private injector: Injector,
               private modalController: ModalController) {
-
   }
+  
     getDataDataService(id: any) {
       return this.dataService.getData(id);
     }
@@ -83,12 +83,6 @@ export class FacadeService {
       return await this.modalController.dismiss();
     }
 
-
-    async getExistingGoogleCredentials() {
-      console.log("getExistingGoogleCredentials");
-      return await this.authenticationService.googleSigninExistingAccount();
-    }
-
     async createAccountWithGoogleSignin() {
       console.log("createAccountWithGoogleSignin");
       return await this.authenticationService.googleSigninNewAccount();
@@ -97,9 +91,6 @@ export class FacadeService {
     async getUseInformation() {
       console.log("getUseInformation");
 
-      return console.log("here2: " + await JSON.stringify(this.profileService.getUserData()));
-      // return await this.profileService.getUserData();
+      return console.log(await JSON.stringify(this.profileService.getUserData()));
     }
-
-
 }

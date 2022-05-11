@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { EmailPasswordProvider } from '../../interface/email-password-provider';
 import { FacadeService } from '../../service/facade.service';
-import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-login',
@@ -52,20 +50,15 @@ export class LoginPage implements OnInit {
       password: passwordString
     }
 
-    
     await this.facadeService.loginAuthenticationService(auth);
 
     if (typeof this.facadeService.getDataDataService("signedIn") !== 'undefined') {
       console.log("signedin")
       this.router.navigateByUrl("profile");  
     }
-    else {
-      // Display a message // I am still on the login page
-    }
-
   }
 
-  loginwithGoogle() { // Needed to getEmail address
+  loginWithGoogle() {
     console.log("loginwithGoogle");
     let result;
     result = this.facadeService.authenticationService.googleSigninNewAccount().then((details: any) => {  });

@@ -3,8 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EmailPasswordProvider } from '../../interface/email-password-provider';
-import { AuthenticationService } from '../../service/authentication.service';
-import { DataService } from '../../service/data.service';
 import { FacadeService } from '../../service/facade.service';
 import {urlComponent} from '../../GlobalVariables/global-variables';
 
@@ -52,7 +50,7 @@ export class RegisterPage implements OnInit {
 
     let emailString: string = this.postData.get("email").value;
     let passwordString: string = this.password = this.postData.get("password").value;
-    let usernameString: string = this.username = this.postData.get("username").value
+    let usernameString: string = this.username = this.postData.get("username").value;
 
     let auth:
     EmailPasswordProvider = {
@@ -68,9 +66,6 @@ export class RegisterPage implements OnInit {
 
     if (typeof this.facadeService.getDataDataService("signedIn") !== 'undefined') {
       this.router.navigateByUrl("profile");  
-    }
-    else {
-      // Display a message // I am still on the login page
     }
   }
 
@@ -89,5 +84,4 @@ export class RegisterPage implements OnInit {
       console.log(JSON.stringify(responseLamdba))
    });   
   }
-
 }

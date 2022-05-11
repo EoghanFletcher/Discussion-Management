@@ -92,7 +92,6 @@ public class EmployeeAttendanceDao implements EmployeeAttendanceDaoInterface {
                 writeResultApiFuture = firestore.collection(databaseCollection).document(date).update(hashMapUser);
                 firestore.collection(databaseCollection).document("date").collection(date).document("Present").update(hashMapUser);
                 writeResultApiFuture = firestore.collection(databaseCollection).document("Date").collection(date).document("Absent").update(deleteMap);
-
             }
         }
         catch (Exception ex) {

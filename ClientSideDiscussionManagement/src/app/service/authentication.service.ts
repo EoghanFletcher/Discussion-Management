@@ -61,67 +61,27 @@ export class AuthenticationService {
     .then(res => {  });
   }
   
-
-  
   async googleSigninNewAccount() {
     console.log("googleSigninNewAccount");
 
     // https://firebase.google.com/docs/auth/web/google-signin
 
     const googleSignInProvider = new GoogleAuthProvider();
-    // googleSignInProvider.addScope("")
-    // Diffent interfaces can be usd for desktop and mobile devices. I should check for this
 
     const auth = getAuth();
     await signInWithPopup(auth, googleSignInProvider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        // console.log("result: " + JSON.stringify(result));
         const credential = GoogleAuthProvider.credentialFromResult(result);
 
-        
         console.log(JSON.stringify(result));
         return credential;
         
         // ...
       }).catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-      });
-  }
-
-  async googleSigninExistingAccount() {
-    console.log("googleSigninExistingAccount");
-
-    // https://firebase.google.com/docs/auth/web/google-signin
-
-    const googleSignInProvider = new GoogleAuthProvider();
-
-    
-    // Diffent interfaces can be usd for desktop and mobile devices. I should check for this
-    const auth = getAuth();
-    //  Link accounts
-    await linkWithPopup(auth.currentUser, googleSignInProvider).then((result) => {
-      console.log("-linkWithPopup")
-      // Accounts successfully linked.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const user = result.user;
-      }).catch((error) => {
-        console.log("error");
         const errorCode = error.code;
         const errorMessage = error.message;
         const email = error.email;
-        console.log("error message, code: " + errorCode);
-
         const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
       });
   }
-
 }

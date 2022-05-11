@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ForgotPassword } from '../../interface/forgot-password';
-import { AuthenticationService } from '../../service/authentication.service';
-import { DataService } from '../../service/data.service';
 import { FacadeService } from '../../service/facade.service';
-import {urlComponent} from '../../GlobalVariables/global-variables';
 
 @Component({
   selector: 'app-forgot-password',
@@ -17,7 +14,6 @@ export class ForgotPasswordPage implements OnInit {
   private postData: FormGroup;
   private email: FormControl;
   data: any;
-
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -49,14 +45,11 @@ export class ForgotPasswordPage implements OnInit {
     ForgotPassword = {
       emailAddress: emailString
     }
-
     await this.facadeService.resetPasswordAuthenticationService(forPass);
   }
 
   navigateToPage(page) {
     console.log("navigateToPage");
-    console.log(page)
     this.router.navigateByUrl(page);
   }
-
 }

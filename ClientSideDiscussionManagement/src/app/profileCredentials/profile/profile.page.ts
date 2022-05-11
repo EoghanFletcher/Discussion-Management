@@ -27,22 +27,17 @@ export class ProfilePage implements OnInit {
     private http: HttpClient,
     private dataService: DataService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {  }
 
   async ionViewWillEnter() {
     this.data = this.facadeService.getDataDataService("uid");
-
     await this.getUserData();
   }
   
   async getUserData() {
     console.log("getUserData");
-    // this.data = await this.facadeService.getUseInformation();
-    // console.log("here3: " + JSON.stringify(this.data))
 
     let url = urlComponent + "user/authenticateEmailPassword";
-
     let response = this.http.post<EmailPasswordProvider>(url, {"uId": this.facadeService.getDataDataService("uid"),
                                       "email": this.facadeService.getDataDataService("email"),
                                       "username": this.facadeService.getDataDataService("username")}
@@ -54,20 +49,10 @@ export class ProfilePage implements OnInit {
 
       console.log("get: " + this.facadeService.getDataDataService("username")),
 
-      // After the data has been retrieved confirm the user has logged in today
+      // After the data has been retrieved confirm the user has logged
       this.confirmAttendance();
     });
   }
-
-  async linkGoogleAccount() { // Needed to getEmail address // https://firebase.google.com/docs/auth/web/account-linking#:~:text=You%20can%20allow%20users%20to,they%20used%20to%20sign%20in.
-    console.log("linkGoogleAccount");
-    let result;
-    result = await this.facadeService.authenticationService.googleSigninExistingAccount().then((details: any) => {
-        console.log("details: " + details),
-        console.log(JSON.stringify(details));
-    });
-  }
-
 
   createCredential() {
     console.log("createCredential");
@@ -89,14 +74,10 @@ export class ProfilePage implements OnInit {
 
   async confirmAttendance() {
     console.log("confirmAttendance");
-    console.log("uId: " + this.facadeService.getDataDataService("uid"));
-    console.log("username: " + this.facadeService.getDataDataService("username"));
 
     let url = urlComponent + "employeeAttendance/confirmAttendance";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
                                               "username": this.facadeService.getDataDataService("username")}).subscribe(responseLamdba => { 
-      console.log(JSON.stringify(responseLamdba))
    });    
   }
-
 }

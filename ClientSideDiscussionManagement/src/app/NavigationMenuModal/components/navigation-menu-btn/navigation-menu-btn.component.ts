@@ -14,14 +14,7 @@ export class NavigationMenuBtnComponent implements OnInit {
 
   async displayMenu() {
     console.log("displayMenu");
-
-    // const modal = await this.modalController.create({
-    //   component: ModalNavigationComponentComponent
-    // });
-    // return await modal.present();
-    
     
     await this.facadeService.displayModal();
   }
-
 }

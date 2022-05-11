@@ -1,21 +1,15 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>listGroups</ion-title>
+    <ion-title>List Groups</ion-title>
   </ion-toolbar>
+  <ion-back-button></ion-back-button>
 </ion-header>
 
-<ion-back-button></ion-back-button>
-
-
-
 <ion-content>
-
   <app-sign-out></app-sign-out>
   <app-navigation-menu-btn></app-navigation-menu-btn>
   
-
   <ion-button id="createGrpBtn" name="createGrpBtn" (click)="createGroup()">Create Group</ion-button>
 
   <ion-item *ngFor="let dataItem of data | keyvalue" (click)="viewGroup(dataItem.value.groupName, dataItem.value.groupDescription)">{{ dataItem.value.groupName }} : {{ dataItem.value.groupDescription }}</ion-item>
-
 </ion-content>

@@ -6,7 +6,6 @@
 </ion-header>
 
 <ion-content>
-
   <form id="composeMessage" name="composeMessage" [formGroup]="postData" (ngSubmit)="sendMessage()">
     <div id="toDiv">
       <ion-label id="toLbl"></ion-label>
@@ -24,7 +23,6 @@
     </div>
 
     <ion-button id="sendMessageBtn" name="sendMessageBtn" type="submit" expand="block" color="danger">Send Message</ion-button>
-    <ion-button id="sendDraftBtn" name="sendDraftBtn" (click)="createDraft()" expand="block" color="primary">Create draft</ion-button>
+    <ion-button id="sendDraftBtn" name="sendDraftBtn" (click)="createDraft()" expand="block" color="primary">Create Draft</ion-button>
   </form>
-
 </ion-content>

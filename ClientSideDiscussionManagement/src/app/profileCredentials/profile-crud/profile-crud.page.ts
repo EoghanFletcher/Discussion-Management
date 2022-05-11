@@ -29,7 +29,6 @@ export class ProfileCrudPage implements OnInit {
     });
     
     this.data = this.facadeService.getDataDataService("uid");
-    console.log("id: " + JSON.stringify(this.facadeService.getDataDataService("id")));
 
     if (this.route.snapshot.data.special) {
       this.credential = this.route.snapshot.data.special;
@@ -40,23 +39,17 @@ export class ProfileCrudPage implements OnInit {
     console.log("update");
 
     let chosenValue: string = this.postData.get("value").value;
-
     let url = urlComponent + "credentials/update";
     let response = this.http.post(url, {"uId": this.facadeService.getDataDataService("uid"),
                                         "username": this.facadeService.getDataDataService("username"),
                                         "chosenKey": this.facadeService.getDataDataService("id").key,
                                       "chosenValue": chosenValue}
     ).subscribe(responseLamdba => { this.data = responseLamdba });    
-
     this.router.navigateByUrl("profile");
   }
 
   deleteCredential(keySelected) {
     console.log("deleteCredential");
-
-    console.log("keySeleted: " + keySelected);
-
-    console.log("key selected: " + keySelected)
 
     if (keySelected !== "email" ||
         keySelected !== "uId" || 
@@ -67,12 +60,7 @@ export class ProfileCrudPage implements OnInit {
                                         "username": this.facadeService.getDataDataService("username"),
                                         "deleteKey": keySelected}
     ).subscribe(responseLamdba => { this.data = responseLamdba });
-  }    
-  else {
-    console.log("equal");
   }
-
     this.router.navigateByUrl("profile");
   }
-
 }

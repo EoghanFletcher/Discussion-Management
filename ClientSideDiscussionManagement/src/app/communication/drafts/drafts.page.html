@@ -1,13 +1,13 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>drafts</ion-title>
+    <ion-title>Drafts</ion-title>
   </ion-toolbar>
+  <ion-back-button></ion-back-button>
 </ion-header>
 
 <ion-content>
   <app-sign-out></app-sign-out>
   <app-navigation-menu-btn></app-navigation-menu-btn>
-  <ion-back-button></ion-back-button>
   <app-compose-btn></app-compose-btn>
   <ion-list *ngFor="let dataItem of data | keyvalue" (click)="replyMessage(dataItem.value.payload.headers[3].value,
                                                                           dataItem.value.payload.headers[2].value,
@@ -17,5 +17,4 @@
     <ion-item-divider>{{ dataItem.value.payload.headers[5].name }} : {{ dataItem.value.payload.headers[5].value }}</ion-item-divider>
     <ion-item-divider>Message : {{ dataItem.value.snippet }}</ion-item-divider>
   </ion-list>
-
 </ion-content>

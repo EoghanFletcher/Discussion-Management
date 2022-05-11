@@ -20,11 +20,6 @@ import static business.Email.JSON_FACTORY;
 public class CommunicationController {
 
     CommunicationDao communicationDao = new CommunicationDao();
-//    final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-//    String databaseCollection = "User";
-
-
-
 
     @GetMapping(path = "/getDrafts")
     public List<Message> getDrafts() {
@@ -33,10 +28,8 @@ public class CommunicationController {
         List<Message> messageList = null;
 
         try {
-
             final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
             messageList = communicationDao.getDrafts(HTTP_TRANSPORT);
-            System.out.println("here: " + messageList.size());
         }
         catch (Exception ex) {
                 System.out.println("An exception occurred [getDrafts], ex: " + ex);
@@ -48,8 +41,6 @@ public class CommunicationController {
     @PostMapping(path = "/credentials")
     public void getCredentials(@RequestBody HashMap data) {
         System.out.println("getCredentials");
-
-        System.out.println("data: " + data.entrySet());
 
         try {
             final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -71,8 +62,6 @@ public class CommunicationController {
                     .setApplicationName(APPLICATION_NAME)
                     .build();
 
-            System.out.println("data: " + data.entrySet());
-
             String to = (String) data.get("to");
             String from = (String) data.get("from");
             String subject = (String) data.get("subject");
@@ -80,8 +69,6 @@ public class CommunicationController {
 
             Draft draft = communicationDao.createDraft(service, from,
                     this.communicationDao.createMineMessage(data, HTTP_TRANSPORT));
-
-            System.out.println("draft: id " + draft.getId());
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [createDraft], ex: " + ex);
@@ -101,8 +88,6 @@ public class CommunicationController {
             Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, communicationDao.getCredentials(HTTP_TRANSPORT, Email.SCOPES_LABELS))
                     .setApplicationName(APPLICATION_NAME)
                     .build();
-
-            System.out.println("data: " + data.entrySet());
 
             String to = (String) data.get("to");
             String from = (String) data.get("from");
@@ -135,13 +120,9 @@ public class CommunicationController {
         try {
             final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
-
-            System.out.println("data: " + data.entrySet());
             String messageType = (String) data.get("messageType");
 
             messageList = this.communicationDao.inboxSentMessages(HTTP_TRANSPORT, messageType);
-            System.out.println("Size: " + messageList.size());
-            System.out.println("First: " + messageList.get(0).getSnippet());
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [getMessage], ex: " + ex);
@@ -149,5 +130,4 @@ public class CommunicationController {
         }
         return messageList;
     }
-
 }

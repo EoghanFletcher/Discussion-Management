@@ -18,7 +18,6 @@ public class GroupController {
     public void createGroup(@RequestBody HashMap data) {
         System.out.println("createGroup");
 
-
         try {
         String uIdString = (String) data.get("uId");
         String usernameString = (String) data.get("username");
@@ -28,7 +27,7 @@ public class GroupController {
         groupTaskDao.createUpdateGroup(uIdString, usernameString, groupNameString, groupDescriptionString, databaseCollection);
         }
         catch (Exception ex) {
-            System.out.println("An exception occurred [deleteCredential], ex: " + ex);
+            System.out.println("An exception occurred [createGroup], ex: " + ex);
             ex.printStackTrace();
         }
     }
@@ -37,9 +36,10 @@ public class GroupController {
     public List<DocumentSnapshot> listGroups(@RequestBody HashMap data) {
         System.out.println("listGroups");
 
-
         List<DocumentSnapshot> listDocumentSnapshot = null;
         List documentListData = null;
+
+        System.out.println("entryset: " + data.entrySet());
 
         String uIdString = (String) data.get("uId");
         String username = (String) data.get("username");
@@ -51,7 +51,7 @@ public class GroupController {
             for (DocumentSnapshot document : listDocumentSnapshot) { documentListData.add(document.getData()); }
             }
         catch (Exception ex) {
-            System.out.println("An exception occurred [deleteCredential], ex: " + ex);
+            System.out.println("An exception occurred [listGroups], ex: " + ex);
             ex.printStackTrace();
         }
         return documentListData;
@@ -63,20 +63,17 @@ public class GroupController {
         boolean response = false;
 
         try {
-        String usernameString = (String) data.get("username");
-        String groupNameString = (String) data.get("groupName");
-        String taskNameString = (String) data.get("taskName");
-        String taskDescriptionString = (String) data.get("taskDescription");
-        String taskTypeString = (String) data.get("taskType");
-//        Date dateTimeOfEvent = (Date) data.get("dateTimeOfEvent");
-        String dateTimeOfEvent = (String) data.get("dateTimeOfEvent");
+            String usernameString = (String) data.get("username");
+            String groupNameString = (String) data.get("groupName");
+            String taskNameString = (String) data.get("taskName");
+            String taskDescriptionString = (String) data.get("taskDescription");
+            String taskTypeString = (String) data.get("taskType");
+            String dateTimeOfEvent = (String) data.get("dateTimeOfEvent");
 
-        response = groupTaskDao.createTask(usernameString, groupNameString, taskNameString, taskDescriptionString, taskTypeString, dateTimeOfEvent, databaseCollection);
-
-
+            response = groupTaskDao.createTask(usernameString, groupNameString, taskNameString, taskDescriptionString, taskTypeString, dateTimeOfEvent, databaseCollection);
         }
         catch (Exception ex) {
-            System.out.println("An exception occurred [deleteCredential], ex: " + ex);
+            System.out.println("An exception occurred [createTask], ex: " + ex);
             ex.printStackTrace();
         }
         return response;
@@ -89,14 +86,13 @@ public class GroupController {
         boolean deleted = false;
 
         try {
+            String groupName = (String) data.get("groupName");
+            String taskName = (String) data.get("taskName");
 
-        String groupName = (String) data.get("groupName");
-        String taskName = (String) data.get("taskName");
-
-        groupTaskDao.deactivateTask(groupName, taskName, databaseCollection);
+            groupTaskDao.deactivateTask(groupName, taskName, databaseCollection);
         }
         catch (Exception ex) {
-            System.out.println("An exception occurred [deleteCredential], ex: " + ex);
+            System.out.println("An exception occurred [deactivateTask], ex: " + ex);
             ex.printStackTrace();
         }
     }
@@ -120,8 +116,8 @@ public class GroupController {
     @GetMapping(path = "/listEvents")
     public Map getEvents() {
         System.out.println("listEvents");
-        String eventCollection = "Event";
 
+        String eventCollection = "Event";
         DocumentSnapshot documentSnapshot = null;
 
         documentSnapshot = groupTaskDao.listEvents(eventCollection);
@@ -139,7 +135,6 @@ public class GroupController {
         String usernameString = (String) data.get("username");
 
         try {
-
             result = groupTaskDao.requestToLeaveGroup(groupNameString, usernameString, databaseCollection);
         }
         catch (Exception ex) {
@@ -156,9 +151,6 @@ public class GroupController {
         boolean result = false;
 
         try {
-
-            System.out.println("data: " + data.entrySet());
-
             String usernameString = (String) data.get("username");
             String groupNameString = (String) data.get("groupName");
             String verdictString = (String) data.get("verdict");
@@ -171,7 +163,6 @@ public class GroupController {
                 System.out.println("deny");
                 result = groupTaskDao.removeRequestToLeave(groupNameString, usernameString, databaseCollection);
             }
-
             result = groupTaskDao.removeRequestToLeave(groupNameString, usernameString, databaseCollection);
         }
         catch (Exception ex) {
@@ -188,16 +179,12 @@ public class GroupController {
         boolean result = false;
 
         try {
-
             Firestore firestore = Dao.initialiseFirestore();
-
-            System.out.println("data: " + data.entrySet());
 
             String usernameString = (String) data.get("username");
             String groupNameString = (String) data.get("groupName");
 
-                /* result = */ groupTaskDao.addGroupMember(usernameString, firestore, groupNameString, databaseCollection);
-
+            result = groupTaskDao.addGroupMember(usernameString, firestore, groupNameString, databaseCollection);
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [groupAddMember], ex: " + ex);

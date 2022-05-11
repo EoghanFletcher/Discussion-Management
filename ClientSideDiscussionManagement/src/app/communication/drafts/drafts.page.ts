@@ -33,22 +33,12 @@ export class DraftsPage implements OnInit {
     console.log("getEmails");
 
     let url = urlComponent + "communication/getDrafts";
-    let response = this.http.get(url).subscribe(responseLamdba => { console.log(JSON.stringify(responseLamdba)),
-      this.data = responseLamdba,
-    console.log("\nPosition 0: " + JSON.stringify(this.data[0]))
-    console.log("\nPosition 0 payload : " + JSON.stringify(this.data[0].payload)),
-    console.log("\nPosition 0 headers : " + JSON.stringify(this.data[0].payload.headers[2])),
-    console.log("\nPosition 0 headers name: " + JSON.stringify(this.data[0].payload.headers[2].name)),
-    console.log("\nPosition 0 headers value: " + JSON.stringify(this.data[0].payload.headers[2].value))
+    let response = this.http.get(url).subscribe(responseLamdba => { this.data = responseLamdba
   });    
   }
 
   replyMessage(to: string, from: string, subject: string): void {
     console.log("replyMessage")
-
-    console.log("to: " + to);
-    console.log("from: " + from);
-    console.log("subject: " + subject);
 
     let emailMessage: Email = {
       to: to,

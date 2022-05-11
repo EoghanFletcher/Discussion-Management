@@ -26,17 +26,13 @@ export class AbsentEmployeesPage implements OnInit {
 
   ionViewWillEnter() {
     console.log("ionViewWillEnter");
-    // this.getList();
   }
 
   getList() {
     console.log("getList");
 
     let url = urlComponent + "employeeAttendance/presentAbsentList";
-    let response = this.http.post(url, {"listType": "Absent"}).subscribe(responseLamdba => { 
-      console.log(JSON.stringify(responseLamdba)),
-      this.data = responseLamdba
-   });    
+    let response = this.http.post(url, {"listType": "Absent"}).subscribe(responseLamdba => { this.data = responseLamdba });    
   }  
 
   viewEmployee() {

@@ -9,7 +9,6 @@
 </ion-header>
 
 <ion-content>
-
 <app-sign-out></app-sign-out>
 <app-navigation-menu-btn></app-navigation-menu-btn>
 <ion-button id="createTaskBtn" name="createTaskBtn" (click)="createTask()" color="primary" expand="block">Create Task</ion-button>
@@ -43,11 +42,7 @@
 <ion-item>
   <h1>Add group member</h1>
   <ion-searchbar autocomplete="on" formControlName="chosenUser" (ionChange)="getStaff($event)"></ion-searchbar>
-  <!-- <ion-list>
-    <ion-item *ngFor="let searchItem of search | keyvalue"> Username: {{ searchItem.value.username }}, Email: {{ searchItem.value.email }}</ion-item>
-  </ion-list> -->
 </ion-item>
 <ion-button id="addMemberBtn" name="addMemberBtn" type="submit" class="ion-padding">Add member</ion-button>
 </form>
-
 </ion-content>

@@ -13,7 +13,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api/user")
-//@CrossOrigin
 public class UserController {
     UserDao userDao = new UserDao();
     String databaseCollection = "User";
@@ -67,7 +66,6 @@ public class UserController {
             System.out.println("An exception occurred [getAllUsers], ex: " + ex);
             ex.printStackTrace();
         }
-        System.out.println("return");
         return documentListData;
         }
 

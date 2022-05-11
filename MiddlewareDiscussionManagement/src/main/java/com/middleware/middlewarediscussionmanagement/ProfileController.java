@@ -36,12 +36,12 @@ public class ProfileController {
         System.out.println("updateCredential");
 
         try {
-        String uIdString = (String) data.get("uId");
-        String usernameString = (String) data.get("username");
-        String chosenKey = (String) data.get("chosenKey");
-        String chosenValue = (String) data.get("chosenValue");
+            String uIdString = (String) data.get("uId");
+            String usernameString = (String) data.get("username");
+            String chosenKey = (String) data.get("chosenKey");
+            String chosenValue = (String) data.get("chosenValue");
 
-        userDao.createUpdateProfileField(uIdString, usernameString, chosenKey, chosenValue, databaseCollection);
+            userDao.createUpdateProfileField(uIdString, usernameString, chosenKey, chosenValue, databaseCollection);
         }
         catch (Exception ex) {
             System.out.println("An exception occurred [updateCredential], ex: " + ex);

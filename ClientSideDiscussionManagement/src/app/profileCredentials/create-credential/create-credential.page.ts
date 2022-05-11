@@ -47,5 +47,4 @@ export class CreateCredentialPage implements OnInit {
     ).subscribe(responseLamdba => { this.data = responseLamdba });
     this.router.navigateByUrl("profile");  
   }
-
 }

@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.Set;
 
 public interface CommunicationDaoInterface {
-
     public List<Message> getDrafts(NetHttpTransport HTTP_TRANSPORT);
+
     public Message getDraft(List<Message> messageList, String draftId);
 
     public Credential getCredentials(NetHttpTransport HTTP_TRANSPORT, Set<String> scopes);
@@ -27,5 +27,4 @@ public interface CommunicationDaoInterface {
     public Message sendDraft(Gmail service, String userId, String draftId);
 
     public List<Message> inboxSentMessages(NetHttpTransport HTTP_TRANSPORT, String messageLabel);
-
 }

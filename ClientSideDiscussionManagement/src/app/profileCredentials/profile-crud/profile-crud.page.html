@@ -1,25 +1,15 @@
 <ion-header>
   <ion-toolbar>
     <ion-back-button></ion-back-button>
-    <ion-title>profile-crud</ion-title>
+    <ion-title>Profile Create, Read, Update and Delete</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
-
 <ion-button id="deleteCredential" name="deleteCredential" (click)="deleteCredential(credential.key)" expand="block" color="danger">Delete credential</ion-button>
-
-
-
-
-
-<!-- <ion-input id="email" name="email" type="email" formControlName="email" placeholder="Email Address" class="ion-text-center"></ion-input> -->
 
 <form id="profileCredentialsCRUD" name="profileCredentialsCRUD" [formGroup]="postData" (ngSubmit)="update()">
   <ion-input id="value" name="value" formControlName="value" placeholder="Value" class="ion-text-center"></ion-input>
   <ion-button id="profileCredentialsCRUDBtn" name="profileCredentialsCRUDBtn" type="submit" expand="block" color="primary">Update credential</ion-button>
 </form>
-
-
 </ion-content>

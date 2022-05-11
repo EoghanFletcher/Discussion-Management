@@ -25,7 +25,6 @@ import static business.Email.*;
 
 // The design of the functions which enable Communications (Email) functionality are heavily influenced by the Gmail API's documentation
 public class CommunicationDao implements CommunicationDaoInterface {
-
     Email email = new Email();
     String user = "me";
     NetHttpTransport HTTP_TRANSPORT = null;
@@ -244,5 +243,4 @@ public class CommunicationDao implements CommunicationDaoInterface {
         }
         return message;
     }
-
 }
